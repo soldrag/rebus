@@ -1127,7 +1127,7 @@ html.lay-land-phone .step-res { font-size: 20px; }
 .legend::backdrop { background: rgba(58, 46, 40, .45); }
 .legend.no-modal { position: fixed; inset: 12px; margin: auto; z-index: 100; height: fit-content; }
 .legend-title { margin: 0 0 12px; text-align: center; font-size: 26px; font-weight: 900; }
-.legend-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.legend-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 .legend-cards.single { grid-template-columns: 1fr; }
 .legend-card {
   display: flex;
@@ -1151,19 +1151,23 @@ html.lay-land-phone .step-res { font-size: 20px; }
 .legend .emoji { line-height: 1.1; }
 .legend-text p { margin: 0; }
 .legend-card-title { font-size: 18px; font-weight: 900; line-height: 1.2; }
-.legend-words { margin-top: 4px !important; font-size: 18px; font-weight: 900; color: var(--mint-ink); letter-spacing: 1px; }
+.legend-words { margin-top: 4px !important; font-size: 18px; font-weight: 900; color: var(--mint-ink); letter-spacing: 1px; overflow-wrap: anywhere; }
 .legend-ok { margin-top: 14px; }
 .legend-cards.single .legend-card { flex-direction: row; justify-content: center; gap: 18px; text-align: left; }
 .legend-cards.single .legend-pic { min-height: 0; }
-@media (max-width: 440px) {
-  .legend { padding: 14px; }
+/* Телефон в портрете: карточки в одну колонку — картинка слева, текст справа. */
+@media (max-width: 559px) {
+  .legend { padding: 14px; --e: 48px; --el: 48px; }
   .legend-title { font-size: 22px; }
-  .legend { --e: 62px; }
+  .legend-cards { grid-template-columns: minmax(0, 1fr); }
+  .legend-card { flex-direction: row; text-align: left; gap: 12px; }
+  .legend-pic { flex: 0 0 auto; min-height: 0; max-width: 50%; }
+  .legend-text { min-width: 0; }
   .legend-card-title, .legend-words { font-size: 16px; }
 }
 @media (orientation: landscape) and (max-height: 560px) {
   .legend { --e: 44px; padding: 12px; }
-  .legend-cards { grid-template-columns: repeat(4, 1fr); }
+  .legend-cards { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .legend-pic { min-height: 70px; }
   .legend-card-title, .legend-words { font-size: 15px; }
   .legend-title { font-size: 20px; margin-bottom: 8px; }

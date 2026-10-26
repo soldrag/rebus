@@ -10,6 +10,7 @@ npm run dev        # локальный сервер
 npm run validate   # проверка ребусов
 npm run stats      # какие ответы и картинки уже есть
 npm run build      # проверка + сборка в dist/
+npm run check:screens  # вёрстка на 15 размерах телефонов и планшетов (нужен запущенный `npx vite preview` и Playwright)
 ```
 
 ## Устройство

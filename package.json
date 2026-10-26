@@ -9,7 +9,8 @@
     "build": "npm run validate && vite build",
     "preview": "vite preview",
     "validate": "node tools/validate.mjs",
-    "stats": "node tools/validate.mjs --stats"
+    "stats": "node tools/validate.mjs --stats",
+    "check:screens": "node tools/check-screens.cjs"
   },
   "devDependencies": {
     "vite": "^8.3.5",
