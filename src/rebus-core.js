@@ -15,6 +15,17 @@ export function keepYo(s) {
 
 export const PREPOSITIONS = ['В', 'НА'];
 
+// Цифры, которые в нашем шрифте выглядят как буквы. Пополняется по итогам
+// визуальной проверки: если цифру на экране путают с буквой — добавить сюда.
+export const DIGIT_LOOKALIKES = { '3': 'З', '0': 'О' };
+
+// Число можно прочитать буквами, если каждая его цифра похожа на букву («3» → З, «30» → ЗО).
+// «100» читается как число: единица на букву не похожа.
+export function readsAsLetters(value) {
+  const digits = String(value || '').split('');
+  return digits.length > 0 && digits.every((d) => d in DIGIT_LOOKALIKES);
+}
+
 // Слова из примеров легенды (src/ui/legend.js): ответы набора не должны с ними совпадать,
 // иначе легенда подскажет ответ.
 export const LEGEND_WORDS = ['КЛЮЧ', 'ТОРТ', 'ТОТ', 'СЫР', 'СЫН', 'СОР', 'КИТ', 'ТИК', 'СЛОН', 'ОБЛАКО', 'СОК',
@@ -110,8 +121,10 @@ function partProblems(part) {
       break;
     case 'number':
       if (!/^\d+$/.test(String(part.value || ''))) p.push('value должно быть числом');
-      // 3 на экране выглядит как буква З — ребёнок прочтёт «З».
-      if (String(part.value).includes('3')) p.push('цифру 3 не используем: её путают с буквой З');
+      if (readsAsLetters(part.value)) {
+        const as = String(part.value).split('').map((d) => DIGIT_LOOKALIKES[d]).join('');
+        p.push(`число ${part.value} на экране читается как буквы «${as}»`);
+      }
       if (part.cutEnd && /[ЬЪ]$/.test(normalize(part.word))) p.push('запятая у числа срезает Ь/Ъ, которого не слышно');
       if (!len) p.push('нет word');
       if (part.flip || part.pick || part.replace || part.replaceAt || part.remove) p.push('у числа можно только запятые');
