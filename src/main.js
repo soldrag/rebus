@@ -118,6 +118,25 @@ syncAppHeight();
 window.addEventListener('resize', syncAppHeight);
 window.addEventListener('orientationchange', () => setTimeout(syncAppHeight, 300));
 
+// iOS при фокусе на поле сам прокручивает страницу вверх — даже если поле и так над
+// клавиатурой (макет заранее оставляет ей место). Из-за этого верх ребуса уезжает
+// за экран. Пока на телефоне в портрете идёт ввод, держим страницу на месте.
+function keepRebusInView() {
+  const typing = document.activeElement && document.activeElement.classList.contains('answer-input');
+  if (!typing || !document.documentElement.classList.contains('lay-portrait')) return;
+  const vv = window.visualViewport;
+  if (window.scrollY > 0 || (vv && vv.offsetTop > 0)) window.scrollTo(0, 0);
+}
+window.addEventListener('scroll', keepRebusInView, { passive: true });
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('scroll', keepRebusInView);
+  window.visualViewport.addEventListener('resize', keepRebusInView);
+}
+document.addEventListener('focusin', () => {
+  // Клавиатура выезжает с анимацией — проверяем несколько раз, пока она не встанет.
+  for (const t of [0, 100, 300, 600]) setTimeout(keepRebusInView, t);
+});
+
 window.addEventListener('hashchange', () => route());
 
 // Прогресс поменяли в другой вкладке. Открытый ребус перерисовываем, только если
