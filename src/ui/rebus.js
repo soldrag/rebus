@@ -188,7 +188,8 @@ export function renderRebus(app, data, id, signal, backTo = '#/') {
   // Экранная клавиатура не должна закрывать поле.
   const keepVisible = () => {
     checkKeyboard();
-    if (document.activeElement !== input) return;
+    // С открытой клавиатурой экран и так закреплён в видимой области.
+    if (document.activeElement !== input || app.classList.contains('kb-open')) return;
     try { btn.scrollIntoView({ block: 'nearest', behavior: reduceMotion() ? 'auto' : 'smooth' }); }
     catch { btn.scrollIntoView(false); }
   };

@@ -81,14 +81,18 @@ async function start() {
   route();
 }
 
-// Высота видимой области (меньше, когда открыта экранная клавиатура):
-// экран ребуса подстраивается под неё, и картинка сжимается, а не уезжает.
+// Видимая область (меньше, когда открыта экранная клавиатура). iOS при открытой
+// клавиатуре ещё и прокручивает страницу — --vvtop говорит, где сейчас видимая часть.
+// Экран ребуса встаёт ровно в неё: картинка сжимается, а не уезжает вверх.
 function syncViewportHeight() {
-  const h = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-  document.documentElement.style.setProperty('--vvh', Math.round(h) + 'px');
+  const vv = window.visualViewport;
+  const root = document.documentElement.style;
+  root.setProperty('--vvh', Math.round(vv ? vv.height : window.innerHeight) + 'px');
+  root.setProperty('--vvtop', Math.round(vv ? vv.offsetTop : 0) + 'px');
 }
 syncViewportHeight();
 (window.visualViewport || window).addEventListener('resize', syncViewportHeight);
+if (window.visualViewport) window.visualViewport.addEventListener('scroll', syncViewportHeight);
 window.addEventListener('orientationchange', syncViewportHeight);
 
 window.addEventListener('hashchange', () => route());

@@ -895,7 +895,18 @@ h1[tabindex="-1"]:focus { outline: none; }
 }
 
 /* Открыта экранная клавиатура: убираем всё лишнее, картинка сжимается. */
-.play.kb-open { min-height: 0; padding-top: calc(6px + var(--safe-t)); padding-bottom: 6px; }
+.play.kb-open {
+  position: fixed;
+  top: var(--vvtop, 0px);
+  left: 0;
+  right: 0;
+  z-index: 10;
+  height: var(--vvh, 100dvh);
+  min-height: 0;
+  padding-top: calc(6px + var(--safe-t));
+  padding-bottom: 6px;
+  background: var(--bg);
+}
 .kb-open .topbar, .kb-open .hearts, .kb-open .hint-slot { display: none; }
 .kb-open .board { min-height: 60px; }
 .kb-open .panel { margin-top: 8px; }
