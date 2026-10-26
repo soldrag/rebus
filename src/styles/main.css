@@ -498,6 +498,8 @@ h1[tabindex="-1"]:focus { outline: none; }
   font-size: var(--e);
   line-height: 1.12;
   display: inline-block;
+  /* Лёгкая тень: бледные эмодзи (🦷, 🥛) не теряются на светлом фоне. */
+  filter: drop-shadow(0 calc(var(--e) * .015) calc(var(--e) * .03) rgba(90, 60, 30, .35));
   font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
 }
 .emoji-wrap { position: relative; display: inline-block; }

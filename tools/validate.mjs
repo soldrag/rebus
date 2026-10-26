@@ -5,6 +5,7 @@ import { chunkStages, formatProblems, LEGEND_WORDS, normalize, pictures, rebusLi
 
 
 const file = new URL('../public/data/rebuses.json', import.meta.url);
+const registryFile = new URL('../data/pictures.json', import.meta.url);
 const rebuses = rebusList(JSON.parse(fs.readFileSync(file, 'utf8')));
 // Одна и та же картинка — не чаще чем в ~2,5% ребусов (но до 4 раз можно всегда).
 const MAX_PIC_USES = Math.max(4, Math.ceil(rebuses.length / 40));
@@ -36,6 +37,8 @@ for (const r of rebuses) {
   // Написанных букв — не больше половины ответа (цель — не больше трети).
   const written = r.parts.filter((p) => p && p.type === 'letters').reduce((n, p) => n + normalize(p.text).length, 0);
   if (a && written / a.length > 0.5) warnings.push(`${name}: буквами написано ${written} из ${a.length}`);
+  // В коротком слове (3–5 букв) — одна написанная буква, на уровне 1 можно две.
+  if (a && a.length <= 5 && written > (r.level === 1 ? 2 : 1)) problems.push(`${name}: в слове из ${a.length} букв написано ${written} — для уровня ${r.level} много`);
 
   for (const p of pictures(r)) {
     const key = `${p.emoji} ${normalize(p.word)}`;
@@ -43,6 +46,34 @@ for (const r of rebuses) {
   }
   if (a && LEGEND_WORDS.includes(a)) problems.push(`${name}: ответ ${r.answer} есть в примерах легенды — легенда его подскажет`);
 }
+// Реестр картинок (data/pictures.json): какие эмодзи и слова можно, с какого уровня,
+// можно ли переворачивать и брать в «первые буквы». picture: false — только для первых букв.
+const registry = new Map(
+  JSON.parse(fs.readFileSync(registryFile, 'utf8')).pictures.map((p) => [`${p.emoji} ${normalize(p.word)}`, p]),
+);
+for (const r of rebuses) {
+  for (const part of (r && r.parts) || []) {
+    if (!part) continue;
+    const uses = part.type === 'pic' ? [{ ...part, asInitial: false }]
+      : part.type === 'initials' ? (part.items || []).map((it) => ({ ...it, asInitial: true })) : [];
+    for (const u of uses) {
+      const key = `${u.emoji} ${normalize(u.word)}`;
+      const reg = registry.get(key);
+      if (!reg) { problems.push(`${r.id}: картинки ${key} нет в реестре data/pictures.json`); continue; }
+      if (reg.banned) { problems.push(`${r.id}: картинка ${key} запрещена — ${reg.note || 'см. реестр'}`); continue; }
+      if (r.level < (reg.minLevel || 1)) problems.push(`${r.id}: картинка ${key} — только с уровня ${reg.minLevel}`);
+      if (u.asInitial && reg.initials === false) problems.push(`${r.id}: картинку ${key} нельзя в первые буквы — ${reg.note || ''}`);
+      if (!u.asInitial && reg.picture === false) problems.push(`${r.id}: картинку ${key} можно только в первые буквы — ${reg.note || ''}`);
+      if (!u.asInitial && u.flip && !reg.flip) problems.push(`${r.id}: картинку ${key} нельзя переворачивать — ${reg.note || ''}`);
+      // Цифры над картинкой в обратном порядке (4 3 2 1) — это тот же переворот.
+      const pk = u.pick || [];
+      if (!u.asInitial && pk.length > 1 && pk.every((n, i) => i === 0 || n < pk[i - 1]) && !reg.flip) {
+        problems.push(`${r.id}: цифры над ${key} в обратном порядке — это переворот, а её переворачивать нельзя`);
+      }
+    }
+  }
+}
+
 // Уровень 1: число только целиком — без запятых (иначе это две операции для пятилетки).
 for (const r of rebuses) {
   if (r && r.level === 1 && (r.parts || []).some((p) => p && p.type === 'number' && (p.cutStart || p.cutEnd))) {

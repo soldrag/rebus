@@ -1,0 +1,1138 @@
+{
+  "version": 1,
+  "pictures": [
+    {
+      "emoji": "🚌",
+      "word": "АВТОБУС",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🦈",
+      "word": "АКУЛА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🍍",
+      "word": "АНАНАС",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🦋",
+      "word": "БАБОЧКА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🍌",
+      "word": "БАНАН",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🎀",
+      "word": "БАНТ",
+      "minLevel": 2,
+      "flip": false,
+      "initials": true,
+      "note": "«бантик»"
+    },
+    {
+      "emoji": "🐏",
+      "word": "БАРАН",
+      "minLevel": 2,
+      "flip": false,
+      "initials": true,
+      "note": "«овечка»"
+    },
+    {
+      "emoji": "🦛",
+      "word": "БЕГЕМОТ",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🐿️",
+      "word": "БЕЛКА",
+      "minLevel": 2,
+      "flip": false,
+      "initials": true,
+      "note": "похожа на бурундука"
+    },
+    {
+      "emoji": "🐂",
+      "word": "БЫК",
+      "minLevel": 2,
+      "flip": false,
+      "initials": true,
+      "note": "«корова»"
+    },
+    {
+      "emoji": "🛁",
+      "word": "ВАННА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🪣",
+      "word": "ВЕДРО",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🌊",
+      "word": "ВОЛНА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": false,
+      "note": "«море»"
+    },
+    {
+      "emoji": "🌋",
+      "word": "ВУЛКАН",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🎸",
+      "word": "ГИТАРА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "👁️",
+      "word": "ГЛАЗ",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": "вверх ногами выглядит так же"
+    },
+    {
+      "emoji": "⛰️",
+      "word": "ГОРА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": "на Android вверх ногами — летающий остров"
+    },
+    {
+      "emoji": "🍄",
+      "word": "ГРИБ",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": "«мухомор»"
+    },
+    {
+      "emoji": "🍐",
+      "word": "ГРУША",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🧽",
+      "word": "ГУБКА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🐬",
+      "word": "ДЕЛЬФИН",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🌳",
+      "word": "ДЕРЕВО",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🏠",
+      "word": "ДОМ",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": "«домик»; не чаще, чем уже есть"
+    },
+    {
+      "emoji": "🐉",
+      "word": "ДРАКОН",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🌲",
+      "word": "ЁЛКА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": false,
+      "note": "«ёлочка»; Ё — два звука"
+    },
+    {
+      "emoji": "🦝",
+      "word": "ЕНОТ",
+      "minLevel": 1,
+      "flip": false,
+      "initials": false,
+      "note": "Е — два звука"
+    },
+    {
+      "emoji": "🦒",
+      "word": "ЖИРАФ",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🪲",
+      "word": "ЖУК",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": "«жучок»"
+    },
+    {
+      "emoji": "🔒",
+      "word": "ЗАМОК",
+      "minLevel": 1,
+      "flip": true,
+      "initials": true,
+      "note": "перевёрнутый замок узнаётся; 🏰 — не замок"
+    },
+    {
+      "emoji": "⭐",
+      "word": "ЗВЕЗДА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🦓",
+      "word": "ЗЕБРА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🐍",
+      "word": "ЗМЕЯ",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🪡",
+      "word": "ИГОЛКА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🌵",
+      "word": "КАКТУС",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🗺️",
+      "word": "КАРТА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": "плоская — не переворачивать"
+    },
+    {
+      "emoji": "🦘",
+      "word": "КЕНГУРУ",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🧢",
+      "word": "КЕПКА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🥝",
+      "word": "КИВИ",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🐳",
+      "word": "КИТ",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🔑",
+      "word": "КЛЮЧ",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🐨",
+      "word": "КОАЛА",
+      "minLevel": 2,
+      "flip": false,
+      "initials": true,
+      "note": "слово знают не все пятилетки"
+    },
+    {
+      "emoji": "🥥",
+      "word": "КОКОС",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": "круглый — не переворачивать"
+    },
+    {
+      "emoji": "💍",
+      "word": "КОЛЬЦО",
+      "minLevel": 2,
+      "flip": false,
+      "initials": true,
+      "note": "«колечко»"
+    },
+    {
+      "emoji": "🐄",
+      "word": "КОРОВА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "👑",
+      "word": "КОРОНА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🐈",
+      "word": "КОШКА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": "как КОТ не использовать"
+    },
+    {
+      "emoji": "🦀",
+      "word": "КРАБ",
+      "minLevel": 2,
+      "flip": false,
+      "initials": true,
+      "note": "маленькие говорят «рак»"
+    },
+    {
+      "emoji": "🏆",
+      "word": "КУБОК",
+      "minLevel": 2,
+      "flip": false,
+      "initials": true,
+      "note": "«приз»"
+    },
+    {
+      "emoji": "🦁",
+      "word": "ЛЕВ",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": "вверх ногами похож на обезьяну (ВЕСЛО, приёмка)"
+    },
+    {
+      "emoji": "🍋",
+      "word": "ЛИМОН",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "📏",
+      "word": "ЛИНЕЙКА",
+      "minLevel": 2,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🦊",
+      "word": "ЛИСА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🛶",
+      "word": "ЛОДКА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🧅",
+      "word": "ЛУК",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🔍",
+      "word": "ЛУПА",
+      "minLevel": 2,
+      "flip": false,
+      "initials": true,
+      "note": "слово знают не все пятилетки"
+    },
+    {
+      "emoji": "🐸",
+      "word": "ЛЯГУШКА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🤿",
+      "word": "МАСКА",
+      "minLevel": 2,
+      "flip": false,
+      "initials": true,
+      "note": "«очки»"
+    },
+    {
+      "emoji": "🚗",
+      "word": "МАШИНА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🍯",
+      "word": "МЁД",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": "«банка», «горшок» — лучше реже"
+    },
+    {
+      "emoji": "🥇",
+      "word": "МЕДАЛЬ",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": "на медали цифра 1 — без цифр над картинкой и замены по номеру"
+    },
+    {
+      "emoji": "🌙",
+      "word": "МЕСЯЦ",
+      "minLevel": 1,
+      "flip": false,
+      "initials": false,
+      "note": "только как МЕСЯЦ, не ЛУНА; Е после М не мешает, но «луна» мешает"
+    },
+    {
+      "emoji": "🧸",
+      "word": "МИШКА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": "единственное слово — уменьшительное, но так называют все"
+    },
+    {
+      "emoji": "🪙",
+      "word": "МОНЕТА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": "«монетка»"
+    },
+    {
+      "emoji": "🥕",
+      "word": "МОРКОВЬ",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": "«морковка» — для первых букв не мешает"
+    },
+    {
+      "emoji": "🍦",
+      "word": "МОРОЖЕНОЕ",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "⚽",
+      "word": "МЯЧ",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": "перевёрнутый выглядит так же"
+    },
+    {
+      "emoji": "🦵",
+      "word": "НОГА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": "вверх ногами — «утка» (ВАГОН, приёмка)"
+    },
+    {
+      "emoji": "🔪",
+      "word": "НОЖ",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "✂️",
+      "word": "НОЖНИЦЫ",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "👃",
+      "word": "НОС",
+      "minLevel": 1,
+      "flip": true,
+      "initials": true,
+      "note": "переворот заметен"
+    },
+    {
+      "emoji": "🧦",
+      "word": "НОСКИ",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🔥",
+      "word": "ОГОНЬ",
+      "minLevel": 1,
+      "flip": false,
+      "initials": false,
+      "note": "О безударная"
+    },
+    {
+      "emoji": "🦌",
+      "word": "ОЛЕНЬ",
+      "minLevel": 1,
+      "flip": false,
+      "initials": false,
+      "note": "О безударная; бывает «лось»"
+    },
+    {
+      "emoji": "🦅",
+      "word": "ОРЁЛ",
+      "minLevel": 1,
+      "flip": false,
+      "initials": false,
+      "note": "О безударная"
+    },
+    {
+      "emoji": "⛺",
+      "word": "ПАЛАТКА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🌴",
+      "word": "ПАЛЬМА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🕷️",
+      "word": "ПАУК",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🪶",
+      "word": "ПЕРО",
+      "minLevel": 2,
+      "flip": false,
+      "initials": true,
+      "note": "«пёрышко»; плоское — не переворачивать, обратные цифры тоже нельзя"
+    },
+    {
+      "emoji": "🍪",
+      "word": "ПЕЧЕНЬЕ",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🪚",
+      "word": "ПИЛА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🐧",
+      "word": "ПИНГВИН",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🥧",
+      "word": "ПИРОГ",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🍕",
+      "word": "ПИЦЦА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "👗",
+      "word": "ПЛАТЬЕ",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🐝",
+      "word": "ПЧЕЛА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": "«пчёлка»"
+    },
+    {
+      "emoji": "🌈",
+      "word": "РАДУГА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🤖",
+      "word": "РОБОТ",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🌹",
+      "word": "РОЗА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": "бывает «цветок»; не чаще, чем уже есть"
+    },
+    {
+      "emoji": "🖊️",
+      "word": "РУЧКА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🐟",
+      "word": "РЫБА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": false,
+      "note": "«рыбка»: только целиком, без замен и запятых; подсказка уточняет"
+    },
+    {
+      "emoji": "🎆",
+      "word": "САЛЮТ",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🛷",
+      "word": "САНКИ",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "📎",
+      "word": "СКРЕПКА",
+      "minLevel": 3,
+      "flip": false,
+      "initials": true,
+      "note": "слово плохо знают"
+    },
+    {
+      "emoji": "🐘",
+      "word": "СЛОН",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": "узнают все"
+    },
+    {
+      "emoji": "🦉",
+      "word": "СОВА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": "есть в примерах легенды"
+    },
+    {
+      "emoji": "🧃",
+      "word": "СОК",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": "есть в примерах легенды"
+    },
+    {
+      "emoji": "☀️",
+      "word": "СОЛНЦЕ",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": "говорят и «солнышко» — для первых букв не мешает"
+    },
+    {
+      "emoji": "🪑",
+      "word": "СТУЛ",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "👜",
+      "word": "СУМКА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🧀",
+      "word": "СЫР",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": "перевёрнутый не отличается (РЫСЬ, приёмка)"
+    },
+    {
+      "emoji": "📺",
+      "word": "ТЕЛЕВИЗОР",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🐯",
+      "word": "ТИГР",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🪓",
+      "word": "ТОПОР",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🎂",
+      "word": "ТОРТ",
+      "minLevel": 1,
+      "flip": true,
+      "initials": true,
+      "note": "перевёрнутый торт узнаётся"
+    },
+    {
+      "emoji": "🎺",
+      "word": "ТРУБА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": false,
+      "note": "бывает «дудка»"
+    },
+    {
+      "emoji": "🎃",
+      "word": "ТЫКВА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🎣",
+      "word": "УДОЧКА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": false,
+      "note": "крупная рыба на картинке — «рыбка», первая буква Р"
+    },
+    {
+      "emoji": "🐌",
+      "word": "УЛИТКА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🦆",
+      "word": "УТКА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "picture": false,
+      "note": "как картинка-слово — «уточка»; только в первых буквах"
+    },
+    {
+      "emoji": "👂",
+      "word": "УХО",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🦩",
+      "word": "ФЛАМИНГО",
+      "minLevel": 2,
+      "flip": false,
+      "initials": false,
+      "note": "слово знают не все"
+    },
+    {
+      "emoji": "🔦",
+      "word": "ФОНАРИК",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "⛲",
+      "word": "ФОНТАН",
+      "minLevel": 2,
+      "flip": false,
+      "initials": false,
+      "note": "узнают не все"
+    },
+    {
+      "emoji": "🍞",
+      "word": "ХЛЕБ",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🐤",
+      "word": "ЦЫПЛЁНОК",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🫖",
+      "word": "ЧАЙНИК",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🐢",
+      "word": "ЧЕРЕПАХА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "🧣",
+      "word": "ШАРФ",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "👒",
+      "word": "ШЛЯПА",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": "«шляпка» — для первых букв не мешает"
+    },
+    {
+      "emoji": "🍫",
+      "word": "ШОКОЛАД",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": ""
+    },
+    {
+      "emoji": "⚓",
+      "word": "ЯКОРЬ",
+      "minLevel": 1,
+      "flip": false,
+      "initials": false,
+      "note": "Я — два звука"
+    },
+    {
+      "emoji": "🐺",
+      "word": "ВОЛК",
+      "banned": true,
+      "note": "в Noto похож на собаку/хаски"
+    },
+    {
+      "emoji": "🗻",
+      "word": "ГОРА",
+      "banned": true,
+      "note": "«вулкан» — брать ⛰️"
+    },
+    {
+      "emoji": "🦍",
+      "word": "ГОРИЛЛА",
+      "banned": true,
+      "note": "«обезьяна»"
+    },
+    {
+      "emoji": "🦔",
+      "word": "ЁЖ",
+      "banned": true,
+      "note": "«ёжик»"
+    },
+    {
+      "emoji": "🏰",
+      "word": "ЗАМОК",
+      "banned": true,
+      "note": "«дворец», «крепость» — брать 🔒"
+    },
+    {
+      "emoji": "🦷",
+      "word": "ЗУБ",
+      "minLevel": 1,
+      "flip": false,
+      "initials": true,
+      "note": "вверх ногами не узнаётся («привидение») — не переворачивать"
+    },
+    {
+      "emoji": "💧",
+      "word": "КАПЛЯ",
+      "banned": true,
+      "note": "«капелька»"
+    },
+    {
+      "emoji": "🍬",
+      "word": "КОНФЕТА",
+      "banned": true,
+      "note": "плохо узнаётся (приёмка, КОФТА)"
+    },
+    {
+      "emoji": "⛸️",
+      "word": "КОНЬКИ",
+      "banned": true,
+      "note": "один конёк — «конёк»"
+    },
+    {
+      "emoji": "🦴",
+      "word": "КОСТЬ",
+      "banned": true,
+      "note": "«косточка»"
+    },
+    {
+      "emoji": "🐱",
+      "word": "КОТ",
+      "banned": true,
+      "note": "«кошка»"
+    },
+    {
+      "emoji": "🐀",
+      "word": "КРЫСА",
+      "banned": true,
+      "note": "в Noto похожа на мышь"
+    },
+    {
+      "emoji": "🍁",
+      "word": "ЛИСТ",
+      "banned": true,
+      "note": "«листик»"
+    },
+    {
+      "emoji": "🏹",
+      "word": "ЛУК",
+      "banned": true,
+      "note": "путают с 🧅, говорят «стрела»"
+    },
+    {
+      "emoji": "🌕",
+      "word": "ЛУНА",
+      "banned": true,
+      "note": "«круг», «шар», «солнце»"
+    },
+    {
+      "emoji": "🎿",
+      "word": "ЛЫЖИ",
+      "banned": true,
+      "note": "в Noto похоже на ботинок"
+    },
+    {
+      "emoji": "🥛",
+      "word": "МОЛОКО",
+      "banned": true,
+      "note": "«стакан»"
+    },
+    {
+      "emoji": "🐭",
+      "word": "МЫШЬ",
+      "banned": true,
+      "note": "«мышка»"
+    },
+    {
+      "emoji": "🍗",
+      "word": "НОЖКА",
+      "banned": true,
+      "note": "«курица», «окорочок»"
+    },
+    {
+      "emoji": "🎵",
+      "word": "НОТЫ",
+      "banned": true,
+      "note": "«нота», «музыка»"
+    },
+    {
+      "emoji": "☁️",
+      "word": "ОБЛАКО",
+      "banned": true,
+      "note": "бледное, «тучка»"
+    },
+    {
+      "emoji": "🏝️",
+      "word": "ОСТРОВ",
+      "banned": true,
+      "note": "«пальма»"
+    },
+    {
+      "emoji": "🦞",
+      "word": "РАК",
+      "banned": true,
+      "note": "лобстер детям незнаком"
+    },
+    {
+      "emoji": "✋",
+      "word": "РУКА",
+      "banned": true,
+      "note": "«ладошка», «пять», «привет» — брать ✊ КУЛАК"
+    },
+    {
+      "emoji": "🚕",
+      "word": "ТАКСИ",
+      "banned": true,
+      "note": "«машина»"
+    },
+    {
+      "emoji": "🎈",
+      "word": "ШАР",
+      "banned": true,
+      "note": "«шарик»"
+    },
+    {
+      "emoji": "👅",
+      "word": "ЯЗЫК",
+      "banned": true,
+      "note": "с губами — «рот»"
+    }
+  ]
+}
