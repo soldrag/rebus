@@ -43,6 +43,13 @@ for (const r of rebuses) {
   }
   if (a && LEGEND_WORDS.includes(a)) problems.push(`${name}: ответ ${r.answer} есть в примерах легенды — легенда его подскажет`);
 }
+// Уровень 1: число только целиком — без запятых (иначе это две операции для пятилетки).
+for (const r of rebuses) {
+  if (r && r.level === 1 && (r.parts || []).some((p) => p && p.type === 'number' && (p.cutStart || p.cutEnd))) {
+    problems.push(`${r.id}: на уровне 1 число берём целиком, без запятых`);
+  }
+}
+
 // Одна операция на картинку (переворот с запятыми — только на уровне 3).
 for (const r of rebuses) {
   for (const p of (r && r.parts) || []) {
@@ -57,7 +64,8 @@ for (const r of rebuses) {
 // Чередование: не больше двух ребусов подряд с одним набором приёмов,
 // и один набор приёмов — не больше 40 % уровня.
 const MAX_IN_ROW = 2;
-const MAX_SHARE = 0.4;
+// Уровню 1 чуть больше допуска: подходящих пятилеткам приёмов меньше.
+const MAX_SHARE = { 1: 0.45, 2: 0.4, 3: 0.4 };
 const kindOf = (r) => techniques(r).sort().join('+');
 const shares = {};
 for (const level of [1, 2, 3]) {
@@ -71,7 +79,7 @@ for (const level of [1, 2, 3]) {
   items.forEach((r) => { count[kindOf(r)] = (count[kindOf(r)] || 0) + 1; });
   shares[level] = count;
   for (const [k, n] of Object.entries(count)) {
-    if (items.length >= 10 && n / items.length > MAX_SHARE) warnings.push(`уровень ${level}: «${k}» — ${n} из ${items.length} (больше ${MAX_SHARE * 100} %)`);
+    if (items.length >= 10 && n / items.length > MAX_SHARE[level]) warnings.push(`уровень ${level}: «${k}» — ${n} из ${items.length} (больше ${MAX_SHARE[level] * 100} %)`);
   }
 }
 

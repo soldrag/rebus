@@ -110,6 +110,9 @@ function partProblems(part) {
       break;
     case 'number':
       if (!/^\d+$/.test(String(part.value || ''))) p.push('value должно быть числом');
+      // 3 на экране выглядит как буква З — ребёнок прочтёт «З».
+      if (String(part.value).includes('3')) p.push('цифру 3 не используем: её путают с буквой З');
+      if (part.cutEnd && /[ЬЪ]$/.test(normalize(part.word))) p.push('запятая у числа срезает Ь/Ъ, которого не слышно');
       if (!len) p.push('нет word');
       if (part.flip || part.pick || part.replace || part.replaceAt || part.remove) p.push('у числа можно только запятые');
       break;

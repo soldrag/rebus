@@ -205,26 +205,6 @@
       "source": "классика"
     },
     {
-      "id": "ris",
-      "answer": "РИС",
-      "accept": [],
-      "level": 1,
-      "hint": "Мелкие белые зёрнышки, из них готовят плов",
-      "parts": [
-        {
-          "type": "number",
-          "value": "3",
-          "word": "ТРИ",
-          "cutStart": 1
-        },
-        {
-          "type": "letters",
-          "text": "С"
-        }
-      ],
-      "source": "классика"
-    },
-    {
       "id": "dub",
       "answer": "ДУБ",
       "accept": [],
@@ -628,6 +608,37 @@
       "source": "классика"
     },
     {
+      "id": "plot",
+      "answer": "ПЛОТ",
+      "accept": [],
+      "level": 1,
+      "hint": "Брёвна связали вместе — и плывут на них по реке",
+      "parts": [
+        {
+          "type": "initials",
+          "items": [
+            {
+              "emoji": "🍕",
+              "word": "ПИЦЦА"
+            },
+            {
+              "emoji": "🎿",
+              "word": "ЛЫЖИ"
+            },
+            {
+              "emoji": "🦌",
+              "word": "ОЛЕНЬ"
+            },
+            {
+              "emoji": "🐯",
+              "word": "ТИГР"
+            }
+          ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
       "id": "nosok",
       "answer": "НОСОК",
       "accept": [],
@@ -673,26 +684,6 @@
               "word": "АНАНАС"
             }
           ]
-        }
-      ],
-      "source": "классика"
-    },
-    {
-      "id": "dvor",
-      "answer": "ДВОР",
-      "accept": [],
-      "level": 1,
-      "hint": "Там между домами гуляют дети",
-      "parts": [
-        {
-          "type": "number",
-          "value": "2",
-          "word": "ДВА",
-          "cutEnd": 1
-        },
-        {
-          "type": "letters",
-          "text": "ОР"
         }
       ],
       "source": "классика"
@@ -749,6 +740,26 @@
       "source": "классика"
     },
     {
+      "id": "nitka",
+      "answer": "НИТКА",
+      "accept": [],
+      "level": 1,
+      "hint": "Её вдевают в иголку, чтобы пришить пуговицу",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "Н"
+        },
+        {
+          "type": "pic",
+          "emoji": "🐌",
+          "word": "УЛИТКА",
+          "cutStart": 2
+        }
+      ],
+      "source": "классика"
+    },
+    {
       "id": "flag",
       "answer": "ФЛАГ",
       "accept": [],
@@ -775,29 +786,6 @@
               "word": "ГИТАРА"
             }
           ]
-        }
-      ],
-      "source": "классика"
-    },
-    {
-      "id": "strizh",
-      "answer": "СТРИЖ",
-      "accept": [],
-      "level": 1,
-      "hint": "Быстрая птица с острыми крыльями, носится над крышами",
-      "parts": [
-        {
-          "type": "letters",
-          "text": "С"
-        },
-        {
-          "type": "number",
-          "value": "3",
-          "word": "ТРИ"
-        },
-        {
-          "type": "letters",
-          "text": "Ж"
         }
       ],
       "source": "классика"
@@ -849,57 +837,6 @@
           "emoji": "🤖",
           "word": "РОБОТ",
           "cutStart": 1
-        }
-      ],
-      "source": "классика"
-    },
-    {
-      "id": "plot",
-      "answer": "ПЛОТ",
-      "accept": [],
-      "level": 1,
-      "hint": "Брёвна связали вместе — и плывут на них по реке",
-      "parts": [
-        {
-          "type": "initials",
-          "items": [
-            {
-              "emoji": "🍕",
-              "word": "ПИЦЦА"
-            },
-            {
-              "emoji": "🎿",
-              "word": "ЛЫЖИ"
-            },
-            {
-              "emoji": "🦌",
-              "word": "ОЛЕНЬ"
-            },
-            {
-              "emoji": "🐯",
-              "word": "ТИГР"
-            }
-          ]
-        }
-      ],
-      "source": "классика"
-    },
-    {
-      "id": "nitka",
-      "answer": "НИТКА",
-      "accept": [],
-      "level": 1,
-      "hint": "Её вдевают в иголку, чтобы пришить пуговицу",
-      "parts": [
-        {
-          "type": "letters",
-          "text": "Н"
-        },
-        {
-          "type": "pic",
-          "emoji": "🐌",
-          "word": "УЛИТКА",
-          "cutStart": 2
         }
       ],
       "source": "классика"
@@ -1825,28 +1762,6 @@
       "source": "классика"
     },
     {
-      "id": "pyatno",
-      "answer": "ПЯТНО",
-      "accept": [],
-      "level": 2,
-      "hint": "Остаётся на рубашке от варенья",
-      "parts": [
-        {
-          "type": "number",
-          "value": "5",
-          "word": "ПЯТЬ",
-          "cutEnd": 1
-        },
-        {
-          "type": "pic",
-          "emoji": "🦵",
-          "word": "НОГА",
-          "cutEnd": 2
-        }
-      ],
-      "source": "классика"
-    },
-    {
       "id": "baton",
       "answer": "БАТОН",
       "accept": [],
@@ -2223,28 +2138,6 @@
           "word": "ВУЛКАН",
           "cutStart": 1,
           "cutEnd": 1
-        }
-      ],
-      "source": "классика"
-    },
-    {
-      "id": "pyatka",
-      "answer": "ПЯТКА",
-      "accept": [],
-      "level": 2,
-      "hint": "Задняя часть ступни, её щекочут",
-      "parts": [
-        {
-          "type": "number",
-          "value": "5",
-          "word": "ПЯТЬ",
-          "cutEnd": 1
-        },
-        {
-          "type": "pic",
-          "emoji": "🧽",
-          "word": "ГУБКА",
-          "cutStart": 3
         }
       ],
       "source": "классика"

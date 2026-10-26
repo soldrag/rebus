@@ -606,12 +606,23 @@ h1[tabindex="-1"]:focus { outline: none; }
 .swap-n { background: var(--sun); color: var(--ink); }
 
 /* Число */
+/* Число — в рамке, как на кубике: так цифру не спутать с буквой. */
 .num-digits {
-  font-size: calc(var(--e) * .95);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: calc(var(--e) * .9);
+  height: calc(var(--e) * 1.02);
+  margin-top: calc(var(--e) * .05);
+  padding: 0 calc(var(--e) * .12);
+  font-size: calc(var(--e) * .72);
   font-weight: 900;
-  line-height: 1.12;
+  line-height: 1;
   color: var(--sky-ink);
   letter-spacing: -.02em;
+  background: #E8F4FC;
+  border: max(3px, calc(var(--e) * .04)) solid var(--sky-ink);
+  border-radius: calc(var(--e) * .18);
 }
 
 /* Первые буквы картинок */
