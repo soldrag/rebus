@@ -171,7 +171,7 @@ export function renderRebus(app, data, id, signal, backTo = '#/') {
   Object.assign(input, { type: 'text', name: 'answer', placeholder: 'Что тут спрятано?', maxLength: 40 });
   for (const [k, v] of Object.entries({
     autocapitalize: 'characters', autocomplete: 'off', autocorrect: 'off', spellcheck: 'false',
-    inputmode: 'text', lang: 'ru', enterkeyhint: 'done', 'aria-label': 'Твой ответ',
+    inputmode: 'text', lang: 'ru', enterkeyhint: 'go', 'aria-label': 'Твой ответ',
   })) input.setAttribute(k, v);
   const btn = el('button', 'btn btn-check', 'Проверить');
   btn.type = 'submit';
@@ -200,8 +200,24 @@ export function renderRebus(app, data, id, signal, backTo = '#/') {
     if (msg.classList.contains('empty-note')) { msg.textContent = ''; msg.className = 'msg'; }
   });
 
+  // Ребёнок набрал слово и закрыл клавиатуру (галочка над клавиатурой iOS):
+  // проверяем сами, чтобы не нужно было ещё раз жать «Проверить».
+  // Пауза — чтобы нажатие на «Проверить» сразу после blur не проверило дважды.
+  let checking = false;
+  input.addEventListener('blur', () => {
+    const val = input.value;
+    if (!normalize(val)) return;
+    setTimeout(() => {
+      if (checking || !input.isConnected || document.activeElement === input) return;
+      if (input.value !== val || closeLegend) return;
+      form.requestSubmit();
+    }, 300);
+  }, { signal });
+
   form.addEventListener('submit', (ev) => {
     ev.preventDefault();
+    checking = true;
+    setTimeout(() => { checking = false; }, 400);
     const val = input.value;
     if (!normalize(val)) {
       msg.textContent = 'Напиши слово 🙂';
