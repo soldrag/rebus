@@ -1,6 +1,6 @@
 // Мини-легенда ребусной записи: по карточке на каждый приём.
-// Примеры не должны совпадать с ответами набора — их список в LEGEND_WORDS (rebus-core.js),
-// валидатор это проверяет.
+// Примеры не должны совпадать с ответами набора, а картинки должны быть разрешены реестром:
+// слова и картинки перечислены в LEGEND_WORDS и LEGEND_PICTURES (rebus-core.js), валидатор это проверяет.
 import { el, add } from './dom.js';
 import { commaSvg, picEmoji, struckLetter, pickNumbers, numberSwap } from './board.js';
 
@@ -9,6 +9,11 @@ const top = (...nodes) => add(el('div', 'part-top'), ...nodes);
 const bigLetters = (text, cls = 'c0') => add(el('span', 'letters-row'), ...text.split('').map((ch) => el('span', 'big-letter ' + cls, ch)));
 
 const CARDS = {
+  plain: {
+    title: 'Назови картинки и прочитай всё подряд, слева направо',
+    words: 'КИТ + Ы → КИТЫ',
+    sample() { return add(el('div', 'pic-row'), picEmoji('🐳'), bigLetters('Ы')); },
+  },
   comma: {
     title: 'Запятая — убери букву с этого края',
     words: 'КЛЮЧ → КЛЮ',
@@ -35,14 +40,14 @@ const CARDS = {
   },
   flip: {
     title: 'Вверх ногами — читай задом наперёд',
-    words: 'КИТ → ТИК',
-    sample() { return picEmoji('🐳', true); },
+    words: 'ТОРТ → ТРОТ',
+    sample() { return picEmoji('🎂', true); },
   },
   initials: {
     title: 'А… — возьми первые буквы картинок',
-    words: 'СЛОН, ОБЛАКО, КЛЮЧ → СОК',
+    words: 'КЕНГУРУ, УТКА, БЕГЕМОТ → КУБ',
     sample() {
-      return stack(top(el('span', 'initials-mark', 'А…')), add(el('div', 'pic-row initials-row'), picEmoji('🐘'), picEmoji('☁️'), picEmoji('🔑')));
+      return stack(top(el('span', 'initials-mark', 'А…')), add(el('div', 'pic-row initials-row'), picEmoji('🦘'), picEmoji('🦆'), picEmoji('🦛')));
     },
   },
   number: {
@@ -75,7 +80,8 @@ const CARDS = {
     },
   },
 };
-export const ALL_KINDS = Object.keys(CARDS);
+// Приёмы с карточками; «plain» — только для ребусов без особых значков, сам не показывается.
+export const ALL_KINDS = Object.keys(CARDS).filter((k) => k !== 'plain');
 
 // Открывает легенду. kinds — какие карточки показать; fresh — «новый значок».
 export function openLegend(kinds, { fresh = false, onClose } = {}) {

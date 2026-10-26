@@ -28,8 +28,15 @@ export function readsAsLetters(value) {
 
 // Слова из примеров легенды (src/ui/legend.js): ответы набора не должны с ними совпадать,
 // иначе легенда подскажет ответ.
-export const LEGEND_WORDS = ['КЛЮЧ', 'ТОРТ', 'ТОТ', 'СЫР', 'СЫН', 'СОР', 'КИТ', 'ТИК', 'СЛОН', 'ОБЛАКО', 'СОК',
+export const LEGEND_WORDS = ['КИТЫ', 'КЛЮЧ', 'ТОРТ', 'ТОТ', 'ТРОТ', 'СЫР', 'СЫН', 'СОР', 'КУБ',
   'СТО', 'СТОЛБ', 'ЛИСА', 'СОВА', 'ВОРОТА', 'КАНАВА'];
+// Картинки легенды: как они там используются (flip — перевёрнута, initials — в первых буквах).
+export const LEGEND_PICTURES = [
+  { emoji: '🐳', word: 'КИТ' }, { emoji: '🔑', word: 'КЛЮЧ' }, { emoji: '🎂', word: 'ТОРТ' },
+  { emoji: '🎂', word: 'ТОРТ', flip: true }, { emoji: '🧀', word: 'СЫР' }, { emoji: '🦊', word: 'ЛИСА' },
+  { emoji: '🦘', word: 'КЕНГУРУ', initials: true }, { emoji: '🦆', word: 'УТКА', initials: true },
+  { emoji: '🦛', word: 'БЕГЕМОТ', initials: true },
+];
 
 // Этапы уровня: по 20 ребусов подряд, хвост короче 10 присоединяется к предыдущему.
 export const STAGE_SIZE = 20;

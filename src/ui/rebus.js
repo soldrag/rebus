@@ -135,9 +135,9 @@ export function renderRebus(app, data, id, signal, backTo = '#/') {
     closeLegend = openLegend(kinds, { fresh, onClose: () => { closeLegend = null; if (after) after(); } });
   };
   help.addEventListener('click', () => {
-    // Сначала приёмы из этого ребуса, запятые — в конце.
-    const own = techniques(rebus).filter((k) => ALL_KINDS.includes(k) && k !== 'comma');
-    const kinds = own.concat(ALL_KINDS.filter((k) => !own.includes(k) && k !== 'comma'), ['comma']);
+    // Только приёмы этого ребуса (запятые — последними); без особых значков — «просто прочитай».
+    const own = techniques(rebus).filter((k) => ALL_KINDS.includes(k));
+    const kinds = own.length ? own.filter((k) => k !== 'comma').concat(own.includes('comma') ? ['comma'] : []) : ['plain'];
     showLegend(kinds, false, () => help.focus());
   });
 

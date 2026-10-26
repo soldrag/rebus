@@ -1,7 +1,7 @@
 // Проверка данных ребусов: npm run validate
 // Правила составления — в docs/REBUSES.md. Ошибки валят сборку, предупреждения — нет.
 import fs from 'node:fs';
-import { chunkStages, formatProblems, LEGEND_WORDS, normalize, pictures, rebusList, techniques } from '../src/rebus-core.js';
+import { chunkStages, formatProblems, LEGEND_PICTURES, LEGEND_WORDS, normalize, pictures, rebusList, techniques } from '../src/rebus-core.js';
 
 
 const file = new URL('../public/data/rebuses.json', import.meta.url);
@@ -72,6 +72,16 @@ for (const r of rebuses) {
       }
     }
   }
+}
+
+// Картинки легенды подчиняются тому же реестру.
+for (const p of LEGEND_PICTURES) {
+  const key = `${p.emoji} ${normalize(p.word)}`;
+  const reg = registry.get(key);
+  if (!reg || reg.banned) problems.push(`легенда: картинки ${key} нет в реестре или она запрещена`);
+  else if (p.flip && !reg.flip) problems.push(`легенда: картинку ${key} нельзя переворачивать`);
+  else if (p.initials && reg.initials === false) problems.push(`легенда: картинку ${key} нельзя в первые буквы`);
+  else if (!p.initials && reg.picture === false) problems.push(`легенда: картинку ${key} можно только в первые буквы`);
 }
 
 // Уровень 1: число только целиком — без запятых (иначе это две операции для пятилетки).
