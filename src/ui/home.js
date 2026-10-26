@@ -62,7 +62,9 @@ export function renderHome(app, data, signal) {
   }, signal);
   const all = el('a', 'all-link', 'Все ребусы по номерам');
   all.href = '#/all';
-  add(app, add(el('footer', 'home-foot'), installBlock(signal), all, reset));
+  const lic = el('a', 'lic-link', 'Лицензии');
+  lic.href = 'licenses.txt';
+  add(app, add(el('footer', 'home-foot'), installBlock(signal), all, reset, lic));
 }
 
 // Кнопка, которая срабатывает только после удержания (~1,5 с): защита от случайного нажатия.

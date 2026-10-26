@@ -39,4 +39,4 @@ GitHub Actions (`.github/workflows/deploy.yml`) собирает и публик
 
 ## Лицензия
 
-MIT
+MIT. Сторонние компоненты (шрифт Nunito, Workbox, иконка из Noto Emoji) — в [public/licenses.txt](public/licenses.txt).

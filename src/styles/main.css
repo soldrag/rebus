@@ -295,6 +295,7 @@ h1[tabindex="-1"]:focus { outline: none; }
   .tile { font-size: 38px; border-radius: 26px; }
 }
 .home-foot { text-align: center; margin-top: 36px; }
+.lic-link { display: inline-block; margin-top: 18px; padding: 8px; font-size: 13px; color: var(--ink-soft); }
 .hold { display: flex; flex-direction: column; align-items: center; gap: 6px; }
 .reset {
   min-height: 48px;
