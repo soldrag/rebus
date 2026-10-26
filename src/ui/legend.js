@@ -1,4 +1,6 @@
 // Мини-легенда ребусной записи: по карточке на каждый приём.
+// Примеры не должны совпадать с ответами набора — их список в LEGEND_WORDS (rebus-core.js),
+// валидатор это проверяет.
 import { el, add } from './dom.js';
 import { commaSvg, picEmoji, struckLetter, pickNumbers } from './board.js';
 
@@ -9,67 +11,67 @@ const bigLetters = (text, cls = 'c0') => add(el('span', 'letters-row'), ...text.
 const CARDS = {
   comma: {
     title: 'Запятая — убери букву с этого края',
-    words: 'КОТ → КО',
+    words: 'КЛЮЧ → КЛЮ',
     sample() {
       const row = el('div', 'pic-row');
       const c = el('span', 'commas commas-r');
       add(c, commaSvg());
-      return add(row, picEmoji('🐱', false), c);
+      return add(row, picEmoji('🔑', false), c);
     },
   },
   remove: {
     title: 'Зачёркнутая буква — убери её',
-    words: 'СЛОН → СОН',
+    words: 'ТОРТ → ТОТ',
     sample() {
-      return stack(picEmoji('🐘', false), add(el('div', 'part-bottom'), struckLetter('Л')));
+      return stack(picEmoji('🎂', false), add(el('div', 'part-bottom'), struckLetter('Р')));
     },
   },
   replace: {
-    title: 'З = С — замени букву',
-    words: 'КОЗА → КОСА',
+    title: 'Р = Н — замени букву',
+    words: 'СЫР → СЫН',
     sample() {
-      return stack(top(el('span', 'swap', 'З = С')), picEmoji('🐐', false));
+      return stack(top(el('span', 'swap', 'Р = Н')), picEmoji('🧀', false));
     },
   },
   flip: {
     title: 'Вверх ногами — читай задом наперёд',
-    words: 'КОТ → ТОК',
-    sample() { return picEmoji('🐱', true); },
+    words: 'КИТ → ТИК',
+    sample() { return picEmoji('🐳', true); },
   },
   initials: {
     title: 'А… — возьми первые буквы картинок',
-    words: 'МЫШЬ, АРБУЗ, КОТ → МАК',
+    words: 'СЛОН, ОБЛАКО, КЛЮЧ → СОК',
     sample() {
-      return stack(top(el('span', 'initials-mark', 'А…')), add(el('div', 'pic-row initials-row'), picEmoji('🐭'), picEmoji('🍉'), picEmoji('🐈')));
+      return stack(top(el('span', 'initials-mark', 'А…')), add(el('div', 'pic-row initials-row'), picEmoji('🐘'), picEmoji('☁️'), picEmoji('🔑')));
     },
   },
   number: {
     title: 'Цифру читай словом',
-    words: '7 + Я → СЕМЬЯ',
-    sample() { return add(el('div', 'pic-row'), el('span', 'num-digits', '7'), bigLetters('Я')); },
+    words: '100 + ЛБ → СТОЛБ',
+    sample() { return add(el('div', 'pic-row'), el('span', 'num-digits', '100'), bigLetters('ЛБ')); },
   },
   pick: {
-    title: 'Цифры сверху — возьми буквы с этими номерами',
-    words: 'КОТ, 3 2 1 → ТОК',
-    sample() { return stack(top(pickNumbers([3, 2, 1])), picEmoji('🐱')); },
+    title: 'Цифры сверху — возьми буквы с этими номерами, по порядку цифр',
+    words: 'ЛИСА, 1 2 3 → ЛИС',
+    sample() { return stack(top(pickNumbers([1, 2, 3])), picEmoji('🦊')); },
   },
   replaceAt: {
-    title: '2 = И — поменяй вторую букву',
-    words: 'КОТ → КИТ',
-    sample() { return stack(top(el('span', 'swap swap-n', '2 = И')), picEmoji('🐱')); },
+    title: '2 = О — поменяй вторую букву',
+    words: 'СЫР → СОР',
+    sample() { return stack(top(el('span', 'swap swap-n', '2 = О')), picEmoji('🧀')); },
   },
   in: {
-    title: 'Буквы внутри буквы — читай со словом «В»',
-    words: 'ДА в О → ВОДА',
+    title: 'Буквы внутри буквы — добавь «В», чтобы вышло слово',
+    words: 'СО в А → СОВА, РОТА в О → ВОРОТА',
     sample() {
-      return add(el('span', 'position in'), add(el('span', 'pos-stack'), el('span', 'pos-outer c1', 'О'), el('span', 'pos-inner c0', 'ДА')));
+      return add(el('span', 'position in'), add(el('span', 'pos-stack'), el('span', 'pos-outer c1', 'А'), el('span', 'pos-inner c0', 'СО')));
     },
   },
   on: {
     title: 'Буквы над буквами — читай со словом «НА»',
-    words: 'ПА на МА → ПАНАМА',
+    words: 'КА на ВА → КАНАВА',
     sample() {
-      return add(el('span', 'position on'), add(el('span', 'pos-stack'), el('span', 'pos-inner c0', 'ПА'), el('span', 'pos-outer c1', 'МА')));
+      return add(el('span', 'position on'), add(el('span', 'pos-stack'), el('span', 'pos-inner c0', 'КА'), el('span', 'pos-outer c1', 'ВА')));
     },
   },
 };

@@ -15,6 +15,30 @@ export function keepYo(s) {
 
 export const PREPOSITIONS = ['В', 'НА'];
 
+// Слова из примеров легенды (src/ui/legend.js): ответы набора не должны с ними совпадать,
+// иначе легенда подскажет ответ.
+export const LEGEND_WORDS = ['КЛЮЧ', 'ТОРТ', 'ТОТ', 'СЫР', 'СЫН', 'СОР', 'КИТ', 'ТИК', 'СЛОН', 'ОБЛАКО', 'СОК',
+  'СТО', 'СТОЛБ', 'ЛИСА', 'СОВА', 'ВОРОТА', 'КАНАВА'];
+
+// Этапы уровня: по 20 ребусов подряд, хвост короче 10 присоединяется к предыдущему.
+export const STAGE_SIZE = 20;
+export function chunkStages(items) {
+  const out = [];
+  for (let i = 0; i < items.length; i += STAGE_SIZE) out.push(items.slice(i, i + STAGE_SIZE));
+  if (out.length > 1 && out[out.length - 1].length < STAGE_SIZE / 2) out[out.length - 2].push(...out.pop());
+  return out;
+}
+
+// Все картинки ребуса (в том числе внутри «первых букв»): [{ emoji, word }].
+export function pictures(rebus) {
+  const out = [];
+  for (const p of rebus.parts || []) {
+    if (p && p.type === 'pic') out.push({ emoji: p.emoji, word: p.word });
+    if (p && p.type === 'initials') (p.items || []).forEach((it) => out.push({ emoji: it.emoji, word: it.word }));
+  }
+  return out;
+}
+
 // Буквы, которые даёт одна часть ребуса.
 // Картинка и число: переворот → замены букв → замены по номеру → зачёркивание
 // → цифры над картинкой (какие буквы и в каком порядке) → запятые.

@@ -1,14 +1,13 @@
 // Уровни сложности, этапы внутри уровня (по ~20 ребусов, за каждый — кубок)
 // и порядок ребусов.
 import { getState } from './store.js';
+import { chunkStages } from './rebus-core.js';
 
 export const LEVELS = [
   { level: 1, title: 'Лёгкие', emoji: '🐣', cls: 'lvl-1' },
   { level: 2, title: 'Средние', emoji: '🦊', cls: 'lvl-2' },
   { level: 3, title: 'Трудные', emoji: '🦁', cls: 'lvl-3' },
 ];
-const STAGE_SIZE = 20;
-const MIN_LAST_STAGE = 10; // короткий хвост присоединяем к предыдущему этапу
 
 export const levelInfo = (level) => LEVELS.find((L) => L.level === level) || LEVELS[0];
 
@@ -18,11 +17,7 @@ const finished = (r) => !!getState(r.id).status;
 
 // Этапы уровня: массивы ребусов по ~20.
 export function stages(list, level) {
-  const items = levelItems(list, level);
-  const out = [];
-  for (let i = 0; i < items.length; i += STAGE_SIZE) out.push(items.slice(i, i + STAGE_SIZE));
-  if (out.length > 1 && out[out.length - 1].length < MIN_LAST_STAGE) out[out.length - 2].push(...out.pop());
-  return out;
+  return chunkStages(levelItems(list, level));
 }
 
 // Где ребус: номер этапа (с 1), все этапы уровня и сам этап.

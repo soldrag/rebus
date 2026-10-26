@@ -1,7 +1,7 @@
 // Проверка данных ребусов: npm run validate
 // Правила составления — в docs/REBUSES.md. Ошибки валят сборку, предупреждения — нет.
 import fs from 'node:fs';
-import { formatProblems, normalize, rebusList, techniques } from '../src/rebus-core.js';
+import { chunkStages, formatProblems, LEGEND_WORDS, normalize, pictures, rebusList, techniques } from '../src/rebus-core.js';
 
 
 const file = new URL('../public/data/rebuses.json', import.meta.url);
@@ -37,12 +37,11 @@ for (const r of rebuses) {
   const written = r.parts.filter((p) => p && p.type === 'letters').reduce((n, p) => n + normalize(p.text).length, 0);
   if (a && written / a.length > 0.5) warnings.push(`${name}: буквами написано ${written} из ${a.length}`);
 
-  for (const p of r.parts) {
-    if (p && p.type === 'pic') {
-      const key = `${p.emoji} ${normalize(p.word)}`;
-      pics.set(key, (pics.get(key) || 0) + 1);
-    }
+  for (const p of pictures(r)) {
+    const key = `${p.emoji} ${normalize(p.word)}`;
+    pics.set(key, (pics.get(key) || 0) + 1);
   }
+  if (a && LEGEND_WORDS.includes(a)) problems.push(`${name}: ответ ${r.answer} есть в примерах легенды — легенда его подскажет`);
 }
 // Одна операция на картинку (переворот с запятыми — только на уровне 3).
 for (const r of rebuses) {
@@ -74,6 +73,20 @@ for (const level of [1, 2, 3]) {
   for (const [k, n] of Object.entries(count)) {
     if (items.length >= 10 && n / items.length > MAX_SHARE) warnings.push(`уровень ${level}: «${k}» — ${n} из ${items.length} (больше ${MAX_SHARE * 100} %)`);
   }
+}
+
+// Зеркальные пары: ответ одного ребуса — картинка другого. «Узел» (картинкой в 2+ ребусах)
+// и пара внутри одного этапа мешают ребёнку.
+const stageOfId = new Map();
+for (const level of [1, 2, 3]) {
+  chunkStages(rebuses.filter((r) => r && r.level === level)).forEach((items, i) => items.forEach((r) => stageOfId.set(r.id, `${level}-${i + 1}`)));
+}
+for (const r of rebuses) {
+  const a = normalize(r && r.answer);
+  if (!a) continue;
+  const others = rebuses.filter((o) => o !== r && pictures(o).some((p) => normalize(p.word) === a));
+  if (others.length >= 2) warnings.push(`${r.id}: ответ ${r.answer} стоит картинкой в ${others.length} ребусах (${others.map((o) => o.id).join(', ')}) — «узел»`);
+  else if (others.length === 1 && stageOfId.get(others[0].id) === stageOfId.get(r.id)) warnings.push(`${r.id}: зеркальная пара с ${others[0].id} в одном этапе`);
 }
 
 for (const [key, n] of pics) {
