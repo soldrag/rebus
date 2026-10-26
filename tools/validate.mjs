@@ -1,23 +1,27 @@
-// Проверка данных: node tools/validate.mjs
-import { createRequire } from 'node:module';
+// Проверка данных ребусов: npm run validate
 import fs from 'node:fs';
-import vm from 'node:vm';
-const require = createRequire(import.meta.url);
-const core = require('../js/rebus-core.js');
+import { normalize, solve } from '../src/rebus-core.js';
 
-const ctx = { window: {} };
-vm.runInNewContext(fs.readFileSync(new URL('../data/rebuses.js', import.meta.url), 'utf8'), ctx);
-const list = ctx.window.REBUSES || [];
-let bad = 0;
+const file = new URL('../public/data/rebuses.json', import.meta.url);
+const { rebuses = [] } = JSON.parse(fs.readFileSync(file, 'utf8'));
+
+const problems = [];
 const ids = new Set();
-for (const r of list) {
-  if (ids.has(r.id)) { console.log('DUP id', r.id); bad++; }
-  ids.add(r.id);
-  const got = core.solve(r);
-  if (got !== core.normalize(r.answer)) {
-    console.log(`FAIL ${r.id}: answer=${r.answer} solve=${got}`);
-    bad++;
+const answers = new Set();
+for (const r of rebuses) {
+  if (!r.id || !r.answer || !Array.isArray(r.parts) || !r.parts.length) {
+    problems.push(`${r.id || '?'}: нет id, answer или parts`);
+    continue;
   }
+  if (ids.has(r.id)) problems.push(`${r.id}: повтор id`);
+  if (answers.has(normalize(r.answer))) problems.push(`${r.id}: повтор ответа ${r.answer}`);
+  ids.add(r.id);
+  answers.add(normalize(r.answer));
+  if (![1, 2, 3].includes(r.level)) problems.push(`${r.id}: level должен быть 1, 2 или 3`);
+  const got = solve(r);
+  if (got !== normalize(r.answer)) problems.push(`${r.id}: ответ ${r.answer}, а по картинке выходит ${got}`);
 }
-console.log(`${list.length} rebuses, ${bad} problems`);
-process.exit(bad ? 1 : 0);
+
+problems.forEach((p) => console.log('✗', p));
+console.log(`${rebuses.length} ребусов, проблем: ${problems.length}`);
+process.exit(problems.length ? 1 : 0);
