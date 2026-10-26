@@ -1,5 +1,6 @@
 // Картинка ребуса, раскладка под размер экрана, разбор решения.
-import { partLetters } from '../rebus-core.js';
+import { partLetters, normalize } from '../rebus-core.js';
+export { techniques } from '../rebus-core.js';
 import { el, add, plural } from './dom.js';
 
 const LETTER_COLORS = 5;
@@ -15,19 +16,6 @@ const GAP = 0.2;     // промежуток между частями, в до�
 const ROW_GAP = 0.15;
 const PAD = 0.3;     // запас по краям, в долях эмодзи
 const ONE_ROW_BIAS = 0.68; // одна строка, если картинки в ней не меньше ~2/3 от двухстрочных
-
-// Приёмы ребусной записи, которые встречаются в ребусе (для легенды).
-export function techniques(rebus) {
-  const t = new Set();
-  for (const p of rebus.parts) {
-    if (p.type === 'letters') continue;
-    if (p.cutStart || p.cutEnd) t.add('comma');
-    if (p.remove && p.remove.length) t.add('remove');
-    if (p.replace && p.replace.length) t.add('replace');
-    if (p.flip) t.add('flip');
-  }
-  return [...t];
-}
 
 // Запятая — нарисованная (круглая головка и хвостик), чтобы не путалась с апострофом.
 export function commaSvg() {
@@ -69,13 +57,30 @@ export function struckLetter(ch) {
   return x;
 }
 
+// Цифры над картинкой: какие буквы слова взять и в каком порядке.
+export function pickNumbers(pick) {
+  const box = el('span', 'pick');
+  box.setAttribute('aria-label', 'буквы номер ' + pick.join(', '));
+  for (const n of pick) add(box, el('span', 'pick-n', String(n)));
+  return box;
+}
+
+// Картинка или число (у числа вместо эмодзи — крупные цифры).
 function renderPic(p) {
-  const box = el('div', 'part pic');
+  const box = el('div', 'part pic' + (p.type === 'number' ? ' number' : ''));
   const top = el('div', 'part-top');
+  if (p.pick) add(top, pickNumbers(p.pick));
   for (const [from, to] of p.replace || []) add(top, el('span', 'swap', show(from) + ' = ' + show(to)));
+  for (const [n, to] of p.replaceAt || []) add(top, el('span', 'swap swap-n', n + ' = ' + show(to)));
   const row = el('div', 'pic-row');
   if (p.cutStart) add(row, commas(p.cutStart, 'l'));
-  add(row, picEmoji(p.emoji, p.flip));
+  if (p.type === 'number') {
+    const num = el('span', 'num-digits', String(p.value));
+    num.setAttribute('aria-label', 'число ' + p.value);
+    add(row, num);
+  } else {
+    add(row, picEmoji(p.emoji, p.flip));
+  }
   if (p.cutEnd) add(row, commas(p.cutEnd, 'r'));
   const bottom = el('div', 'part-bottom');
   for (const ch of p.remove || []) add(bottom, struckLetter(ch));
@@ -89,6 +94,41 @@ function renderLetters(p, seed) {
     add(row, el('span', 'big-letter c' + (seed.n++ % LETTER_COLORS), ch));
   });
   return add(box, el('div', 'part-top'), row, el('div', 'part-bottom'));
+}
+
+// Первые буквы: несколько картинок в рамке, над ней — значок «А…».
+function renderInitials(p) {
+  const box = el('div', 'part pic initials');
+  const top = el('div', 'part-top');
+  const mark = el('span', 'initials-mark', 'А…');
+  mark.setAttribute('aria-label', 'по первым буквам');
+  add(top, mark);
+  const row = el('div', 'pic-row initials-row');
+  for (const it of p.items) add(row, picEmoji(it.emoji, false));
+  return add(box, top, row, el('div', 'part-bottom'));
+}
+
+// Буквы в букве («В») или над буквами («НА»).
+function renderPosition(p, seed) {
+  const on = normalize(p.prep) === 'НА';
+  const box = el('div', 'part text position ' + (on ? 'on' : 'in'));
+  const color = () => 'c' + (seed.n++ % LETTER_COLORS);
+  const outer = el('span', 'pos-outer ' + color(), show(p.outer));
+  const inner = el('span', 'pos-inner ' + color(), show(p.inner));
+  const stack = el('span', 'pos-stack');
+  stack.setAttribute('aria-label', show(p.inner) + (on ? ' над ' : ' внутри ') + show(p.outer));
+  if (on) add(stack, inner, outer);
+  else add(stack, outer, inner);
+  return add(box, el('div', 'part-top'), add(el('div', 'letters-row'), stack), el('div', 'part-bottom'));
+}
+
+function renderPart(p, seed) {
+  switch (p.type) {
+    case 'letters': return renderLetters(p, seed);
+    case 'initials': return renderInitials(p);
+    case 'position': return renderPosition(p, seed);
+    default: return renderPic(p);
+  }
 }
 
 // ---------- Раскладка ----------
@@ -165,11 +205,11 @@ export function renderBoard(rebus, signal) {
   const seed = { n: 0 };
   const board = el('div', 'board');
   const inner = el('div', 'board-inner');
-  const hasTop = rebus.parts.some((p) => p.replace && p.replace.length);
+  const hasTop = rebus.parts.some((p) => (p.replace && p.replace.length) || (p.replaceAt && p.replaceAt.length) || p.pick || p.type === 'initials');
   const hasBottom = rebus.parts.some((p) => p.remove && p.remove.length);
   if (!hasTop) inner.classList.add('no-top');
   if (!hasBottom) inner.classList.add('no-bottom');
-  const parts = rebus.parts.map((p) => (p.type === 'letters' ? renderLetters(p, seed) : renderPic(p)));
+  const parts = rebus.parts.map((p) => renderPart(p, seed));
   const rows = [el('div', 'board-row'), el('div', 'board-row')];
   add(rows[0], ...parts);
   add(inner, rows[0]);
@@ -208,12 +248,23 @@ function explainPart(p) {
   if (p.type === 'letters') {
     pic = el('span', 'step-pic', '🔤');
     add(what, el('span', 'step-notes step-plain', 'просто буквы'));
+  } else if (p.type === 'initials') {
+    pic = el('span', 'step-pic step-multi', p.items.map((it) => it.emoji).join(''));
+    add(what, el('b', 'step-word', p.items.map((it) => show(it.word)).join(', ')),
+      el('span', 'step-notes', 'берём первые буквы'));
+  } else if (p.type === 'position') {
+    const on = normalize(p.prep) === 'НА';
+    pic = el('span', 'step-pic step-pos', on ? '⬆️' : '🔠');
+    add(what, el('b', 'step-word', show(p.inner) + (on ? ' на ' : ' в ') + show(p.outer)),
+      el('span', 'step-notes', 'читаем со словом «' + (on ? 'НА' : 'В') + '»'));
   } else {
-    pic = el('span', 'step-pic' + (p.flip ? ' flip' : ''), p.emoji);
+    pic = el('span', 'step-pic' + (p.flip ? ' flip' : '') + (p.type === 'number' ? ' step-num' : ''), p.type === 'number' ? String(p.value) : p.emoji);
     add(what, el('b', 'step-word', show(p.word)));
     const notes = [];
     if (p.flip) notes.push('читаем наоборот');
     for (const [from, to] of p.replace || []) notes.push(show(from) + ' меняем на ' + show(to));
+    for (const [n, to] of p.replaceAt || []) notes.push(n + '-ю букву меняем на ' + show(to));
+    if (p.pick) notes.push('берём буквы ' + p.pick.join(', '));
     for (const ch of p.remove || []) notes.push('убираем ' + show(ch));
     if (p.cutStart) notes.push(without(p.cutStart, 'в начале'));
     if (p.cutEnd) notes.push(without(p.cutEnd, 'в конце'));

@@ -1,7 +1,7 @@
 // Проверка данных ребусов: npm run validate
 // Правила составления — в docs/REBUSES.md. Ошибки валят сборку, предупреждения — нет.
 import fs from 'node:fs';
-import { formatProblems, normalize, rebusList } from '../src/rebus-core.js';
+import { formatProblems, normalize, rebusList, techniques } from '../src/rebus-core.js';
 
 
 const file = new URL('../public/data/rebuses.json', import.meta.url);
@@ -44,6 +44,38 @@ for (const r of rebuses) {
     }
   }
 }
+// Одна операция на картинку (переворот с запятыми — только на уровне 3).
+for (const r of rebuses) {
+  for (const p of (r && r.parts) || []) {
+    if (!p || p.type !== 'pic') continue;
+    const ops = ['flip', 'replace', 'replaceAt', 'remove', 'pick'].filter((k) => p[k] && (p[k] === true || p[k].length));
+    if (p.cutStart || p.cutEnd) ops.push('cut');
+    const flipCut = ops.length === 2 && ops.includes('flip') && ops.includes('cut') && r.level === 3;
+    if (ops.length > 1 && !flipCut) warnings.push(`${r.id}: на картинке ${p.emoji} несколько операций (${ops.join(', ')})`);
+  }
+}
+
+// Чередование: не больше двух ребусов подряд с одним набором приёмов,
+// и один набор приёмов — не больше 40 % уровня.
+const MAX_IN_ROW = 2;
+const MAX_SHARE = 0.4;
+const kindOf = (r) => techniques(r).sort().join('+');
+const shares = {};
+for (const level of [1, 2, 3]) {
+  const items = rebuses.filter((r) => r && r.level === level && Array.isArray(r.parts));
+  let run = 0;
+  items.forEach((r, i) => {
+    run = i && kindOf(items[i - 1]) === kindOf(r) ? run + 1 : 1;
+    if (run === MAX_IN_ROW + 1) warnings.push(`${r.id}: уже ${run} ребуса подряд «${kindOf(r)}» на уровне ${level}`);
+  });
+  const count = {};
+  items.forEach((r) => { count[kindOf(r)] = (count[kindOf(r)] || 0) + 1; });
+  shares[level] = count;
+  for (const [k, n] of Object.entries(count)) {
+    if (items.length >= 10 && n / items.length > MAX_SHARE) warnings.push(`уровень ${level}: «${k}» — ${n} из ${items.length} (больше ${MAX_SHARE * 100} %)`);
+  }
+}
+
 for (const [key, n] of pics) {
   if (n > MAX_PIC_USES) problems.push(`картинка ${key} используется ${n} раз (максимум ${MAX_PIC_USES})`);
 }
@@ -55,6 +87,10 @@ if (process.argv.includes('--stats')) {
   const byLevel = [1, 2, 3].map((l) => rebuses.filter((r) => r.level === l).length);
   console.log('по уровням (1/2/3):', byLevel.join(' / '));
   console.log('ответы:', rebuses.map((r) => r.answer).join(', '));
+  for (const level of [1, 2, 3]) {
+    const c = Object.entries(shares[level]).sort((a, b) => b[1] - a[1]).map(([k, n]) => `${k} ×${n}`).join(', ');
+    console.log(`приёмы, уровень ${level}:`, c);
+  }
   console.log('картинки:', [...pics].sort((x, y) => y[1] - x[1]).map(([k, n]) => `${k} ×${n}`).join(', '));
 }
 process.exit(problems.length ? 1 : 0);

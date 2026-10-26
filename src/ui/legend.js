@@ -1,6 +1,10 @@
-// Мини-легенда ребусной записи: что значат запятые, зачёркнутая буква, «=», перевёрнутая картинка.
+// Мини-легенда ребусной записи: по карточке на каждый приём.
 import { el, add } from './dom.js';
-import { commaSvg, picEmoji, struckLetter } from './board.js';
+import { commaSvg, picEmoji, struckLetter, pickNumbers } from './board.js';
+
+const stack = (...nodes) => add(el('div', 'legend-stack'), ...nodes);
+const top = (...nodes) => add(el('div', 'part-top'), ...nodes);
+const bigLetters = (text, cls = 'c0') => add(el('span', 'letters-row'), ...text.split('').map((ch) => el('span', 'big-letter ' + cls, ch)));
 
 const CARDS = {
   comma: {
@@ -17,22 +21,56 @@ const CARDS = {
     title: 'Зачёркнутая буква — убери её',
     words: 'СЛОН → СОН',
     sample() {
-      const box = el('div', 'legend-stack');
-      return add(box, picEmoji('🐘', false), add(el('div', 'part-bottom'), struckLetter('Л')));
+      return stack(picEmoji('🐘', false), add(el('div', 'part-bottom'), struckLetter('Л')));
     },
   },
   replace: {
     title: 'З = С — замени букву',
     words: 'КОЗА → КОСА',
     sample() {
-      const box = el('div', 'legend-stack');
-      return add(box, add(el('div', 'part-top'), el('span', 'swap', 'З = С')), picEmoji('🐐', false));
+      return stack(top(el('span', 'swap', 'З = С')), picEmoji('🐐', false));
     },
   },
   flip: {
     title: 'Вверх ногами — читай задом наперёд',
     words: 'КОТ → ТОК',
     sample() { return picEmoji('🐱', true); },
+  },
+  initials: {
+    title: 'А… — возьми первые буквы картинок',
+    words: 'МЫШЬ, АРБУЗ, КОТ → МАК',
+    sample() {
+      return stack(top(el('span', 'initials-mark', 'А…')), add(el('div', 'pic-row initials-row'), picEmoji('🐭'), picEmoji('🍉'), picEmoji('🐈')));
+    },
+  },
+  number: {
+    title: 'Цифру читай словом',
+    words: '7 + Я → СЕМЬЯ',
+    sample() { return add(el('div', 'pic-row'), el('span', 'num-digits', '7'), bigLetters('Я')); },
+  },
+  pick: {
+    title: 'Цифры сверху — возьми буквы с этими номерами',
+    words: 'КОТ, 3 2 1 → ТОК',
+    sample() { return stack(top(pickNumbers([3, 2, 1])), picEmoji('🐱')); },
+  },
+  replaceAt: {
+    title: '2 = И — поменяй вторую букву',
+    words: 'КОТ → КИТ',
+    sample() { return stack(top(el('span', 'swap swap-n', '2 = И')), picEmoji('🐱')); },
+  },
+  in: {
+    title: 'Буквы внутри буквы — читай со словом «В»',
+    words: 'ДА в О → ВОДА',
+    sample() {
+      return add(el('span', 'position in'), add(el('span', 'pos-stack'), el('span', 'pos-outer c1', 'О'), el('span', 'pos-inner c0', 'ДА')));
+    },
+  },
+  on: {
+    title: 'Буквы над буквами — читай со словом «НА»',
+    words: 'ПА на МА → ПАНАМА',
+    sample() {
+      return add(el('span', 'position on'), add(el('span', 'pos-stack'), el('span', 'pos-inner c0', 'ПА'), el('span', 'pos-outer c1', 'МА')));
+    },
   },
 };
 export const ALL_KINDS = Object.keys(CARDS);

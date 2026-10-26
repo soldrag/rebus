@@ -156,7 +156,7 @@ export function renderRebus(app, data, id, signal, backTo = '#/') {
   };
   help.addEventListener('click', () => {
     // Сначала приёмы из этого ребуса, запятые — в конце.
-    const own = techniques(rebus).filter((k) => k !== 'comma');
+    const own = techniques(rebus).filter((k) => ALL_KINDS.includes(k) && k !== 'comma');
     const kinds = own.concat(ALL_KINDS.filter((k) => !own.includes(k) && k !== 'comma'), ['comma']);
     showLegend(kinds, false, () => help.focus());
   });
@@ -258,7 +258,7 @@ export function renderRebus(app, data, id, signal, backTo = '#/') {
   const focusInput = () => { if (finePointer()) input.focus({ preventScroll: true }); };
   // Новый для ребёнка приём записи — один раз показываем легенду.
   // Запятые ребёнок знает — для них легенду сам не показываем.
-  const fresh = techniques(rebus).filter((k) => k !== 'comma' && !hasSeen(k));
+  const fresh = techniques(rebus).filter((k) => ALL_KINDS.includes(k) && k !== 'comma' && !hasSeen(k));
   if (fresh.length) {
     setTimeout(() => {
       if (signal && signal.aborted) return;
