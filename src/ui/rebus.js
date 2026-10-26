@@ -1,7 +1,8 @@
 // Экран одного ребуса: картинка, ввод ответа, сердечки, итог.
 import { normalize, isCorrect } from '../rebus-core.js';
 import { el, add, reduceMotion, finePointer } from './dom.js';
-import { getState, setState, solvedCount, MAX_TRIES, hasSeen, markSeen } from '../store.js';
+import { getState, setState, MAX_TRIES, hasSeen, markSeen } from '../store.js';
+import { levelInfo, levelNext, levelProgress } from '../levels.js';
 import { renderBoard, renderExplain, techniques, show } from './board.js';
 import { openLegend, ALL_KINDS } from './legend.js';
 import { celebrate } from './confetti.js';
@@ -30,19 +31,12 @@ function isClose(rebus, input) {
   return [rebus.answer].concat(rebus.accept || []).some((a) => distance(normalize(a), n) <= 2);
 }
 
-function nextUnsolved(list, fromIndex) {
-  for (let k = 1; k <= list.length; k++) {
-    const r = list[(fromIndex + k) % list.length];
-    if (!getState(r.id).status) return r;
-  }
-  return null;
-}
-
-function nextButton(data, index) {
-  const b = el('button', 'btn btn-next', 'Дальше →');
+// «Дальше» — следующий ребус того же уровня; когда уровень пройден — на главную.
+function nextButton(data, rebus) {
+  const n = levelNext(data.list, rebus);
+  const b = el('button', 'btn btn-next', n ? 'Дальше →' : 'Уровень пройден! 🏆');
   b.type = 'button';
   b.addEventListener('click', () => {
-    const n = nextUnsolved(data.list, index);
     location.hash = n ? '#/r/' + encodeURIComponent(n.id) : '#/';
   });
   return b;
@@ -82,12 +76,12 @@ function markDone(panel) {
   if (app) app.classList.add('done');
 }
 
-function showSolved(panel, rebus, data, index, fresh) {
+function showSolved(panel, rebus, data, fresh) {
   markDone(panel);
   const res = el('div', 'result ok');
   res.setAttribute('role', 'status');
   add(res, el('p', 'result-title', fresh ? 'Молодец! 🎉' : 'Отгадано! ⭐'), el('p', 'result-word', show(rebus.answer)));
-  const actions = add(el('div', 'actions'), nextButton(data, index));
+  const actions = add(el('div', 'actions'), nextButton(data, rebus));
   panel.replaceChildren(res, actions);
   if (!fresh) add(panel, renderExplain(rebus));
   panel.scrollTop = 0;
@@ -95,12 +89,12 @@ function showSolved(panel, rebus, data, index, fresh) {
   focusSoon(actions.firstChild);
 }
 
-function showRevealed(panel, rebus, data, index) {
+function showRevealed(panel, rebus, data) {
   markDone(panel);
   const res = el('div', 'result reveal');
   res.setAttribute('role', 'status');
   add(res, el('p', 'result-title', 'Вот какое слово было!'), el('p', 'result-word', show(rebus.answer)));
-  const actions = add(el('div', 'actions'), nextButton(data, index));
+  const actions = add(el('div', 'actions'), nextButton(data, rebus));
   panel.replaceChildren(res, renderExplain(rebus), actions);
   panel.scrollTop = 0;
   focusSoon(actions.firstChild);
@@ -128,22 +122,26 @@ function watchKeyboard(app, input, signal) {
 export function renderRebus(app, data, id, signal) {
   const info = data.byId[id];
   if (!info) { location.replace('#/'); return; }
-  const { rebus, num, index } = info;
+  const { rebus } = info;
   const st = getState(id);
-  document.title = 'Ребус ' + num;
+  const L = levelInfo(rebus.level);
+  document.title = 'Ребусы — ' + L.title;
   app.className = 'app play';
 
   const bar = el('div', 'topbar');
   const back = el('a', 'back', '←');
   back.href = '#/';
-  back.setAttribute('aria-label', 'Назад ко всем ребусам');
+  back.setAttribute('aria-label', 'На главную');
   const stars = el('span', 'mini-stars');
-  const updateStars = () => { stars.textContent = '⭐ ' + solvedCount(data.list) + '/' + data.list.length; };
+  const updateStars = () => {
+    const p = levelProgress(data.list, rebus.level);
+    stars.textContent = '⭐ ' + p.solved + '/' + p.total;
+  };
   updateStars();
   const help = el('button', 'help-btn', '?');
   help.type = 'button';
   help.setAttribute('aria-label', 'Как читать ребус');
-  add(bar, back, el('h1', 'rebus-num', '№ ' + num), stars, help);
+  add(bar, back, el('h1', 'rebus-num', L.emoji + ' ' + L.title), stars, help);
 
   const card = el('section', 'card');
   const panel = el('div', 'panel');
@@ -163,8 +161,8 @@ export function renderRebus(app, data, id, signal) {
     showLegend(kinds, false, () => help.focus());
   });
 
-  if (st.status === 'solved') return showSolved(panel, rebus, data, index, false);
-  if (st.status === 'revealed') return showRevealed(panel, rebus, data, index);
+  if (st.status === 'solved') return showSolved(panel, rebus, data, false);
+  if (st.status === 'revealed') return showRevealed(panel, rebus, data);
 
   const form = el('form', 'answer');
   form.setAttribute('autocomplete', 'off');
@@ -214,14 +212,14 @@ export function renderRebus(app, data, id, signal) {
       setState(id, { tries: st.tries, status: 'solved' });
       input.blur();
       updateStars();
-      showSolved(panel, rebus, data, index, true);
+      showSolved(panel, rebus, data, true);
       return;
     }
     st.tries += 1;
     if (st.tries >= MAX_TRIES) {
       setState(id, { tries: st.tries, status: 'revealed' });
       input.blur();
-      showRevealed(panel, rebus, data, index);
+      showRevealed(panel, rebus, data);
       return;
     }
     setState(id, { tries: st.tries });

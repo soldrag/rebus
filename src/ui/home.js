@@ -1,13 +1,8 @@
-// Главный экран: прогресс и плитки по уровням.
+// Главный экран: три больших кнопки уровней с прогрессом.
 import { el, add } from './dom.js';
-import { getState, resetAll, solvedCount, MAX_TRIES } from '../store.js';
+import { resetAll, solvedCount } from '../store.js';
 import { canInstall, install, onInstallChange } from '../install.js';
-
-const LEVELS = [
-  { level: 1, title: 'Лёгкие', cls: 'lvl-1' },
-  { level: 2, title: 'Средние', cls: 'lvl-2' },
-  { level: 3, title: 'Трудные', cls: 'lvl-3' },
-];
+import { LEVELS, levelProgress } from '../levels.js';
 
 function header() {
   const head = el('header', 'home-head');
@@ -16,8 +11,29 @@ function header() {
   return add(head, mascot, el('h1', 'title', 'Ребусы'));
 }
 
+function levelCard(list, L) {
+  const p = levelProgress(list, L.level);
+  const a = el('a', 'level-card ' + L.cls + (p.done ? ' done' : ''));
+  a.href = '#/level/' + L.level;
+  a.dataset.level = String(L.level);
+  const icon = el('span', 'level-emoji', L.emoji);
+  icon.setAttribute('aria-hidden', 'true');
+  const body = el('span', 'level-body');
+  const bar = el('span', 'level-bar');
+  const fill = el('span', 'level-fill');
+  fill.style.width = (p.total ? (p.finished / p.total) * 100 : 0) + '%';
+  add(body,
+    el('span', 'level-name', L.title),
+    el('span', 'level-count', '⭐ ' + p.solved + ' из ' + p.total),
+    add(bar, fill));
+  const cta = p.done ? 'Ещё раз' : p.finished ? 'Дальше' : 'Играть';
+  add(a, icon, body, el('span', 'level-go', p.done ? '🏆' : '▶'));
+  a.setAttribute('aria-label', `${L.title}: отгадано ${p.solved} из ${p.total}. ${cta}`);
+  return a;
+}
+
 export function renderHome(app, data, signal) {
-  const { list, byId } = data;
+  const { list } = data;
   document.title = 'Ребусы для детей';
   app.className = 'app home';
   app.replaceChildren(header());
@@ -28,53 +44,14 @@ export function renderHome(app, data, signal) {
   }
 
   const done = solvedCount(list);
-  const prog = el('div', 'progress');
-  prog.setAttribute('role', 'img');
-  prog.setAttribute('aria-label', 'Отгадано ' + done + ' из ' + list.length);
-  const pt = el('span', 'progress-text');
-  add(pt, el('b', null, String(done)), document.createTextNode(' из ' + list.length));
-  const bar = el('div', 'progress-bar');
-  const fill = el('div', 'progress-fill');
-  fill.style.width = (done / list.length) * 100 + '%';
-  add(prog, el('span', 'progress-star', '⭐'), pt, add(bar, fill));
-  add(app, prog, installBlock(signal));
-
   if (done === list.length) add(app, el('p', 'all-done', '🎉 Ты отгадал все ребусы! Ура!'));
 
+  const levels = el('nav', 'levels');
+  levels.setAttribute('aria-label', 'Уровни');
   for (const L of LEVELS) {
-    const items = list.filter((r) => (r.level || 1) === L.level);
-    if (!items.length) continue;
-    const sec = el('section', 'level ' + L.cls);
-    const h = el('h2', 'level-title');
-    add(h, el('span', 'level-dots', '●'.repeat(L.level)), document.createTextNode(' ' + L.title));
-    const grid = el('div', 'grid');
-    for (const r of items) {
-      const { num } = byId[r.id];
-      const st = getState(r.id);
-      const a = el('a', 'tile');
-      a.href = '#/r/' + encodeURIComponent(r.id);
-      a.dataset.id = r.id;
-      add(a, el('span', 'tile-num', String(num)));
-      let label = 'Ребус ' + num;
-      if (st.status === 'solved') {
-        a.classList.add('solved');
-        add(a, el('span', 'tile-mark', '⭐'));
-        label += ', отгадан';
-      } else if (st.status === 'revealed') {
-        a.classList.add('revealed');
-        add(a, el('span', 'tile-mark', '💡'));
-        label += ', ответ показан';
-      } else if (st.tries > 0) {
-        const left = Math.max(0, MAX_TRIES - st.tries);
-        a.classList.add('started');
-        add(a, el('span', 'tile-mark tile-hearts', '♥'.repeat(left)));
-        label += ', осталось попыток: ' + left;
-      }
-      a.setAttribute('aria-label', label);
-      add(grid, a);
-    }
-    add(app, add(sec, h, grid));
+    if (levelProgress(list, L.level).total) add(levels, levelCard(list, L));
   }
+  add(app, levels);
 
   const reset = holdButton('Начать заново', 'Держи, чтобы начать заново', () => {
     resetAll();
@@ -83,7 +60,7 @@ export function renderHome(app, data, signal) {
     title.setAttribute('tabindex', '-1');
     title.focus();
   }, signal);
-  add(app, add(el('footer', 'home-foot'), reset));
+  add(app, add(el('footer', 'home-foot'), installBlock(signal), reset));
 }
 
 // Кнопка, которая срабатывает только после удержания (~1,5 с): защита от случайного нажатия.

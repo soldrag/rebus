@@ -1,4 +1,4 @@
-// Точка входа: загрузка данных и маршрутизация по hash (#/ и #/r/<id>).
+// Точка входа: загрузка данных и маршрутизация по hash (#/, #/level/<n>, #/r/<id>).
 // Только кириллица и латиница: остальные наборы глифов не нужны и лишь раздувают офлайн-кеш.
 import '@fontsource/nunito/cyrillic-700.css';
 import '@fontsource/nunito/cyrillic-800.css';
@@ -12,12 +12,13 @@ import { registerSW } from 'virtual:pwa-register';
 import { getState, reload, STORE_KEY } from './store.js';
 import { renderHome, renderStatus } from './ui/home.js';
 import { renderRebus } from './ui/rebus.js';
+import { levelStart } from './levels.js';
 import { clearConfetti } from './ui/confetti.js';
 
 const app = document.getElementById('app');
 let data = null;
 let current = null; // { id, controller } — открытый экран
-let lastRebusId = null;
+let lastLevel = null;
 
 function currentId() {
   const m = /^#\/r\/(.+)$/.exec(location.hash);
@@ -30,12 +31,18 @@ function route({ keepScroll = false } = {}) {
   if (!data) return;
   clearConfetti();
   if (current) current.controller.abort();
+  const lv = /^#\/level\/(\d)$/.exec(location.hash);
+  if (lv) {
+    const r = levelStart(data.list, Number(lv[1]));
+    location.replace(r ? '#/r/' + encodeURIComponent(r.id) : '#/');
+    return;
+  }
   const id = currentId();
   current = { id, controller: new AbortController() };
   const { signal } = current.controller;
   if (id) {
     renderRebus(app, data, id, signal);
-    lastRebusId = id;
+    if (data.byId[id]) lastLevel = data.byId[id].rebus.level;
   } else {
     renderHome(app, data, signal);
   }
@@ -44,9 +51,9 @@ function route({ keepScroll = false } = {}) {
   focusAfterRoute(id);
 }
 
-// Для клавиатуры и скринридера: фокус на заголовок или на плитку, откуда пришли.
+// Для клавиатуры и скринридера: фокус на заголовок или на уровень, откуда пришли.
 function focusAfterRoute(id) {
-  const tile = !id && lastRebusId && app.querySelector(`.tile[data-id="${CSS.escape(lastRebusId)}"]`);
+  const tile = !id && lastLevel && app.querySelector(`.level-card[data-level="${lastLevel}"]`);
   const target = tile || app.querySelector('h1');
   if (!target) return;
   if (!tile) target.setAttribute('tabindex', '-1');
