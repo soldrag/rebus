@@ -89,19 +89,34 @@ async function start() {
   route();
 }
 
-// Видимая область (меньше, когда открыта экранная клавиатура). iOS при открытой
-// клавиатуре ещё и прокручивает страницу — --vvtop говорит, где сейчас видимая часть.
-// Экран ребуса встаёт ровно в неё: картинка сжимается, а не уезжает вверх.
-function syncViewportHeight() {
-  const vv = window.visualViewport;
-  const root = document.documentElement.style;
-  root.setProperty('--vvh', Math.round(vv ? vv.height : window.innerHeight) + 'px');
-  root.setProperty('--vvtop', Math.round(vv ? vv.offsetTop : 0) + 'px');
+// Высота экрана для раскладки (--app-h) и класс раскладки на <html>. Экранная клавиатура их НЕ меняет:
+// макет заранее оставляет под клавиатуру место, поэтому при её появлении ничего
+// не прыгает. Обновляем при повороте/смене ширины и при изменении окна, пока
+// не идёт ввод (на Android с resizes-content клавиатура уменьшает окно).
+let appW = 0;
+function syncAppHeight() {
+  const typing = document.activeElement && /^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName);
+  const cw = document.documentElement.clientWidth;
+  if (typing && cw === appW) return;
+  appW = cw;
+  const w = window.innerWidth, h = window.innerHeight;
+  const root = document.documentElement;
+  root.style.setProperty('--app-h', h + 'px');
+  // Раскладка экрана ребуса — классами, а не media-запросами по ориентации:
+  // на Android (resizes-content) клавиатура уменьшает окно, и планшет «становится»
+  // альбомным. Классы меняются только вместе с --app-h, то есть не во время ввода.
+  const coarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+  const portrait = h >= w;
+  const land = !portrait && (h <= 560 || coarse);
+  root.classList.toggle('lay-portrait', portrait);
+  root.classList.toggle('lay-portrait-wide', portrait && w >= 600);
+  root.classList.toggle('lay-land', land);
+  root.classList.toggle('lay-land-phone', !portrait && h <= 560);
+  root.classList.toggle('lay-short', h <= 820 && w >= 600);
 }
-syncViewportHeight();
-(window.visualViewport || window).addEventListener('resize', syncViewportHeight);
-if (window.visualViewport) window.visualViewport.addEventListener('scroll', syncViewportHeight);
-window.addEventListener('orientationchange', syncViewportHeight);
+syncAppHeight();
+window.addEventListener('resize', syncAppHeight);
+window.addEventListener('orientationchange', () => setTimeout(syncAppHeight, 300));
 
 window.addEventListener('hashchange', () => route());
 

@@ -364,13 +364,12 @@ h1[tabindex="-1"]:focus { outline: none; }
   max-width: 1100px;
   display: flex;
   flex-direction: column;
+  /* Высота экрана без учёта клавиатуры (см. main.js): при её появлении
+     макет не меняется. */
   height: 100vh;
-  height: var(--vvh, 100dvh);
+  height: var(--app-h, 100svh);
   min-height: 420px;
 }
-.play.done { height: auto; min-height: var(--vvh, 100dvh); }
-.play.done .card { flex: none; }
-.play.done .board { flex: none; height: clamp(170px, 38vh, 380px); }
 
 .topbar {
   display: flex;
@@ -652,9 +651,10 @@ h1[tabindex="-1"]:focus { outline: none; }
 .position.on .pos-outer { font-size: calc(var(--el) * .62); }
 .step-num { font-size: 24px; font-weight: 900; color: var(--sky-ink); font-family: var(--font); }
 .step-multi { font-size: 20px; word-break: break-all; }
+.step-word.step-wrap { white-space: normal; }
 
 /* Ответ */
-.panel { flex: none; margin-top: clamp(12px, 2vh, 20px); }
+.panel { flex: none; margin-top: 14px; }
 
 .hearts {
   display: flex;
@@ -677,8 +677,8 @@ h1[tabindex="-1"]:focus { outline: none; }
 }
 .answer-input {
   width: 100%;
-  min-height: 72px;
-  padding: 10px 18px;
+  height: 72px; /* фиксированная: итог на месте поля — того же размера */
+  padding: 0 18px;
   font-size: clamp(28px, 7vw, 40px);
   font-weight: 900;
   text-align: center;
@@ -739,27 +739,47 @@ h1[tabindex="-1"]:focus { outline: none; }
 }
 .msg.try { color: #B5552F; }
 
-.result {
-  text-align: center;
-  border-radius: 22px;
-  padding: 14px 16px 16px;
-  margin-bottom: 14px;
+.input-wrap {
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 72px;
 }
-.result.ok { background: var(--mint); color: #17553C; animation: pop .45s cubic-bezier(.2, 1.4, .4, 1); }
-.result.reveal { background: var(--reveal); color: #2F4B62; }
-.result-title { margin: 0; font-size: clamp(24px, 6vw, 32px); font-weight: 900; }
-.result-word {
-  margin: 4px 0 0;
-  font-size: clamp(36px, 10vw, 56px);
-  font-weight: 900;
-  letter-spacing: 3px;
-  line-height: 1.1;
-  word-break: break-word;
-}
+.input-wrap .answer-input { flex: 1 1 auto; min-width: 0; }
 
-.actions { margin: 6px 0 4px; }
-/* Слово-ответ и «Дальше» — поверх конфетти */
-.result, .actions { position: relative; z-index: 60; }
+/* Итог на месте поля, того же размера */
+.result-inline {
+  position: absolute;
+  inset: 0;
+  z-index: 60; /* поверх конфетти */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 10px;
+  border-radius: 22px;
+  border: 4px solid transparent;
+  text-align: center;
+  line-height: 1.05;
+  animation: pop .45s cubic-bezier(.2, 1.4, .4, 1);
+}
+.result-inline.settled { position: relative; inset: auto; flex: 1 1 auto; animation: none; }
+.result-inline.ok { background: var(--mint); border-color: #8FD9B7; color: #17553C; }
+.result-inline.reveal { background: var(--reveal); border-color: #C3D3DF; color: #2F4B62; }
+.result-inline .result-title { font-size: 17px; font-weight: 900; }
+.result-inline .result-word {
+  font-size: clamp(24px, 7.5vw, 34px);
+  font-weight: 900;
+  letter-spacing: 2px;
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+}
+.btn-next { position: relative; z-index: 60; }
+
+.explain.appear { animation: appear .4s ease both; }
+@keyframes appear { from { opacity: 0; transform: translateY(10px); } }
 
 .explain {
   margin-top: 16px;
@@ -909,87 +929,88 @@ h1[tabindex="-1"]:focus { outline: none; }
   .hearts { gap: 14px; }
   .answer { flex-direction: row; }
   .answer-input { flex: 1 1 auto; min-width: 0; }
-  .btn-check { width: auto; flex: none; min-width: 210px; min-height: 72px; }
-  .btn-next { max-width: 420px; display: block; margin: 0 auto; }
+  .btn-check, .answer .btn-next { width: auto; flex: none; min-width: 210px; min-height: 72px; }
   .step { grid-template-columns: 64px 1fr auto auto; }
 }
 
 /* Низкие экраны (ландшафт): компактнее шапка и отступы */
-@media (max-height: 820px) and (min-width: 600px) {
-  .topbar { margin-bottom: 8px; }
-  .back, .help-btn { width: 56px; height: 56px; }
-  .hearts { margin-bottom: 8px; }
-  .heart { font-size: 34px; }
-}
+/* (класс ставит main.js — не меняется, пока открыта клавиатура) */
+html.lay-short .topbar { margin-bottom: 8px; }
+html.lay-short .back, html.lay-short .help-btn { width: 56px; height: 56px; }
+html.lay-short .hearts { margin-bottom: 8px; }
+html.lay-short .heart { font-size: 34px; }
 
-/* Телефон в ландшафте: ребус слева на всю высоту, ответ справа. */
-@media (orientation: landscape) and (max-height: 560px) {
-  .play { min-height: 0; padding-top: calc(8px + var(--safe-t)); padding-bottom: calc(8px + var(--safe-b)); }
-  .play.done { height: var(--vvh, 100dvh); min-height: 0; }
-  .topbar { margin-bottom: 6px; }
-  .back { width: 48px; height: 48px; font-size: 26px; }
-  .rebus-num { font-size: 22px; }
-  .mini-stars { font-size: 17px; padding: 6px 12px; }
-  .card, .play.done .card {
+/* Портрет: нижняя часть экрана заранее отдана под экранную клавиатуру
+   (iOS с панелью подсказок ≈ 45 % высоты). Поле ввода всегда выше неё,
+   а «Проверить», сообщения, подсказка и разбор лежат в этой зоне:
+   клавиатура просто ложится поверх, ничего не сдвигается. */
+html.lay-portrait .play { --kb: .46; --above-kb: 86px; }
+html.lay-portrait .play .board { min-height: 100px; }
+html.lay-portrait .play .panel {
+    height: calc(var(--app-h, 100svh) * var(--kb) + var(--above-kb) - var(--safe-b));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-bottom: 8px;
+  }
+
+html.lay-portrait-wide .play { --kb: .40; --above-kb: 96px; }
+
+
+/* Ландшафт на сенсорных экранах (телефон и планшет): ребус слева на всю высоту,
+   справа сверху поле ввода (клавиатура закрывает только низ), ниже остальное. */
+html.lay-land .card {
     flex: 1 1 auto;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) clamp(250px, 38%, 360px);
+    grid-template-columns: minmax(0, 1fr) clamp(250px, 36%, 380px);
     gap: 14px;
-    --pad: 10px;
   }
-  .board, .play.done .board { height: auto; min-height: 0; }
-  /* «Дальше» сразу под ответом, разбор — ниже (его можно прокрутить) */
-  .play.done .panel { display: flex; flex-direction: column; }
-  .play.done .result { order: 0; flex: none; }
-  .play.done .actions { order: 1; flex: none; }
-  .play.done .explain { order: 2; flex: none; }
-  .panel {
+html.lay-land .board { height: auto; min-height: 0; }
+html.lay-land .panel {
     margin-top: 0;
     min-height: 0;
     overflow-y: auto;
     overscroll-behavior: contain;
     padding: 2px 2px 6px;
+    display: flex;
+    flex-direction: column;
   }
-  .help-btn { width: 48px; height: 48px; font-size: 26px; }
-  .hearts { margin-bottom: 6px; }
-  .heart { font-size: 26px; }
-  .answer { flex-direction: column; gap: 8px; }
-  .answer-input { min-height: 56px; font-size: 26px; padding: 6px 12px; }
-  .answer-input::placeholder { font-size: 18px; }
-  .btn-check, .btn { min-width: 0; width: 100%; min-height: 56px; font-size: 22px; }
-  .msg { font-size: 17px; margin-top: 6px; }
-  .hint { padding: 6px 10px; margin-top: 6px; display: block; text-align: left; }
-  .hint-label { font-size: 15px; margin-right: 4px; }
-  .hint-text { font-size: 16px; }
-  .result { padding: 8px 10px; margin-bottom: 8px; }
-  .result-title { font-size: 20px; }
-  .result-word { font-size: 32px; }
-  .explain { margin-top: 8px; padding: 8px 8px 2px; }
-  .step { grid-template-columns: 40px 1fr auto; gap: 6px; }
-  .step-pic { font-size: 32px; }
-  .step-arrow { display: none; }
-  .step-word { font-size: 18px; }
-  .step-notes { font-size: 14px; }
-  .step-res { font-size: 20px; }
-}
+html.lay-land .panel > .answer { order: 0; flex: none; flex-direction: column; gap: 10px; }
+html.lay-land .panel > .hearts { order: 1; margin: 10px 0 0; }
+html.lay-land .panel > .msg { order: 2; }
+html.lay-land .panel > .hint-slot { order: 3; }
+html.lay-land .panel > .explain { order: 4; flex: none; }
+html.lay-land .answer .btn-check, html.lay-land .answer .btn-next { width: 100%; min-width: 0; }
 
-/* Открыта экранная клавиатура: убираем всё лишнее, картинка сжимается. */
-.play.kb-open {
-  position: fixed;
-  top: var(--vvtop, 0px);
-  left: 0;
-  right: 0;
-  z-index: 10;
-  height: var(--vvh, 100dvh);
-  min-height: 0;
-  padding-top: calc(6px + var(--safe-t));
-  padding-bottom: 6px;
-  background: var(--bg);
-}
-.kb-open .topbar, .kb-open .hearts, .kb-open .hint-slot { display: none; }
-.kb-open .board { min-height: 60px; }
-.kb-open .panel { margin-top: 8px; }
-.kb-open .msg { margin-top: 4px; font-size: 17px; min-height: 0; }
+
+/* Телефон в ландшафте: всё компактнее. */
+html.lay-land-phone .play { min-height: 0; padding-top: calc(8px + var(--safe-t)); padding-bottom: calc(8px + var(--safe-b)); }
+html.lay-land-phone .topbar { margin-bottom: 6px; }
+html.lay-land-phone .back { width: 48px; height: 48px; font-size: 26px; }
+html.lay-land-phone .rebus-num { font-size: 22px; }
+html.lay-land-phone .mini-stars { font-size: 17px; padding: 6px 12px; }
+html.lay-land-phone .card { --pad: 10px; grid-template-columns: minmax(0, 1fr) clamp(250px, 38%, 360px); }
+html.lay-land-phone .help-btn { width: 48px; height: 48px; font-size: 26px; }
+html.lay-land-phone .panel > .hearts { margin-top: 6px; }
+html.lay-land-phone .heart { font-size: 26px; }
+html.lay-land-phone .panel > .answer { gap: 8px; }
+html.lay-land-phone .input-wrap { height: 56px; }
+html.lay-land-phone .answer-input { height: 56px; font-size: 26px; padding: 0 12px; }
+html.lay-land-phone .result-inline .result-title { font-size: 14px; }
+html.lay-land-phone .result-inline .result-word { font-size: 24px; }
+html.lay-land-phone .answer-input::placeholder { font-size: 18px; }
+html.lay-land-phone .btn-check, html.lay-land-phone .btn { min-width: 0; width: 100%; min-height: 56px; font-size: 22px; }
+html.lay-land-phone .msg { font-size: 17px; margin-top: 6px; }
+html.lay-land-phone .hint { padding: 6px 10px; margin-top: 6px; display: block; text-align: left; }
+html.lay-land-phone .hint-label { font-size: 15px; margin-right: 4px; }
+html.lay-land-phone .hint-text { font-size: 16px; }
+html.lay-land-phone .explain { margin-top: 8px; padding: 8px 8px 2px; }
+html.lay-land-phone .step { grid-template-columns: 40px 1fr auto; gap: 6px; }
+html.lay-land-phone .step-pic { font-size: 32px; }
+html.lay-land-phone .step-arrow { display: none; }
+html.lay-land-phone .step-word { font-size: 18px; }
+html.lay-land-phone .step-notes { font-size: 14px; }
+html.lay-land-phone .step-res { font-size: 20px; }
+
 
 @media (max-width: 440px) {
   .step {
@@ -1060,7 +1081,7 @@ h1[tabindex="-1"]:focus { outline: none; }
   --top: auto;
   --bottom: auto;
   width: min(640px, calc(100vw - 24px));
-  max-height: calc(var(--vvh, 100dvh) - 24px);
+  max-height: calc(100dvh - 24px);
   overflow-y: auto;
   border: 0;
   border-radius: var(--radius);

@@ -1,6 +1,6 @@
 // Экран одного ребуса: картинка, ввод ответа, сердечки, итог.
 import { normalize, isCorrect } from '../rebus-core.js';
-import { el, add, reduceMotion, finePointer } from './dom.js';
+import { el, add, finePointer } from './dom.js';
 import { getState, setState, MAX_TRIES, hasSeen, markSeen } from '../store.js';
 import { levelInfo, stageNext, stageOf, stageProgress } from '../levels.js';
 import { renderBoard, renderExplain, techniques, show } from './board.js';
@@ -10,6 +10,10 @@ import { celebrate } from './confetti.js';
 const HINT_AFTER = 2;
 const CLOSE_PHRASES = ['Почти! Попробуй ещё 🙂', 'Совсем близко! Ещё разок 💪'];
 const FAR_PHRASES = ['Не то слово, попробуй ещё 🙂', 'Посмотри на картинку ещё раз 👀'];
+// Короткие подсказки прямо в поле: их видно и при открытой клавиатуре.
+const CLOSE_PLACEHOLDER = 'Почти! Ещё разок';
+const FAR_PLACEHOLDER = 'Попробуй ещё';
+const SETTLE_MS = 600; // столько «Молодец!» видно, прежде чем клавиатура плавно уедет
 
 // Расстояние Левенштейна: насколько ответ похож на правильный.
 function distance(a, b) {
@@ -67,57 +71,29 @@ function renderHintButton(rebus) {
   return b;
 }
 
-// Фокус на кнопку «Дальше»: экранную клавиатуру он не открывает, поэтому и на телефоне.
-function focusSoon(node) {
-  if (node) setTimeout(() => node.focus({ preventScroll: true }), 60);
+// Итог показывается на месте поля и кнопки, тех же размеров: картинка и всё
+// остальное на экране остаются на своих местах.
+function resultBox(kind, rebus, fresh) {
+  const box = el('div', 'result-inline ' + kind);
+  box.setAttribute('role', 'status');
+  const title = kind === 'ok' ? (fresh ? 'Молодец! 🎉' : 'Отгадано! ⭐') : 'Вот какое слово было:';
+  add(box, el('span', 'result-title', title), el('span', 'result-word', show(rebus.answer)));
+  return box;
 }
 
-function markDone(panel) {
-  const app = panel.closest('.app');
-  if (app) app.classList.add('done');
+function explainBlock(rebus, animate) {
+  const ex = renderExplain(rebus);
+  if (animate) ex.classList.add('appear');
+  return ex;
 }
 
-function showSolved(panel, rebus, data, fresh) {
-  markDone(panel);
-  const res = el('div', 'result ok');
-  res.setAttribute('role', 'status');
-  add(res, el('p', 'result-title', fresh ? 'Молодец! 🎉' : 'Отгадано! ⭐'), el('p', 'result-word', show(rebus.answer)));
-  const actions = add(el('div', 'actions'), nextButton(data, rebus));
-  panel.replaceChildren(res, actions);
-  if (!fresh) add(panel, renderExplain(rebus));
-  panel.scrollTop = 0;
-  if (fresh) celebrate();
-  focusSoon(actions.firstChild);
-}
-
-function showRevealed(panel, rebus, data) {
-  markDone(panel);
-  const res = el('div', 'result reveal');
-  res.setAttribute('role', 'status');
-  add(res, el('p', 'result-title', 'Вот какое слово было!'), el('p', 'result-word', show(rebus.answer)));
-  const actions = add(el('div', 'actions'), nextButton(data, rebus));
-  panel.replaceChildren(res, renderExplain(rebus), actions);
-  panel.scrollTop = 0;
-  focusSoon(actions.firstChild);
-}
-
-// Класс kb-open: открыта экранная клавиатура (видимая область заметно ниже обычной).
-// Обычную высоту запоминаем для текущей ширины экрана.
-function watchKeyboard(app, input, signal) {
-  const vv = window.visualViewport;
-  let width = window.innerWidth;
-  let full = vv ? vv.height : window.innerHeight;
-  const check = () => {
-    const h = vv ? vv.height : window.innerHeight;
-    if (window.innerWidth !== width) { width = window.innerWidth; full = h; }
-    if (document.activeElement !== input) full = Math.max(full, h);
-    const open = document.activeElement === input && h < full * 0.75;
-    app.classList.toggle('kb-open', open);
-  };
-  (vv || window).addEventListener('resize', check, { signal });
-  input.addEventListener('focus', check, { signal });
-  input.addEventListener('blur', () => { app.classList.remove('kb-open'); }, { signal });
-  return check;
+// Готовый ребус при повторном открытии.
+function renderDone(panel, rebus, data, st) {
+  const kind = st.status === 'solved' ? 'ok' : 'reveal';
+  const box = resultBox(kind, rebus, false);
+  box.classList.add('settled');
+  const answer = add(el('div', 'answer answer-done'), add(el('div', 'input-wrap'), box), nextButton(data, rebus));
+  panel.replaceChildren(renderHearts(st.tries), answer, el('p', 'msg'), explainBlock(rebus, false));
 }
 
 export function renderRebus(app, data, id, signal, backTo = '#/') {
@@ -165,8 +141,7 @@ export function renderRebus(app, data, id, signal, backTo = '#/') {
     showLegend(kinds, false, () => help.focus());
   });
 
-  if (st.status === 'solved') return showSolved(panel, rebus, data, false);
-  if (st.status === 'revealed') return showRevealed(panel, rebus, data);
+  if (st.status) { renderDone(panel, rebus, data, st); return; }
 
   const form = el('form', 'answer');
   form.setAttribute('autocomplete', 'off');
@@ -179,7 +154,8 @@ export function renderRebus(app, data, id, signal, backTo = '#/') {
   })) input.setAttribute(k, v);
   const btn = el('button', 'btn btn-check', 'Проверить');
   btn.type = 'submit';
-  add(form, input, btn);
+  const inputWrap = add(el('div', 'input-wrap'), input);
+  add(form, inputWrap, btn);
 
   const hearts = renderHearts(st.tries);
   const msg = el('p', 'msg');
@@ -188,18 +164,9 @@ export function renderRebus(app, data, id, signal, backTo = '#/') {
   if (rebus.hint && st.tries >= HINT_AFTER) add(hintSlot, renderHintButton(rebus));
   add(panel, hearts, form, msg, hintSlot);
 
-  const checkKeyboard = watchKeyboard(app, input, signal);
-  // Экранная клавиатура не должна закрывать поле.
-  const keepVisible = () => {
-    checkKeyboard();
-    // С открытой клавиатурой экран и так закреплён в видимой области.
-    if (document.activeElement !== input || app.classList.contains('kb-open')) return;
-    try { btn.scrollIntoView({ block: 'nearest', behavior: reduceMotion() ? 'auto' : 'smooth' }); }
-    catch { btn.scrollIntoView(false); }
-  };
-  input.addEventListener('focus', () => setTimeout(keepVisible, 350), { signal });
-  if (window.visualViewport) window.visualViewport.addEventListener('resize', keepVisible, { signal });
+  let done = false;
   input.addEventListener('input', () => {
+    if (done) return;
     input.classList.remove('shake');
     if (msg.classList.contains('empty-note')) { msg.textContent = ''; msg.className = 'msg'; }
   });
@@ -212,14 +179,40 @@ export function renderRebus(app, data, id, signal, backTo = '#/') {
     const val = input.value;
     if (!normalize(val)) return;
     setTimeout(() => {
-      if (checking || !input.isConnected || document.activeElement === input) return;
+      if (done || checking || !input.isConnected || document.activeElement === input) return;
       if (input.value !== val || closeLegend) return;
       form.requestSubmit();
     }, 300);
   }, { signal });
 
+  // Ответ готов: итог появляется поверх поля, «Дальше» — на месте «Проверить».
+  // Клавиатуру (если открыта) убираем не сразу, а через SETTLE_MS: ребёнок успевает
+  // увидеть «Молодец!», и ничего на экране не прыгает — размеры те же.
+  const finish = (kind) => {
+    done = true;
+    const box = resultBox(kind, rebus, true);
+    add(inputWrap, box);
+    const next = nextButton(data, rebus);
+    btn.replaceWith(next);
+    form.classList.add('answer-done');
+    msg.textContent = '';
+    msg.className = 'msg';
+    if (hintSlot.querySelector('.hint-btn')) hintSlot.replaceChildren();
+    if (kind === 'ok') celebrate();
+    const hadFocus = document.activeElement === input;
+    setTimeout(() => {
+      if (!input.isConnected) return;
+      input.blur();
+      input.remove();
+      box.classList.add('settled');
+      if (kind === 'reveal') add(panel, explainBlock(rebus, true));
+      next.focus({ preventScroll: true });
+    }, hadFocus ? SETTLE_MS : 0);
+  };
+
   form.addEventListener('submit', (ev) => {
     ev.preventDefault();
+    if (done) return;
     checking = true;
     setTimeout(() => { checking = false; }, 400);
     const val = input.value;
@@ -231,16 +224,17 @@ export function renderRebus(app, data, id, signal, backTo = '#/') {
     }
     if (isCorrect(rebus, val)) {
       setState(id, { tries: st.tries, status: 'solved' });
-      input.blur();
       updateStars();
-      showSolved(panel, rebus, data, true);
+      finish('ok');
       return;
     }
     st.tries += 1;
     if (st.tries >= MAX_TRIES) {
       setState(id, { tries: st.tries, status: 'revealed' });
-      input.blur();
-      showRevealed(panel, rebus, data);
+      const lastHeart = hearts.children[0];
+      if (lastHeart) lastHeart.classList.add('off', 'losing');
+      updateHeartsLabel(hearts, st.tries);
+      finish('reveal');
       return;
     }
     setState(id, { tries: st.tries });
@@ -250,13 +244,15 @@ export function renderRebus(app, data, id, signal, backTo = '#/') {
     input.classList.remove('shake');
     void input.offsetWidth; // перезапуск анимации
     input.classList.add('shake');
-    const phrases = isClose(rebus, val) ? CLOSE_PHRASES : FAR_PHRASES;
+    const close = isClose(rebus, val);
+    const phrases = close ? CLOSE_PHRASES : FAR_PHRASES;
     msg.textContent = phrases[(st.tries - 1) % phrases.length];
     msg.className = 'msg try';
     if (rebus.hint && st.tries >= HINT_AFTER && !hintSlot.firstChild) add(hintSlot, renderHintButton(rebus));
     // Поле очищаем, а не выделяем: выделение вызывает на телефоне меню «Копировать».
+    // Фокус не трогаем: если клавиатура была открыта, она так и остаётся.
     input.value = '';
-    input.placeholder = 'Попробуй ещё';
+    input.placeholder = close ? CLOSE_PLACEHOLDER : FAR_PLACEHOLDER;
   });
 
   const focusInput = () => { if (finePointer()) input.focus({ preventScroll: true }); };

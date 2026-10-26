@@ -250,7 +250,7 @@ function explainPart(p) {
     add(what, el('span', 'step-notes step-plain', 'просто буквы'));
   } else if (p.type === 'initials') {
     pic = el('span', 'step-pic step-multi', p.items.map((it) => it.emoji).join(''));
-    add(what, el('b', 'step-word', p.items.map((it) => show(it.word)).join(', ')),
+    add(what, el('b', 'step-word step-wrap', p.items.map((it) => show(it.word)).join(', ')),
       el('span', 'step-notes', 'берём первые буквы'));
   } else if (p.type === 'position') {
     const on = normalize(p.prep) === 'НА';
