@@ -109,6 +109,14 @@ const MAX_IN_ROW = 2;
 const MAX_SHARE = { 1: 0.45, 2: 0.4, 3: 0.4 };
 const kindOf = (r) => techniques(r).sort().join('+');
 const shares = {};
+// Темы: не больше трёх ребусов одной темы подряд внутри уровня.
+for (const level of [1, 2, 3]) {
+  let run = 0;
+  rebuses.filter((r) => r && r.level === level).forEach((r, i, items) => {
+    run = i && items[i - 1].theme === r.theme ? run + 1 : 1;
+    if (run === 4) warnings.push(`${r.id}: уже 4 ребуса подряд на тему «${r.theme}» на уровне ${level}`);
+  });
+}
 for (const level of [1, 2, 3]) {
   const items = rebuses.filter((r) => r && r.level === level && Array.isArray(r.parts));
   let run = 0;
@@ -149,6 +157,9 @@ if (process.argv.includes('--stats')) {
   const byLevel = [1, 2, 3].map((l) => rebuses.filter((r) => r.level === l).length);
   console.log('по уровням (1/2/3):', byLevel.join(' / '));
   console.log('ответы:', rebuses.map((r) => r.answer).join(', '));
+  const themes = {};
+  rebuses.forEach((r) => { themes[r.theme] = (themes[r.theme] || 0) + 1; });
+  console.log('темы:', Object.entries(themes).sort((a, b) => b[1] - a[1]).map(([k, n]) => `${k} ×${n}`).join(', '));
   for (const level of [1, 2, 3]) {
     const c = Object.entries(shares[level]).sort((a, b) => b[1] - a[1]).map(([k, n]) => `${k} ×${n}`).join(', ');
     console.log(`приёмы, уровень ${level}:`, c);

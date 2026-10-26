@@ -110,6 +110,10 @@ export function isCorrect(rebus, input) {
 
 const PART_TYPES = ['pic', 'letters', 'number', 'initials', 'position'];
 
+// Темы набора — для разнообразия (не больше трёх ребусов одной темы подряд).
+export const THEMES = ['звери', 'птицы', 'насекомые', 'вода', 'еда', 'фрукты', 'растения', 'природа',
+  'игрушки', 'дом', 'одежда', 'транспорт', 'сказки', 'люди'];
+
 function partProblems(part) {
   if (!part || !PART_TYPES.includes(part.type)) return ['неизвестный type'];
   const p = [];
@@ -157,8 +161,15 @@ export function formatProblems(r) {
   if (typeof r.answer !== 'string' || !normalize(r.answer)) p.push('нет answer');
   if (![1, 2, 3].includes(r.level)) p.push('level должен быть 1, 2 или 3');
   if (typeof r.hint !== 'string' || !r.hint.trim()) p.push('нет hint');
+  if (!THEMES.includes(r.theme)) p.push('theme должна быть одной из: ' + THEMES.join(', '));
   if (!Array.isArray(r.parts) || !r.parts.length) return p.concat('нет parts');
   r.parts.forEach((part, i) => partProblems(part).forEach((x) => p.push(`часть ${i + 1}: ${x}`)));
+  // Разметка приёмов должна совпадать с тем, что на самом деле в частях ребуса.
+  if (!p.length) {
+    const real = techniques(r).sort().join(', ');
+    const marked = Array.isArray(r.techniques) ? [...r.techniques].sort().join(', ') : '';
+    if (real !== marked) p.push(`techniques: в разметке [${marked}], а по частям [${real}]`);
+  }
   if (!p.length && solve(r) !== normalize(r.answer)) {
     p.push(`ответ ${r.answer}, а по картинке выходит ${solve(r)}`);
   } else if (!p.length && solve(r, keepYo) !== keepYo(r.answer)) {

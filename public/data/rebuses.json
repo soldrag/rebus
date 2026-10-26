@@ -6,6 +6,10 @@
       "answer": "СУП",
       "accept": [],
       "level": 1,
+      "theme": "еда",
+      "techniques": [
+        "initials"
+      ],
       "hint": "Горячий, его едят ложкой на обед",
       "parts": [
         {
@@ -33,6 +37,10 @@
       "answer": "ЖУК",
       "accept": [],
       "level": 1,
+      "theme": "насекомые",
+      "techniques": [
+        "initials"
+      ],
       "hint": "Ползает по травинке, у него твёрдые крылышки",
       "parts": [
         {
@@ -60,6 +68,10 @@
       "answer": "ШАР",
       "accept": [],
       "level": 1,
+      "theme": "игрушки",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Круглый, его надувают и отпускают в небо",
       "parts": [
         {
@@ -76,6 +88,10 @@
       "answer": "ДУБ",
       "accept": [],
       "level": 1,
+      "theme": "растения",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Большое дерево, на нём растут жёлуди",
       "parts": [
         {
@@ -96,6 +112,10 @@
       "answer": "САД",
       "accept": [],
       "level": 1,
+      "theme": "растения",
+      "techniques": [
+        "initials"
+      ],
       "hint": "Там растут яблони и груши",
       "parts": [
         {
@@ -123,6 +143,10 @@
       "answer": "ЛЕС",
       "accept": [],
       "level": 1,
+      "theme": "природа",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Много-много деревьев, там живут звери",
       "parts": [
         {
@@ -143,6 +167,10 @@
       "answer": "СТОЛ",
       "accept": [],
       "level": 1,
+      "theme": "дом",
+      "techniques": [
+        "number"
+      ],
       "hint": "У него четыре ножки, за ним обедают",
       "parts": [
         {
@@ -162,6 +190,10 @@
       "answer": "ОСА",
       "accept": [],
       "level": 1,
+      "theme": "насекомые",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Жёлто-чёрная, жужжит и может ужалить",
       "parts": [
         {
@@ -182,6 +214,10 @@
       "answer": "ЛУЧ",
       "accept": [],
       "level": 1,
+      "theme": "природа",
+      "techniques": [
+        "initials"
+      ],
       "hint": "Солнце посылает его в окошко",
       "parts": [
         {
@@ -209,6 +245,10 @@
       "answer": "НОЖ",
       "accept": [],
       "level": 1,
+      "theme": "дом",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Им режут хлеб",
       "parts": [
         {
@@ -229,6 +269,10 @@
       "answer": "УСЫ",
       "accept": [],
       "level": 1,
+      "theme": "звери",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Длинные у кота, торчат возле носа",
       "parts": [
         {
@@ -249,6 +293,10 @@
       "answer": "ТАЗ",
       "accept": [],
       "level": 1,
+      "theme": "дом",
+      "techniques": [
+        "initials"
+      ],
       "hint": "В нём стирают бельё или моют ноги",
       "parts": [
         {
@@ -276,6 +324,10 @@
       "answer": "ШИШКА",
       "accept": [],
       "level": 1,
+      "theme": "растения",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Растёт на ёлке, её грызёт белка",
       "parts": [
         {
@@ -296,6 +348,10 @@
       "answer": "ПУХ",
       "accept": [],
       "level": 1,
+      "theme": "звери",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Лёгкий и мягкий, есть у цыплёнка и летит с тополя",
       "parts": [
         {
@@ -316,6 +372,10 @@
       "answer": "МАК",
       "accept": [],
       "level": 1,
+      "theme": "растения",
+      "techniques": [
+        "initials"
+      ],
       "hint": "Красный цветок в поле, с чёрной серединкой",
       "parts": [
         {
@@ -343,6 +403,10 @@
       "answer": "КОЗА",
       "accept": [],
       "level": 1,
+      "theme": "звери",
+      "techniques": [
+        "comma"
+      ],
       "hint": "С рогами и бородой, говорит «ме-е»",
       "parts": [
         {
@@ -363,6 +427,10 @@
       "answer": "СЕМЬЯ",
       "accept": [],
       "level": 1,
+      "theme": "люди",
+      "techniques": [
+        "number"
+      ],
       "hint": "Мама, папа, я и бабушка с дедушкой — все вместе",
       "parts": [
         {
@@ -382,6 +450,10 @@
       "answer": "МУХА",
       "accept": [],
       "level": 1,
+      "theme": "насекомые",
+      "techniques": [
+        "initials"
+      ],
       "hint": "Жужжит и садится на варенье",
       "parts": [
         {
@@ -413,6 +485,10 @@
       "answer": "НОРА",
       "accept": [],
       "level": 1,
+      "theme": "природа",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Подземный домик лисы",
       "parts": [
         {
@@ -433,6 +509,10 @@
       "answer": "ШУБА",
       "accept": [],
       "level": 1,
+      "theme": "одежда",
+      "techniques": [
+        "initials"
+      ],
       "hint": "Меховая, в ней тепло в сильный мороз",
       "parts": [
         {
@@ -464,6 +544,10 @@
       "answer": "РЫБАК",
       "accept": [],
       "level": 1,
+      "theme": "вода",
+      "techniques": [
+        "plain"
+      ],
       "hint": "Сидит с удочкой у речки и ждёт, когда клюнет",
       "parts": [
         {
@@ -483,6 +567,10 @@
       "answer": "ЛУК",
       "accept": [],
       "level": 1,
+      "theme": "растения",
+      "techniques": [
+        "comma"
+      ],
       "hint": "От него плачут, когда режут",
       "parts": [
         {
@@ -503,6 +591,10 @@
       "answer": "ШКАФ",
       "accept": [],
       "level": 1,
+      "theme": "дом",
+      "techniques": [
+        "initials"
+      ],
       "hint": "В нём висит одежда",
       "parts": [
         {
@@ -534,6 +626,10 @@
       "answer": "ЛИСТ",
       "accept": [],
       "level": 1,
+      "theme": "растения",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Растёт на дереве, осенью желтеет",
       "parts": [
         {
@@ -554,6 +650,10 @@
       "answer": "НОСОК",
       "accept": [],
       "level": 1,
+      "theme": "одежда",
+      "techniques": [
+        "plain"
+      ],
       "hint": "Его надевают на ногу",
       "parts": [
         {
@@ -573,6 +673,10 @@
       "answer": "ГРОМ",
       "accept": [],
       "level": 1,
+      "theme": "природа",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Бабах в небе после молнии",
       "parts": [
         {
@@ -593,6 +697,10 @@
       "answer": "КУСТ",
       "accept": [],
       "level": 1,
+      "theme": "растения",
+      "techniques": [
+        "initials"
+      ],
       "hint": "Невысокий, с ветками, на нём растёт малина",
       "parts": [
         {
@@ -624,6 +732,10 @@
       "answer": "РЕПКА",
       "accept": [],
       "level": 1,
+      "theme": "растения",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Тянут-потянут, вытянуть не могут",
       "parts": [
         {
@@ -644,6 +756,10 @@
       "answer": "ЛУЖА",
       "accept": [],
       "level": 1,
+      "theme": "природа",
+      "techniques": [
+        "initials"
+      ],
       "hint": "Остаётся на дороге после дождя",
       "parts": [
         {
@@ -675,6 +791,10 @@
       "answer": "ТЕСТО",
       "accept": [],
       "level": 1,
+      "theme": "еда",
+      "techniques": [
+        "number"
+      ],
       "hint": "Его месят, а потом пекут из него пироги",
       "parts": [
         {
@@ -694,6 +814,10 @@
       "answer": "ТУЧА",
       "accept": [],
       "level": 1,
+      "theme": "природа",
+      "techniques": [
+        "initials"
+      ],
       "hint": "Тёмная и тяжёлая, закрывает солнце",
       "parts": [
         {
@@ -725,6 +849,10 @@
       "answer": "МОСТ",
       "accept": [],
       "level": 1,
+      "theme": "транспорт",
+      "techniques": [
+        "comma"
+      ],
       "hint": "По нему переходят через речку",
       "parts": [
         {
@@ -745,6 +873,10 @@
       "answer": "КРУГ",
       "accept": [],
       "level": 1,
+      "theme": "природа",
+      "techniques": [
+        "initials"
+      ],
       "hint": "Фигура, как колесо: без углов",
       "parts": [
         {
@@ -776,6 +908,10 @@
       "answer": "ФЛАГ",
       "accept": [],
       "level": 1,
+      "theme": "сказки",
+      "techniques": [
+        "initials"
+      ],
       "hint": "Разноцветный, висит на палке и развевается на ветру",
       "parts": [
         {
@@ -807,6 +943,10 @@
       "answer": "РОГ",
       "accept": [],
       "level": 2,
+      "theme": "звери",
+      "techniques": [
+        "comma"
+      ],
       "hint": "У коровы их два на голове",
       "parts": [
         {
@@ -823,6 +963,10 @@
       "answer": "ДЫМ",
       "accept": [],
       "level": 2,
+      "theme": "дом",
+      "techniques": [
+        "replaceAt"
+      ],
       "hint": "Идёт из трубы",
       "parts": [
         {
@@ -844,6 +988,10 @@
       "answer": "ШИНА",
       "accept": [],
       "level": 2,
+      "theme": "транспорт",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Резиновая, её надевают на колесо",
       "parts": [
         {
@@ -860,6 +1008,10 @@
       "answer": "ЧАЙ",
       "accept": [],
       "level": 2,
+      "theme": "еда",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Горячий напиток, его пьют с вареньем",
       "parts": [
         {
@@ -876,6 +1028,11 @@
       "answer": "КРОШКА",
       "accept": [],
       "level": 2,
+      "theme": "еда",
+      "techniques": [
+        "comma",
+        "initials"
+      ],
       "hint": "Маленький кусочек хлеба, её клюют воробьи",
       "parts": [
         {
@@ -905,6 +1062,10 @@
       "answer": "ЛЕЙКА",
       "accept": [],
       "level": 2,
+      "theme": "дом",
+      "techniques": [
+        "pick"
+      ],
       "hint": "С носиком, из неё на грядках брызжет вода",
       "parts": [
         {
@@ -927,6 +1088,10 @@
       "answer": "НИТКА",
       "accept": [],
       "level": 2,
+      "theme": "одежда",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Её вдевают в иголку, чтобы пришить пуговицу",
       "parts": [
         {
@@ -947,6 +1112,10 @@
       "answer": "ЛЁД",
       "accept": [],
       "level": 2,
+      "theme": "еда",
+      "techniques": [
+        "replaceAt"
+      ],
       "hint": "Зимой по нему катаются на коньках",
       "parts": [
         {
@@ -968,6 +1137,10 @@
       "answer": "РАК",
       "accept": [],
       "level": 2,
+      "theme": "вода",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Пятится назад и щиплется клешнями",
       "parts": [
         {
@@ -985,6 +1158,10 @@
       "answer": "СЕНО",
       "accept": [],
       "level": 2,
+      "theme": "растения",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Сухая трава, её зимой едят коровы",
       "parts": [
         {
@@ -1005,6 +1182,10 @@
       "answer": "ВОДА",
       "accept": [],
       "level": 2,
+      "theme": "природа",
+      "techniques": [
+        "in"
+      ],
       "hint": "Её пьют, в ней купаются и моют руки",
       "parts": [
         {
@@ -1022,6 +1203,10 @@
       "answer": "ПАЛКА",
       "accept": [],
       "level": 2,
+      "theme": "дом",
+      "techniques": [
+        "pick"
+      ],
       "hint": "Сухая ветка, её приносит собака",
       "parts": [
         {
@@ -1044,6 +1229,10 @@
       "answer": "МЕЧ",
       "accept": [],
       "level": 2,
+      "theme": "сказки",
+      "techniques": [
+        "replaceAt"
+      ],
       "hint": "Им сражается богатырь",
       "parts": [
         {
@@ -1065,6 +1254,11 @@
       "answer": "ПОЛЕ",
       "accept": [],
       "level": 2,
+      "theme": "растения",
+      "techniques": [
+        "comma",
+        "pick"
+      ],
       "hint": "Там растёт пшеница, по краю — васильки",
       "parts": [
         {
@@ -1090,6 +1284,10 @@
       "answer": "ЩИТ",
       "accept": [],
       "level": 2,
+      "theme": "сказки",
+      "techniques": [
+        "replaceAt"
+      ],
       "hint": "Рыцарь закрывается им от стрел",
       "parts": [
         {
@@ -1111,6 +1309,10 @@
       "answer": "РУКА",
       "accept": [],
       "level": 2,
+      "theme": "люди",
+      "techniques": [
+        "remove"
+      ],
       "hint": "Ей держат ложку и машут «пока»",
       "parts": [
         {
@@ -1129,6 +1331,10 @@
       "answer": "КЛЮВ",
       "accept": [],
       "level": 2,
+      "theme": "птицы",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Есть у каждой птицы, им она стучит и ест зёрнышки",
       "parts": [
         {
@@ -1149,6 +1355,10 @@
       "answer": "ПЕЧЬ",
       "accept": [],
       "level": 2,
+      "theme": "дом",
+      "techniques": [
+        "pick"
+      ],
       "hint": "На ней в сказке ездил Емеля",
       "parts": [
         {
@@ -1173,6 +1383,10 @@
       "answer": "ГОРБ",
       "accept": [],
       "level": 2,
+      "theme": "звери",
+      "techniques": [
+        "replaceAt"
+      ],
       "hint": "У верблюда их бывает два",
       "parts": [
         {
@@ -1194,6 +1408,10 @@
       "answer": "БОЧКА",
       "accept": [],
       "level": 2,
+      "theme": "дом",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Деревянная, круглая, в ней солят огурцы",
       "parts": [
         {
@@ -1210,6 +1428,10 @@
       "answer": "КРАН",
       "accept": [],
       "level": 2,
+      "theme": "транспорт",
+      "techniques": [
+        "replaceAt"
+      ],
       "hint": "Из него на кухне течёт вода",
       "parts": [
         {
@@ -1231,6 +1453,10 @@
       "answer": "КЛАД",
       "accept": [],
       "level": 2,
+      "theme": "сказки",
+      "techniques": [
+        "pick"
+      ],
       "hint": "Сундук с сокровищами, его ищут пираты",
       "parts": [
         {
@@ -1255,6 +1481,10 @@
       "answer": "ЮЛА",
       "accept": [],
       "level": 2,
+      "theme": "игрушки",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Игрушка: крутится на одной ножке и гудит",
       "parts": [
         {
@@ -1275,6 +1505,10 @@
       "answer": "ПЕНАЛ",
       "accept": [],
       "level": 2,
+      "theme": "дом",
+      "techniques": [
+        "on"
+      ],
       "hint": "В нём лежат ручки и карандаши",
       "parts": [
         {
@@ -1291,6 +1525,10 @@
       "answer": "ФЕЯ",
       "accept": [],
       "level": 2,
+      "theme": "сказки",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Сказочная волшебница с крылышками и палочкой",
       "parts": [
         {
@@ -1311,6 +1549,10 @@
       "answer": "МЯСО",
       "accept": [],
       "level": 2,
+      "theme": "еда",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Из него делают котлеты",
       "parts": [
         {
@@ -1333,6 +1575,10 @@
       "answer": "ДРУГ",
       "accept": [],
       "level": 2,
+      "theme": "люди",
+      "techniques": [
+        "pick"
+      ],
       "hint": "С ним играют и делятся игрушками",
       "parts": [
         {
@@ -1357,6 +1603,10 @@
       "answer": "ОКНО",
       "accept": [],
       "level": 2,
+      "theme": "дом",
+      "techniques": [
+        "comma"
+      ],
       "hint": "В нём стекло, через него смотрят на улицу",
       "parts": [
         {
@@ -1379,6 +1629,10 @@
       "answer": "ОСЁЛ",
       "accept": [],
       "level": 2,
+      "theme": "звери",
+      "techniques": [
+        "replaceAt"
+      ],
       "hint": "Серый, упрямый, кричит «иа»",
       "parts": [
         {
@@ -1400,6 +1654,10 @@
       "answer": "ПАРТА",
       "accept": [],
       "level": 2,
+      "theme": "дом",
+      "techniques": [
+        "comma"
+      ],
       "hint": "За ней сидят на уроке в школе",
       "parts": [
         {
@@ -1420,6 +1678,10 @@
       "answer": "ЛАПА",
       "accept": [],
       "level": 2,
+      "theme": "звери",
+      "techniques": [
+        "replaceAt"
+      ],
       "hint": "Мягкая у кошки, а в ней острые коготки",
       "parts": [
         {
@@ -1441,6 +1703,10 @@
       "answer": "КЕКС",
       "accept": [],
       "level": 2,
+      "theme": "еда",
+      "techniques": [
+        "pick"
+      ],
       "hint": "Сладкий кирпичик с изюмом из духовки",
       "parts": [
         {
@@ -1465,6 +1731,10 @@
       "answer": "КУЛАК",
       "accept": [],
       "level": 2,
+      "theme": "люди",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Сожмёшь пальцы — получится он",
       "parts": [
         {
@@ -1485,6 +1755,10 @@
       "answer": "ПАРК",
       "accept": [],
       "level": 2,
+      "theme": "люди",
+      "techniques": [
+        "replaceAt"
+      ],
       "hint": "Там гуляют, растут деревья и стоят карусели",
       "parts": [
         {
@@ -1506,6 +1780,10 @@
       "answer": "КОНЬ",
       "accept": [],
       "level": 2,
+      "theme": "звери",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Скачет, у него грива и копыта",
       "parts": [
         {
@@ -1526,6 +1804,10 @@
       "answer": "ПЛАЩ",
       "accept": [],
       "level": 2,
+      "theme": "одежда",
+      "techniques": [
+        "remove"
+      ],
       "hint": "Длинный, непромокаемый, его надевают поверх одежды",
       "parts": [
         {
@@ -1548,6 +1830,10 @@
       "answer": "БАРАНКА",
       "accept": [],
       "level": 2,
+      "theme": "еда",
+      "techniques": [
+        "plain"
+      ],
       "hint": "Круглая, с дыркой, её нанизывают на верёвочку",
       "parts": [
         {
@@ -1567,6 +1853,11 @@
       "answer": "МОРОЗ",
       "accept": [],
       "level": 2,
+      "theme": "природа",
+      "techniques": [
+        "comma",
+        "pick"
+      ],
       "hint": "Зимой щиплет за нос и щёки",
       "parts": [
         {
@@ -1592,6 +1883,10 @@
       "answer": "СОРОКА",
       "accept": [],
       "level": 2,
+      "theme": "птицы",
+      "techniques": [
+        "number"
+      ],
       "hint": "Белобока, трещит и любит блестящее",
       "parts": [
         {
@@ -1611,6 +1906,11 @@
       "answer": "БАТОН",
       "accept": [],
       "level": 2,
+      "theme": "еда",
+      "techniques": [
+        "comma",
+        "remove"
+      ],
       "hint": "Длинный белый хлеб",
       "parts": [
         {
@@ -1635,6 +1935,10 @@
       "answer": "ПЕНЬ",
       "accept": [],
       "level": 2,
+      "theme": "растения",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Остаётся в лесу от спиленного дерева",
       "parts": [
         {
@@ -1655,6 +1959,10 @@
       "answer": "БИНТ",
       "accept": [],
       "level": 2,
+      "theme": "сказки",
+      "techniques": [
+        "replaceAt"
+      ],
       "hint": "Им перевязывают ранку",
       "parts": [
         {
@@ -1676,6 +1984,10 @@
       "answer": "БЛИН",
       "accept": [],
       "level": 2,
+      "theme": "еда",
+      "techniques": [
+        "pick"
+      ],
       "hint": "Круглый и тонкий, его пекут на сковороде",
       "parts": [
         {
@@ -1700,6 +2012,10 @@
       "answer": "ЮБКА",
       "accept": [],
       "level": 2,
+      "theme": "одежда",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Её носят девочки вместе с кофточкой",
       "parts": [
         {
@@ -1720,6 +2036,10 @@
       "answer": "КУБИК",
       "accept": [],
       "level": 2,
+      "theme": "игрушки",
+      "techniques": [
+        "replaceAt"
+      ],
       "hint": "Из них строят башню, на гранях бывают буквы",
       "parts": [
         {
@@ -1741,6 +2061,10 @@
       "answer": "ВАЗА",
       "accept": [],
       "level": 2,
+      "theme": "дом",
+      "techniques": [
+        "in"
+      ],
       "hint": "В неё ставят цветы",
       "parts": [
         {
@@ -1758,6 +2082,10 @@
       "answer": "БЫК",
       "accept": [],
       "level": 2,
+      "theme": "звери",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Большой, с рогами, сердится на красную тряпку",
       "parts": [
         {
@@ -1779,6 +2107,10 @@
       "answer": "ЛОЖКА",
       "accept": [],
       "level": 2,
+      "theme": "дом",
+      "techniques": [
+        "replaceAt"
+      ],
       "hint": "Ей едят кашу, бывает чайная и столовая",
       "parts": [
         {
@@ -1800,6 +2132,10 @@
       "answer": "ТРОН",
       "accept": [],
       "level": 2,
+      "theme": "сказки",
+      "techniques": [
+        "pick"
+      ],
       "hint": "На нём сидит король",
       "parts": [
         {
@@ -1824,6 +2160,10 @@
       "answer": "ПЕСОК",
       "accept": [],
       "level": 2,
+      "theme": "природа",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Жёлтый, из него лепят куличики на пляже",
       "parts": [
         {
@@ -1845,6 +2185,10 @@
       "answer": "КОТ",
       "accept": [],
       "level": 2,
+      "theme": "звери",
+      "techniques": [
+        "replaceAt"
+      ],
       "hint": "Мурлычет и ловит мышей",
       "parts": [
         {
@@ -1866,6 +2210,10 @@
       "answer": "ПЕДАЛЬ",
       "accept": [],
       "level": 2,
+      "theme": "транспорт",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Её крутят ногой на велосипеде",
       "parts": [
         {
@@ -1886,6 +2234,10 @@
       "answer": "СУШКА",
       "accept": [],
       "level": 2,
+      "theme": "еда",
+      "techniques": [
+        "replaceAt"
+      ],
       "hint": "Маленькое твёрдое колечко, его грызут с чаем",
       "parts": [
         {
@@ -1907,6 +2259,10 @@
       "answer": "СОКОЛ",
       "accept": [],
       "level": 2,
+      "theme": "птицы",
+      "techniques": [
+        "pick"
+      ],
       "hint": "Быстрая птица, камнем падает с неба на добычу",
       "parts": [
         {
@@ -1931,6 +2287,10 @@
       "answer": "МИСКА",
       "accept": [],
       "level": 2,
+      "theme": "дом",
+      "techniques": [
+        "replaceAt"
+      ],
       "hint": "Из неё лакает молоко котёнок",
       "parts": [
         {
@@ -1952,6 +2312,10 @@
       "answer": "ДРОВА",
       "accept": [],
       "level": 2,
+      "theme": "растения",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Их колют топором и кладут в печку",
       "parts": [
         {
@@ -1972,6 +2336,10 @@
       "answer": "САЛКИ",
       "accept": [],
       "level": 2,
+      "theme": "игрушки",
+      "techniques": [
+        "replaceAt"
+      ],
       "hint": "Игра: водящий догоняет и касается рукой",
       "parts": [
         {
@@ -1993,6 +2361,10 @@
       "answer": "ХОБОТ",
       "accept": [],
       "level": 2,
+      "theme": "звери",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Длинный нос у слона",
       "parts": [
         {
@@ -2013,6 +2385,11 @@
       "answer": "КАБАН",
       "accept": [],
       "level": 2,
+      "theme": "звери",
+      "techniques": [
+        "comma",
+        "initials"
+      ],
       "hint": "Дикая свинья с клыками",
       "parts": [
         {
@@ -2042,6 +2419,10 @@
       "answer": "БУЛКА",
       "accept": [],
       "level": 2,
+      "theme": "еда",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Мягкая, сдобная, её привозят из пекарни",
       "parts": [
         {
@@ -2063,6 +2444,10 @@
       "answer": "САЛАТ",
       "accept": [],
       "level": 2,
+      "theme": "еда",
+      "techniques": [
+        "replaceAt"
+      ],
       "hint": "Его режут из огурцов и помидоров",
       "parts": [
         {
@@ -2084,6 +2469,10 @@
       "answer": "ПОЛКА",
       "accept": [],
       "level": 2,
+      "theme": "дом",
+      "techniques": [
+        "comma"
+      ],
       "hint": "На ней стоят книжки",
       "parts": [
         {
@@ -2104,6 +2493,10 @@
       "answer": "КОЛОС",
       "accept": [],
       "level": 2,
+      "theme": "растения",
+      "techniques": [
+        "pick"
+      ],
       "hint": "Растёт в поле, в нём спрятаны зёрнышки",
       "parts": [
         {
@@ -2129,6 +2522,10 @@
       "answer": "ГРАД",
       "accept": [],
       "level": 2,
+      "theme": "природа",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Ледяные горошины падают с неба",
       "parts": [
         {
@@ -2149,6 +2546,10 @@
       "answer": "ПАНАМА",
       "accept": [],
       "level": 2,
+      "theme": "одежда",
+      "techniques": [
+        "on"
+      ],
       "hint": "Лёгкая шляпка от солнца",
       "parts": [
         {
@@ -2165,6 +2566,10 @@
       "answer": "ШКОЛА",
       "accept": [],
       "level": 2,
+      "theme": "дом",
+      "techniques": [
+        "remove"
+      ],
       "hint": "Туда идут первого сентября с букетом",
       "parts": [
         {
@@ -2187,6 +2592,11 @@
       "answer": "РЕКА",
       "accept": [],
       "level": 2,
+      "theme": "природа",
+      "techniques": [
+        "comma",
+        "pick"
+      ],
       "hint": "Течёт далеко-далеко, по ней плывут лодки",
       "parts": [
         {
@@ -2212,6 +2622,10 @@
       "answer": "МАЛИНА",
       "accept": [],
       "level": 2,
+      "theme": "фрукты",
+      "techniques": [
+        "replaceAt"
+      ],
       "hint": "Красная ягода, её любит медведь",
       "parts": [
         {
@@ -2233,6 +2647,10 @@
       "answer": "ВИЛКА",
       "accept": [],
       "level": 2,
+      "theme": "дом",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Ей накалывают котлету, у неё зубчики",
       "parts": [
         {
@@ -2255,6 +2673,10 @@
       "answer": "ГАРАЖ",
       "accept": [],
       "level": 2,
+      "theme": "транспорт",
+      "techniques": [
+        "pick"
+      ],
       "hint": "Домик для машины",
       "parts": [
         {
@@ -2280,6 +2702,10 @@
       "answer": "ВОРОНА",
       "accept": [],
       "level": 2,
+      "theme": "птицы",
+      "techniques": [
+        "replaceAt"
+      ],
       "hint": "Каркает на заборе",
       "parts": [
         {
@@ -2301,6 +2727,10 @@
       "answer": "ПИЛОТ",
       "accept": [],
       "level": 2,
+      "theme": "транспорт",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Управляет самолётом",
       "parts": [
         {
@@ -2323,6 +2753,10 @@
       "answer": "СОЛЬ",
       "accept": [],
       "level": 2,
+      "theme": "еда",
+      "techniques": [
+        "replaceAt"
+      ],
       "hint": "Белые крупинки, ими посыпают картошку",
       "parts": [
         {
@@ -2348,6 +2782,10 @@
       "answer": "КЛУБОК",
       "accept": [],
       "level": 2,
+      "theme": "люди",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Его гоняет котёнок, из него вяжут",
       "parts": [
         {
@@ -2368,6 +2806,10 @@
       "answer": "ДУДКА",
       "accept": [],
       "level": 2,
+      "theme": "игрушки",
+      "techniques": [
+        "pick"
+      ],
       "hint": "На ней играет пастушок",
       "parts": [
         {
@@ -2393,6 +2835,10 @@
       "answer": "ЛУНА",
       "accept": [],
       "level": 2,
+      "theme": "природа",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Светит на небе ночью",
       "parts": [
         {
@@ -2415,6 +2861,10 @@
       "answer": "СОВОК",
       "accept": [],
       "level": 2,
+      "theme": "дом",
+      "techniques": [
+        "replaceAt"
+      ],
       "hint": "Им насыпают песок в ведёрко, а дома собирают мусор",
       "parts": [
         {
@@ -2440,6 +2890,10 @@
       "answer": "КАША",
       "accept": [],
       "level": 2,
+      "theme": "еда",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Её варят на завтрак из крупы",
       "parts": [
         {
@@ -2462,6 +2916,10 @@
       "answer": "БАНАН",
       "accept": [],
       "level": 3,
+      "theme": "фрукты",
+      "techniques": [
+        "replace"
+      ],
       "hint": "Жёлтый, изогнутый, его любят обезьяны",
       "parts": [
         {
@@ -2483,6 +2941,10 @@
       "answer": "КЛЫК",
       "accept": [],
       "level": 3,
+      "theme": "звери",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Острый длинный зуб у кабана или моржа",
       "parts": [
         {
@@ -2505,6 +2967,10 @@
       "answer": "ЛИПА",
       "accept": [],
       "level": 3,
+      "theme": "растения",
+      "techniques": [
+        "pick"
+      ],
       "hint": "Дерево с душистыми цветками, из них заваривают чай",
       "parts": [
         {
@@ -2526,6 +2992,10 @@
       "answer": "КЛЮШКА",
       "accept": [],
       "level": 3,
+      "theme": "игрушки",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Ей гоняют шайбу на льду",
       "parts": [
         {
@@ -2548,6 +3018,10 @@
       "answer": "ГНОМ",
       "accept": [],
       "level": 3,
+      "theme": "сказки",
+      "techniques": [
+        "replace"
+      ],
       "hint": "Маленький сказочный человечек в колпаке",
       "parts": [
         {
@@ -2573,6 +3047,10 @@
       "answer": "БРАТ",
       "accept": [],
       "level": 3,
+      "theme": "люди",
+      "techniques": [
+        "pick"
+      ],
       "hint": "Мальчик, с которым ты растёшь в одной семье",
       "parts": [
         {
@@ -2594,6 +3072,10 @@
       "answer": "ДОСКА",
       "accept": [],
       "level": 3,
+      "theme": "дом",
+      "techniques": [
+        "comma"
+      ],
       "hint": "На ней в школе пишут мелом",
       "parts": [
         {
@@ -2616,6 +3098,10 @@
       "answer": "ЛАМПА",
       "accept": [],
       "level": 3,
+      "theme": "дом",
+      "techniques": [
+        "pick"
+      ],
       "hint": "Стоит на столе под абажуром",
       "parts": [
         {
@@ -2638,6 +3124,10 @@
       "answer": "УЛЕЙ",
       "accept": [],
       "level": 3,
+      "theme": "насекомые",
+      "techniques": [
+        "replace"
+      ],
       "hint": "Домик для пчёл",
       "parts": [
         {
@@ -2663,6 +3153,10 @@
       "answer": "СТУПА",
       "accept": [],
       "level": 3,
+      "theme": "сказки",
+      "techniques": [
+        "comma"
+      ],
       "hint": "В ней летает Баба-Яга",
       "parts": [
         {
@@ -2685,6 +3179,10 @@
       "answer": "ЗОНТ",
       "accept": [],
       "level": 3,
+      "theme": "одежда",
+      "techniques": [
+        "pick"
+      ],
       "hint": "Раскрывается над головой, как большой грибок",
       "parts": [
         {
@@ -2709,6 +3207,10 @@
       "answer": "БАРАБАН",
       "accept": [],
       "level": 3,
+      "theme": "игрушки",
+      "techniques": [
+        "comma"
+      ],
       "hint": "По нему стучат палочками: бум-бум",
       "parts": [
         {
@@ -2731,6 +3233,10 @@
       "answer": "СОН",
       "accept": [],
       "level": 3,
+      "theme": "люди",
+      "techniques": [
+        "flip"
+      ],
       "hint": "Его смотрят ночью с закрытыми глазами",
       "parts": [
         {
@@ -2747,6 +3253,10 @@
       "answer": "СКРИПКА",
       "accept": [],
       "level": 3,
+      "theme": "игрушки",
+      "techniques": [
+        "replace"
+      ],
       "hint": "На ней играют смычком",
       "parts": [
         {
@@ -2768,6 +3278,10 @@
       "answer": "СЛИВА",
       "accept": [],
       "level": 3,
+      "theme": "фрукты",
+      "techniques": [
+        "replace"
+      ],
       "hint": "Синий фрукт с косточкой, из него варят компот",
       "parts": [
         {
@@ -2793,6 +3307,10 @@
       "answer": "ЛОСЬ",
       "accept": [],
       "level": 3,
+      "theme": "звери",
+      "techniques": [
+        "pick"
+      ],
       "hint": "Лесной великан с широкими рогами",
       "parts": [
         {
@@ -2817,6 +3335,10 @@
       "answer": "КНИГА",
       "accept": [],
       "level": 3,
+      "theme": "дом",
+      "techniques": [
+        "replace"
+      ],
       "hint": "Её читают, в ней страницы и картинки",
       "parts": [
         {
@@ -2842,6 +3364,10 @@
       "answer": "ХОМЯК",
       "accept": [],
       "level": 3,
+      "theme": "звери",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Набивает щёки зёрнышками",
       "parts": [
         {
@@ -2868,6 +3394,10 @@
       "answer": "ФАРА",
       "accept": [],
       "level": 3,
+      "theme": "транспорт",
+      "techniques": [
+        "pick"
+      ],
       "hint": "Глаз у машины: горит спереди в темноте",
       "parts": [
         {
@@ -2892,6 +3422,10 @@
       "answer": "ЩЕНОК",
       "accept": [],
       "level": 3,
+      "theme": "звери",
+      "techniques": [
+        "replace"
+      ],
       "hint": "Маленький, лает, потом вырастет в собаку",
       "parts": [
         {
@@ -2917,6 +3451,10 @@
       "answer": "КРАСКИ",
       "accept": [],
       "level": 3,
+      "theme": "игрушки",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Ими рисуют кисточкой",
       "parts": [
         {
@@ -2939,6 +3477,10 @@
       "answer": "ОЗЕРО",
       "accept": [],
       "level": 3,
+      "theme": "природа",
+      "techniques": [
+        "replace"
+      ],
       "hint": "Много воды посреди леса, там плавают утки",
       "parts": [
         {
@@ -2964,6 +3506,10 @@
       "answer": "ЦИФРА",
       "accept": [],
       "level": 3,
+      "theme": "дом",
+      "techniques": [
+        "pick"
+      ],
       "hint": "Из них пишут числа: 1, 2, 3",
       "parts": [
         {
@@ -2989,6 +3535,10 @@
       "answer": "ПОВАР",
       "accept": [],
       "level": 3,
+      "theme": "сказки",
+      "techniques": [
+        "replace"
+      ],
       "hint": "Готовит еду, носит белый колпак",
       "parts": [
         {
@@ -3014,6 +3564,10 @@
       "answer": "ВЕСЛО",
       "accept": [],
       "level": 3,
+      "theme": "транспорт",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Им гребут в лодке",
       "parts": [
         {
@@ -3036,6 +3590,10 @@
       "answer": "КУКЛА",
       "accept": [],
       "level": 3,
+      "theme": "игрушки",
+      "techniques": [
+        "pick"
+      ],
       "hint": "С ней играют в дочки-матери",
       "parts": [
         {
@@ -3061,6 +3619,10 @@
       "answer": "КАРТОШКА",
       "accept": [],
       "level": 3,
+      "theme": "фрукты",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Её копают осенью и делают из неё пюре",
       "parts": [
         {
@@ -3083,6 +3645,11 @@
       "answer": "КРОТ",
       "accept": [],
       "level": 3,
+      "theme": "звери",
+      "techniques": [
+        "comma",
+        "flip"
+      ],
       "hint": "Живёт под землёй, роет ходы и плохо видит",
       "parts": [
         {
@@ -3104,6 +3671,10 @@
       "answer": "ПЕРЕЦ",
       "accept": [],
       "level": 3,
+      "theme": "фрукты",
+      "techniques": [
+        "replace"
+      ],
       "hint": "Бывает сладкий и жгучий, красный и зелёный",
       "parts": [
         {
@@ -3129,6 +3700,10 @@
       "answer": "ГОЛОВА",
       "accept": [],
       "level": 3,
+      "theme": "люди",
+      "techniques": [
+        "replaceAt"
+      ],
       "hint": "На ней растут волосы, её прячут под шапку",
       "parts": [
         {
@@ -3154,6 +3729,11 @@
       "answer": "РОМАШКА",
       "accept": [],
       "level": 3,
+      "theme": "растения",
+      "techniques": [
+        "comma",
+        "replaceAt"
+      ],
       "hint": "Белые лепестки, жёлтая серединка",
       "parts": [
         {
@@ -3181,6 +3761,10 @@
       "answer": "ПИРАТ",
       "accept": [],
       "level": 3,
+      "theme": "сказки",
+      "techniques": [
+        "replace"
+      ],
       "hint": "Плавает под чёрным флагом и ищет клад",
       "parts": [
         {
@@ -3206,6 +3790,10 @@
       "answer": "ВАГОН",
       "accept": [],
       "level": 3,
+      "theme": "транспорт",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Их цепляет паровоз",
       "parts": [
         {
@@ -3229,6 +3817,10 @@
       "answer": "ШАШКИ",
       "accept": [],
       "level": 3,
+      "theme": "игрушки",
+      "techniques": [
+        "pick"
+      ],
       "hint": "Игра с чёрными и белыми кружками на доске",
       "parts": [
         {
@@ -3254,6 +3846,11 @@
       "answer": "ДОКТОР",
       "accept": [],
       "level": 3,
+      "theme": "сказки",
+      "techniques": [
+        "comma",
+        "replace"
+      ],
       "hint": "Лечит детей и слушает, как бьётся сердце",
       "parts": [
         {
@@ -3281,6 +3878,10 @@
       "answer": "ГРИБ",
       "accept": [],
       "level": 3,
+      "theme": "растения",
+      "techniques": [
+        "replace"
+      ],
       "hint": "Растёт в лесу под ёлкой, его ищут с корзинкой",
       "parts": [
         {
@@ -3306,6 +3907,10 @@
       "answer": "МОРЯК",
       "accept": [],
       "level": 3,
+      "theme": "сказки",
+      "techniques": [
+        "pick"
+      ],
       "hint": "Плавает на корабле, носит тельняшку",
       "parts": [
         {
@@ -3331,6 +3936,10 @@
       "answer": "КАШТАН",
       "accept": [],
       "level": 3,
+      "theme": "фрукты",
+      "techniques": [
+        "replace"
+      ],
       "hint": "Блестящий коричневый орех в колючей кожуре",
       "parts": [
         {
@@ -3356,6 +3965,10 @@
       "answer": "ДВЕРЬ",
       "accept": [],
       "level": 3,
+      "theme": "дом",
+      "techniques": [
+        "pick"
+      ],
       "hint": "Её открывают ключом",
       "parts": [
         {
@@ -3381,6 +3994,10 @@
       "answer": "ТАРЕЛКА",
       "accept": [],
       "level": 3,
+      "theme": "еда",
+      "techniques": [
+        "comma"
+      ],
       "hint": "В неё наливают суп",
       "parts": [
         {
@@ -3404,6 +4021,10 @@
       "answer": "КРУЖКА",
       "accept": [],
       "level": 3,
+      "theme": "дом",
+      "techniques": [
+        "replace"
+      ],
       "hint": "Из неё пьют молоко",
       "parts": [
         {
@@ -3429,6 +4050,10 @@
       "answer": "РУБАШКА",
       "accept": [],
       "level": 3,
+      "theme": "одежда",
+      "techniques": [
+        "comma"
+      ],
       "hint": "У неё воротник и пуговицы",
       "parts": [
         {
@@ -3451,6 +4076,10 @@
       "answer": "ТРОПА",
       "accept": [],
       "level": 3,
+      "theme": "природа",
+      "techniques": [
+        "pick"
+      ],
       "hint": "Узкая дорожка в лесу",
       "parts": [
         {
@@ -3476,6 +4105,10 @@
       "answer": "КОРЕНЬ",
       "accept": [],
       "level": 3,
+      "theme": "растения",
+      "techniques": [
+        "replace"
+      ],
       "hint": "Держит дерево в земле",
       "parts": [
         {
@@ -3501,6 +4134,10 @@
       "answer": "ЛАПША",
       "accept": [],
       "level": 3,
+      "theme": "еда",
+      "techniques": [
+        "pick"
+      ],
       "hint": "Длинные полоски из теста, их варят в супе",
       "parts": [
         {
@@ -3526,6 +4163,11 @@
       "answer": "КОМАР",
       "accept": [],
       "level": 3,
+      "theme": "насекомые",
+      "techniques": [
+        "comma",
+        "flip"
+      ],
       "hint": "Пищит и кусается летом",
       "parts": [
         {
@@ -3547,6 +4189,10 @@
       "answer": "КОГОТЬ",
       "accept": [],
       "level": 3,
+      "theme": "звери",
+      "techniques": [
+        "replace"
+      ],
       "hint": "Острый, есть на лапе у кошки",
       "parts": [
         {
@@ -3572,6 +4218,10 @@
       "answer": "ПАЛЬТО",
       "accept": [],
       "level": 3,
+      "theme": "одежда",
+      "techniques": [
+        "pick"
+      ],
       "hint": "Длинное, с воротником, его надевают осенью поверх свитера",
       "parts": [
         {
@@ -3598,6 +4248,10 @@
       "answer": "ГРИВА",
       "accept": [],
       "level": 3,
+      "theme": "звери",
+      "techniques": [
+        "replace"
+      ],
       "hint": "Длинные волосы на шее у лошади и льва",
       "parts": [
         {
@@ -3623,6 +4277,10 @@
       "answer": "ТЕЛЁНОК",
       "accept": [],
       "level": 3,
+      "theme": "звери",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Детёныш коровы",
       "parts": [
         {
@@ -3643,6 +4301,10 @@
       "answer": "СОБАКА",
       "accept": [],
       "level": 3,
+      "theme": "звери",
+      "techniques": [
+        "replace"
+      ],
       "hint": "Друг человека, говорит «гав»",
       "parts": [
         {
@@ -3668,6 +4330,10 @@
       "answer": "МОЛНИЯ",
       "accept": [],
       "level": 3,
+      "theme": "природа",
+      "techniques": [
+        "pick"
+      ],
       "hint": "Сверкает в небе в грозу",
       "parts": [
         {
@@ -3694,6 +4360,10 @@
       "answer": "ИГРУШКА",
       "accept": [],
       "level": 3,
+      "theme": "игрушки",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Её дарят на день рождения, с ней можно спать в кроватке",
       "parts": [
         {
@@ -3716,6 +4386,10 @@
       "answer": "ТРАВА",
       "accept": [],
       "level": 3,
+      "theme": "растения",
+      "techniques": [
+        "replace"
+      ],
       "hint": "Зелёная, растёт на лугу, её щиплет коза",
       "parts": [
         {
@@ -3741,6 +4415,10 @@
       "answer": "ПИРОЖОК",
       "accept": [],
       "level": 3,
+      "theme": "еда",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Маленький, печёный, с капустой или с повидлом",
       "parts": [
         {
@@ -3767,6 +4445,10 @@
       "answer": "КОМЕТА",
       "accept": [],
       "level": 3,
+      "theme": "природа",
+      "techniques": [
+        "pick"
+      ],
       "hint": "Летит по небу со светящимся хвостом",
       "parts": [
         {
@@ -3793,6 +4475,10 @@
       "answer": "МЕДВЕДЬ",
       "accept": [],
       "level": 3,
+      "theme": "звери",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Косолапый, зимой спит в берлоге",
       "parts": [
         {
@@ -3819,6 +4505,10 @@
       "answer": "КАРАВАЙ",
       "accept": [],
       "level": 3,
+      "theme": "еда",
+      "techniques": [
+        "replace"
+      ],
       "hint": "Пышный хлеб, про него поют на дне рождения",
       "parts": [
         {
@@ -3844,6 +4534,10 @@
       "answer": "КАЧЕЛИ",
       "accept": [],
       "level": 3,
+      "theme": "игрушки",
+      "techniques": [
+        "pick"
+      ],
       "hint": "Во дворе: садишься и летаешь вперёд-назад",
       "parts": [
         {
@@ -3873,6 +4567,10 @@
       "answer": "КАЛИТКА",
       "accept": [],
       "level": 3,
+      "theme": "дом",
+      "techniques": [
+        "replace"
+      ],
       "hint": "Маленькая дверца в заборе",
       "parts": [
         {
@@ -3898,6 +4596,10 @@
       "answer": "КРАПИВА",
       "accept": [],
       "level": 3,
+      "theme": "растения",
+      "techniques": [
+        "comma"
+      ],
       "hint": "Жжётся, растёт у забора",
       "parts": [
         {

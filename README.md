@@ -25,7 +25,8 @@ npm run check:screens  # вёрстка на 15 размерах телефон�
 
 ```json
 {
-  "id": "vorona", "answer": "ВОРОНА", "level": 3, "hint": "Каркает на заборе",
+  "id": "vorona", "answer": "ВОРОНА", "level": 3, "theme": "птицы", "techniques": ["replace"],
+  "hint": "Каркает на заборе",
   "parts": [
     { "type": "pic", "emoji": "👑", "word": "КОРОНА", "replace": [["К", "В"]] }
   ]
