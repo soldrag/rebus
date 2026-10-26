@@ -2,6 +2,7 @@
 import { el, add } from './dom.js';
 
 const REPO = 'https://github.com/soldrag/rebus';
+const CLAUDE_CODE = 'https://claude.com/product/claude-code';
 const GITHUB_PRIVACY = 'https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement';
 
 function link(text, href) {
@@ -35,8 +36,9 @@ export function renderAbout(app) {
     para('Сайт размещён на GitHub Pages. Как любой хостинг, GitHub обрабатывает технические данные запросов (например, IP-адрес) — по ',
       link('своей политике конфиденциальности', GITHUB_PRIVACY), '.'),
     el('h2', null, 'Исходный код и лицензии'),
-    para('Код открыт: ', link('github.com/soldrag/rebus', REPO), ' (лицензия MIT). Сторонние компоненты — шрифт Nunito, Workbox, иконка из Noto Emoji: ',
-      link('лицензии', 'licenses.txt'), '.'),
+    para('Код открыт: ', link('github.com/soldrag/rebus', REPO), ' (лицензия MIT).'),
+    para('Сайт сделан с помощью ', link('Claude Code', CLAUDE_CODE), ' — ИИ-помощника для программирования от Anthropic.'),
+    para('Сторонние компоненты — шрифт Nunito, Workbox, иконка из Noto Emoji: ', link('лицензии', 'licenses.txt'), '.'),
   );
   app.replaceChildren(bar, card);
 }
