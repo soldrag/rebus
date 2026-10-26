@@ -59,10 +59,17 @@ function updateHeartsLabel(h, tries) {
   h.setAttribute('aria-label', 'Осталось попыток: ' + (MAX_TRIES - tries));
 }
 
-function renderHint(rebus) {
-  const box = el('p', 'hint');
-  add(box, el('span', 'hint-label', '💡 Подсказка'), el('span', 'hint-text', rebus.hint));
-  return box;
+// После двух ошибок появляется кнопка; сама подсказка — только по нажатию.
+function renderHintButton(rebus) {
+  const b = el('button', 'hint-btn', '💡 Подсказка');
+  b.type = 'button';
+  b.addEventListener('click', () => {
+    const box = el('p', 'hint');
+    box.setAttribute('role', 'status');
+    add(box, el('span', 'hint-label', '💡 Подсказка'), el('span', 'hint-text', rebus.hint));
+    b.replaceWith(box);
+  });
+  return b;
 }
 
 // Фокус на кнопку «Дальше»: экранную клавиатуру он не открывает, поэтому и на телефоне.
@@ -176,7 +183,7 @@ export function renderRebus(app, data, id, signal) {
   const msg = el('p', 'msg');
   msg.setAttribute('role', 'status');
   const hintSlot = el('div', 'hint-slot');
-  if (rebus.hint && st.tries >= HINT_AFTER) add(hintSlot, renderHint(rebus));
+  if (rebus.hint && st.tries >= HINT_AFTER) add(hintSlot, renderHintButton(rebus));
   add(panel, hearts, form, msg, hintSlot);
 
   const checkKeyboard = watchKeyboard(app, input, signal);
@@ -227,7 +234,7 @@ export function renderRebus(app, data, id, signal) {
     const phrases = isClose(rebus, val) ? CLOSE_PHRASES : FAR_PHRASES;
     msg.textContent = phrases[(st.tries - 1) % phrases.length];
     msg.className = 'msg try';
-    if (rebus.hint && st.tries >= HINT_AFTER && !hintSlot.firstChild) add(hintSlot, renderHint(rebus));
+    if (rebus.hint && st.tries >= HINT_AFTER && !hintSlot.firstChild) add(hintSlot, renderHintButton(rebus));
     // Поле очищаем, а не выделяем: выделение вызывает на телефоне меню «Копировать».
     input.value = '';
     input.placeholder = 'Попробуй ещё';

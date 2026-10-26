@@ -652,6 +652,22 @@ h1[tabindex="-1"]:focus { outline: none; }
   animation: pop .45s cubic-bezier(.2, 1.4, .4, 1);
 }
 .hint-label { font-size: 16px; font-weight: 900; color: #8A6200; }
+.hint-btn {
+  display: block;
+  margin: 12px auto 0;
+  min-height: 52px;
+  padding: 0 22px;
+  font: inherit;
+  font-size: 18px;
+  font-weight: 900;
+  color: #6B4C00;
+  background: #FFF4CC;
+  border: 2px dashed var(--sun-deep);
+  border-radius: 999px;
+  cursor: pointer;
+  animation: pop .45s cubic-bezier(.2, 1.4, .4, 1);
+}
+.hint-btn:active { transform: translateY(2px); }
 .hint-text { font-size: 22px; font-weight: 800; color: var(--ink); }
 
 /* Загрузка и ошибка */
