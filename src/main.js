@@ -159,7 +159,20 @@ const updateIfIdle = () => {
 };
 window.addEventListener('hashchange', updateIfIdle);
 document.addEventListener('visibilitychange', updateIfIdle);
+// Один раз, когда всё скачано для работы без интернета (на iPhone установленное
+// приложение скачивает себя заново при первом запуске — родителю полезно знать, что уже можно).
+function showOfflineReady() {
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.setAttribute('role', 'status');
+  toast.textContent = '✓ Можно играть без интернета';
+  document.body.appendChild(toast);
+  setTimeout(() => toast.classList.add('toast-hide'), 3500);
+  setTimeout(() => toast.remove(), 4200);
+}
+
 const updateSW = registerSW({
+  onOfflineReady: showOfflineReady,
   onNeedRefresh() {
     applyUpdate = () => { applyUpdate = null; updateSW(true); };
     updateIfIdle();

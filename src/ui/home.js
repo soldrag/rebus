@@ -128,7 +128,7 @@ function installBlock(signal) {
     b.type = 'button';
     b.addEventListener('click', async () => {
       if ((await install()) === 'ios') {
-        b.replaceWith(el('p', 'install-tip', 'Нажми «Поделиться» ⬆️, а потом «На экран „Домой“» ➕'));
+        b.replaceWith(el('p', 'install-tip', 'Нажми «Поделиться» ⬆️, а потом «На экран „Домой“» ➕. Потом открой приложение один раз с интернетом — дальше оно работает и без него.'));
       }
     });
     add(box, b);
