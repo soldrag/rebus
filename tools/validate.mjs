@@ -3,10 +3,11 @@
 import fs from 'node:fs';
 import { formatProblems, normalize, rebusList } from '../src/rebus-core.js';
 
-const MAX_PIC_USES = 4; // одна и та же картинка — не чаще (цель — не больше 3)
 
 const file = new URL('../public/data/rebuses.json', import.meta.url);
 const rebuses = rebusList(JSON.parse(fs.readFileSync(file, 'utf8')));
+// Одна и та же картинка — не чаще чем в ~2,5% ребусов (но до 4 раз можно всегда).
+const MAX_PIC_USES = Math.max(4, Math.ceil(rebuses.length / 40));
 
 const problems = [];
 const warnings = [];
