@@ -71,6 +71,8 @@ button, input { font: inherit; color: inherit; }
 
 .noscript { text-align: center; padding: 40px 16px; }
 
+h1[tabindex="-1"]:focus { outline: none; }
+
 :focus-visible {
   outline: 4px solid var(--sky-ink);
   outline-offset: 3px;
@@ -212,6 +214,7 @@ button, input { font: inherit; color: inherit; }
 .tile.started .tile-num { transform: translateY(-6px); }
 
 .home-foot { text-align: center; margin-top: 30px; }
+.hold { display: flex; flex-direction: column; align-items: center; gap: 6px; }
 .reset {
   min-height: 48px;
   padding: 8px 20px;
@@ -224,6 +227,40 @@ button, input { font: inherit; color: inherit; }
   cursor: pointer;
 }
 .reset:hover { background: #FFF; }
+.hold-btn {
+  position: relative;
+  min-height: 52px;
+  padding: 8px 24px;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+.hold-ring {
+  position: absolute;
+  inset: -2px;
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  overflow: visible;
+  pointer-events: none;
+}
+.hold-ring rect {
+  x: 2px;
+  y: 2px;
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
+  rx: 24px;
+  fill: none;
+  stroke: var(--coral-ink);
+  stroke-width: 4px;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  transition: stroke-dashoffset .2s ease;
+}
+.hold-btn.holding rect { stroke-dashoffset: 0; transition: stroke-dashoffset 1.5s linear; }
+.hold-btn.holding { color: var(--coral-ink); background: #FFF; }
+.hold-caption { margin: 0; font-size: 15px; font-weight: 700; color: var(--ink-soft); }
+.hold-caption.nudge { animation: shake .45s ease; color: var(--coral-ink); }
 
 /* ---------- Экран ребуса ---------- */
 
@@ -261,8 +298,23 @@ button, input { font: inherit; color: inherit; }
   box-shadow: 0 4px 0 var(--line), var(--shadow);
   touch-action: manipulation;
 }
-.back:active { transform: translateY(2px); }
-.rebus-num { margin: 0; font-size: 28px; font-weight: 900; }
+.back:active, .help-btn:active { transform: translateY(2px); }
+.help-btn {
+  width: 60px;
+  height: 60px;
+  flex: none;
+  border: 0;
+  border-radius: 50%;
+  background: var(--card);
+  color: var(--sky-ink);
+  font-size: 32px;
+  font-weight: 900;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 4px 0 var(--line), var(--shadow);
+  touch-action: manipulation;
+}
+.rebus-num { margin: 0; font-size: 28px; font-weight: 900; white-space: nowrap; }
 .mini-stars {
   margin-left: auto;
   font-size: 20px;
@@ -287,8 +339,8 @@ button, input { font: inherit; color: inherit; }
   padding: var(--pad);
 }
 
-/* Область картинки забирает всё свободное место карточки;
-   эмодзи масштабируется от её размеров (container queries). */
+/* Область картинки забирает всё свободное место карточки.
+   Размеры --e (картинки) и --el (буквы) считает board.js по размеру области. */
 .board {
   flex: 1 1 auto;
   min-height: 150px;
@@ -301,29 +353,29 @@ button, input { font: inherit; color: inherit; }
   border-radius: 22px;
   user-select: none;
   -webkit-user-select: none;
-  container-type: size;
 }
 .board-inner {
-  --emax: 240px;
-  --e: clamp(48px, 20vw, 150px); /* запасной вариант без container queries */
+  --e: clamp(48px, 20vw, 150px); /* до первого расчёта */
+  --el: var(--e);
   --top: calc(var(--e) * .42);
   --bottom: calc(var(--e) * .58);
   width: 100%;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: flex-start;
-  align-content: center;
-  column-gap: calc(var(--e) * .2);
+  flex-direction: column;
+  align-items: center;
   row-gap: calc(var(--e) * .15);
 }
-@supports (container-type: size) {
-  .board-inner {
-    --e1: min(100cqw / var(--u1, 3), 100cqh / var(--hf, 1.3));
-    --e2: min(100cqw / var(--u2, 3), 100cqh / (2 * var(--hf, 1.3) + .15));
-    --e: clamp(40px, max(var(--e1), var(--e2)), var(--emax));
-  }
+.board-row {
+  display: flex;
+  flex-wrap: wrap; /* на случай неточного расчёта — лучше перенос, чем обрезка */
+  justify-content: center;
+  align-items: flex-start;
+  column-gap: calc(var(--e) * .2);
+  row-gap: calc(var(--e) * .15);
+  max-width: 100%;
 }
+.board-inner.measuring { width: max-content; }
+.board-inner.measuring .board-row { flex-wrap: nowrap; max-width: none; }
 .board-inner.no-top { --top: 0px; }
 .board-inner.no-bottom { --bottom: 0px; }
 
@@ -352,20 +404,40 @@ button, input { font: inherit; color: inherit; }
   display: inline-block;
   font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
 }
+.emoji-wrap { position: relative; display: inline-block; }
 .emoji.flip, .step-pic.flip { transform: rotate(180deg); }
+.flip-badge {
+  position: absolute;
+  right: calc(var(--e) * -.08);
+  bottom: calc(var(--e) * .02);
+  width: calc(var(--e) * .34);
+  height: calc(var(--e) * .34);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(var(--e) * .24);
+  font-weight: 900;
+  line-height: 1;
+  color: #164C78;
+  background: #FFF;
+  border: max(2px, calc(var(--e) * .025)) solid var(--sky-ink);
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .12);
+}
 
 .commas {
-  font-size: calc(var(--e) * .78);
-  font-weight: 900;
-  line-height: .6;
-  letter-spacing: calc(var(--e) * -.04);
-  color: var(--ink);
-  font-family: 'Arial Black', var(--font);
-  position: relative;
-  top: calc(var(--e) * -.12);
+  display: flex;
+  gap: calc(var(--e) * .03);
+  padding-top: calc(var(--e) * .06);
 }
-.commas-l { margin-right: calc(var(--e) * .02); }
-.commas-r { margin-left: calc(var(--e) * .02); }
+.comma {
+  display: block;
+  width: calc(var(--e) * .2);
+  height: calc(var(--e) * .4);
+  fill: var(--ink);
+}
+.commas-l { margin-right: calc(var(--e) * -.02); }
+.commas-r { margin-left: calc(var(--e) * -.02); }
 
 .letters-row {
   display: flex;
@@ -373,16 +445,16 @@ button, input { font: inherit; color: inherit; }
   height: calc(var(--e) * 1.12);
 }
 .big-letter {
-  font-size: calc(var(--e) * .92);
+  font-size: calc(var(--el) * .92);
   font-weight: 900;
   line-height: 1;
-  padding: 0 calc(var(--e) * .01);
-  text-shadow: 0 calc(var(--e) * .04) 0 rgba(0,0,0,.08);
+  padding: 0 calc(var(--el) * .01);
+  text-shadow: 0 calc(var(--el) * .04) 0 rgba(0,0,0,.08);
 }
 .c0 { color: #E8604C; }
 .c1 { color: #2C88C9; }
 .c2 { color: #27996C; }
-.c3 { color: #D98B00; }
+.c3 { color: #B87400; }
 .c4 { color: #8A5FD1; }
 
 .swap {
@@ -427,7 +499,7 @@ button, input { font: inherit; color: inherit; }
   display: flex;
   justify-content: center;
   gap: 10px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 .heart {
   font-size: 32px;
@@ -461,7 +533,7 @@ button, input { font: inherit; color: inherit; }
   appearance: none;
 }
 .answer-input::placeholder {
-  color: #B6A595;
+  color: #7F6E60;
   text-transform: none;
   letter-spacing: 0;
   font-weight: 800;
@@ -490,12 +562,11 @@ button, input { font: inherit; color: inherit; }
 }
 .btn-check:active { box-shadow: 0 2px 0 #E3A520; }
 .btn-next {
-  background: #5CC49A;
+  background: #23845B;
   color: #fff;
-  text-shadow: 0 2px 0 rgba(0, 0, 0, .12);
-  box-shadow: 0 5px 0 #3E9C77;
+  box-shadow: 0 5px 0 #165C3F;
 }
-.btn-next:active { box-shadow: 0 2px 0 #3E9C77; }
+.btn-next:active { box-shadow: 0 2px 0 #165C3F; }
 
 .msg {
   min-height: 1.4em;
@@ -526,6 +597,8 @@ button, input { font: inherit; color: inherit; }
 }
 
 .actions { margin: 6px 0 4px; }
+/* Слово-ответ и «Дальше» — поверх конфетти */
+.result, .actions { position: relative; z-index: 60; }
 
 .explain {
   margin-top: 16px;
@@ -546,10 +619,10 @@ button, input { font: inherit; color: inherit; }
 }
 .step:first-child { border-top: 0; }
 .step-pic { font-size: 44px; line-height: 1; text-align: center; display: inline-block; }
-.step-abc { color: var(--ink-soft); font-size: 18px; letter-spacing: 0; font-weight: 800; }
 .step-what { display: flex; flex-direction: column; min-width: 0; }
-.step-word { font-size: 22px; font-weight: 900; letter-spacing: 1px; overflow-wrap: anywhere; }
-.step-notes { font-size: 16px; color: var(--ink-soft); font-weight: 700; line-height: 1.25; }
+.step-word { font-size: 22px; font-weight: 900; letter-spacing: 1px; white-space: nowrap; }
+.step-notes { font-size: 16px; color: var(--ink-soft); font-weight: 700; line-height: 1.25; overflow-wrap: normal; hyphens: none; }
+.step-plain { font-size: 18px; font-weight: 800; }
 .step-arrow { font-size: 24px; color: #C9B49B; }
 .step-res {
   font-size: 26px;
@@ -561,6 +634,7 @@ button, input { font: inherit; color: inherit; }
   letter-spacing: 1px;
   min-width: 44px;
   text-align: center;
+  white-space: nowrap;
 }
 
 /* Подсказка */
@@ -668,22 +742,90 @@ button, input { font: inherit; color: inherit; }
 /* Низкие экраны (ландшафт): компактнее шапка и отступы */
 @media (max-height: 820px) and (min-width: 600px) {
   .topbar { margin-bottom: 8px; }
-  .back { width: 56px; height: 56px; }
+  .back, .help-btn { width: 56px; height: 56px; }
   .hearts { margin-bottom: 8px; }
   .heart { font-size: 34px; }
 }
-@media (max-height: 520px) {
-  .play { min-height: 0; }
-  .board { min-height: 110px; }
-  .hearts { margin-bottom: 6px; }
-  .heart { font-size: 24px; }
-  .back { width: 52px; height: 52px; }
+@media (min-width: 1024px) {
+  .grid { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); }
 }
 
-@media (max-width: 440px) {
-  .step { grid-template-columns: 46px 1fr auto; gap: 8px; }
-  .step-pic { font-size: 38px; }
+/* Телефон в ландшафте: ребус слева на всю высоту, ответ справа. */
+@media (orientation: landscape) and (max-height: 560px) {
+  .play { min-height: 0; padding-top: calc(8px + var(--safe-t)); padding-bottom: calc(8px + var(--safe-b)); }
+  .play.done { height: var(--vvh, 100dvh); min-height: 0; }
+  .topbar { margin-bottom: 6px; }
+  .back { width: 48px; height: 48px; font-size: 26px; }
+  .rebus-num { font-size: 22px; }
+  .mini-stars { font-size: 17px; padding: 6px 12px; }
+  .card, .play.done .card {
+    flex: 1 1 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(250px, 38%, 360px);
+    gap: 14px;
+    --pad: 10px;
+  }
+  .board, .play.done .board { height: auto; min-height: 0; }
+  /* «Дальше» сразу под ответом, разбор — ниже (его можно прокрутить) */
+  .play.done .panel { display: flex; flex-direction: column; }
+  .play.done .result { order: 0; flex: none; }
+  .play.done .actions { order: 1; flex: none; }
+  .play.done .explain { order: 2; flex: none; }
+  .panel {
+    margin-top: 0;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 2px 2px 6px;
+  }
+  .help-btn { width: 48px; height: 48px; font-size: 26px; }
+  .hearts { margin-bottom: 6px; }
+  .heart { font-size: 26px; }
+  .answer { flex-direction: column; gap: 8px; }
+  .answer-input { min-height: 56px; font-size: 26px; padding: 6px 12px; }
+  .answer-input::placeholder { font-size: 18px; }
+  .btn-check, .btn { min-width: 0; width: 100%; min-height: 56px; font-size: 22px; }
+  .msg { font-size: 17px; margin-top: 6px; }
+  .hint { padding: 6px 10px; margin-top: 6px; display: block; text-align: left; }
+  .hint-label { font-size: 15px; margin-right: 4px; }
+  .hint-text { font-size: 16px; }
+  .result { padding: 8px 10px; margin-bottom: 8px; }
+  .result-title { font-size: 20px; }
+  .result-word { font-size: 32px; }
+  .explain { margin-top: 8px; padding: 8px 8px 2px; }
+  .step { grid-template-columns: 40px 1fr auto; gap: 6px; }
+  .step-pic { font-size: 32px; }
   .step-arrow { display: none; }
+  .step-word { font-size: 18px; }
+  .step-notes { font-size: 14px; }
+  .step-res { font-size: 20px; }
+}
+
+/* Открыта экранная клавиатура: убираем всё лишнее, картинка сжимается. */
+.play.kb-open { min-height: 0; padding-top: calc(6px + var(--safe-t)); padding-bottom: 6px; }
+.kb-open .topbar, .kb-open .hearts, .kb-open .hint-slot { display: none; }
+.kb-open .board { min-height: 60px; }
+.kb-open .panel { margin-top: 8px; }
+.kb-open .msg { margin-top: 4px; font-size: 17px; min-height: 0; }
+
+@media (max-width: 440px) {
+  .step {
+    grid-template-columns: 48px 1fr;
+    grid-template-areas: "pic what" "pic res";
+    column-gap: 10px;
+    row-gap: 4px;
+  }
+  .step-pic { grid-area: pic; font-size: 40px; }
+  .step-what { grid-area: what; }
+  .step-res { grid-area: res; justify-self: start; }
+  .step-arrow { display: none; }
+}
+
+@media (max-width: 400px) {
+  .topbar { gap: 8px; }
+  .back, .help-btn { width: 52px; height: 52px; font-size: 28px; }
+  .rebus-num { font-size: 24px; }
+  .mini-stars { font-size: 17px; padding: 6px 10px; }
 }
 
 @media (max-width: 359px) {
@@ -702,18 +844,18 @@ button, input { font: inherit; color: inherit; }
 }
 
 /* ---------- Установка приложения ---------- */
-.install { display: flex; justify-content: center; margin-bottom: 14px; }
+.install { display: flex; justify-content: center; margin: -6px 0 16px; }
 .install:empty { display: none; }
 .install-btn {
   font: inherit;
   font-weight: 800;
-  font-size: 1.1rem;
-  min-height: 56px;
-  padding: 0 24px;
+  font-size: 17px;
+  min-height: 48px;
+  padding: 0 20px;
   border: 0;
   border-radius: 999px;
   background: var(--sky);
-  color: var(--sky-ink);
+  color: #164C78;
   box-shadow: 0 4px 0 #9CCDEB;
   cursor: pointer;
 }
@@ -727,4 +869,67 @@ button, input { font: inherit; color: inherit; }
   font-weight: 800;
   color: var(--ink);
   max-width: 420px;
+}
+
+/* ---------- Легенда ребусной записи ---------- */
+.legend {
+  --e: 76px;
+  --el: 76px;
+  --top: auto;
+  --bottom: auto;
+  width: min(640px, calc(100vw - 24px));
+  max-height: calc(var(--vvh, 100dvh) - 24px);
+  overflow-y: auto;
+  border: 0;
+  border-radius: var(--radius);
+  padding: 18px;
+  background: var(--card);
+  color: var(--ink);
+  box-shadow: 0 20px 60px rgba(80, 50, 20, .3);
+  font-family: var(--font);
+}
+.legend::backdrop { background: rgba(58, 46, 40, .45); }
+.legend.no-modal { position: fixed; inset: 12px; margin: auto; z-index: 100; height: fit-content; }
+.legend-title { margin: 0 0 12px; text-align: center; font-size: 26px; font-weight: 900; }
+.legend-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.legend-cards.single { grid-template-columns: 1fr; }
+.legend-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 10px;
+  background: #FFFAF2;
+  border: 2px solid var(--line);
+  border-radius: 20px;
+  text-align: center;
+}
+.legend-pic {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 96px;
+}
+.legend-stack { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.legend .pic-row { height: auto; }
+.legend .emoji { line-height: 1.1; }
+.legend-text p { margin: 0; }
+.legend-card-title { font-size: 18px; font-weight: 900; line-height: 1.2; }
+.legend-words { margin-top: 4px !important; font-size: 18px; font-weight: 900; color: var(--mint-ink); letter-spacing: 1px; }
+.legend-ok { margin-top: 14px; }
+.legend-cards.single .legend-card { flex-direction: row; justify-content: center; gap: 18px; text-align: left; }
+.legend-cards.single .legend-pic { min-height: 0; }
+@media (max-width: 440px) {
+  .legend { padding: 14px; }
+  .legend-title { font-size: 22px; }
+  .legend { --e: 62px; }
+  .legend-card-title, .legend-words { font-size: 16px; }
+}
+@media (orientation: landscape) and (max-height: 560px) {
+  .legend { --e: 44px; padding: 12px; }
+  .legend-cards { grid-template-columns: repeat(4, 1fr); }
+  .legend-pic { min-height: 70px; }
+  .legend-card-title, .legend-words { font-size: 15px; }
+  .legend-title { font-size: 20px; margin-bottom: 8px; }
+  .legend-ok { margin-top: 8px; min-height: 52px; }
 }

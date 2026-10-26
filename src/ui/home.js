@@ -37,7 +37,7 @@ export function renderHome(app, data, signal) {
   const fill = el('div', 'progress-fill');
   fill.style.width = (done / list.length) * 100 + '%';
   add(prog, el('span', 'progress-star', '⭐'), pt, add(bar, fill));
-  add(app, prog);
+  add(app, prog, installBlock(signal));
 
   if (done === list.length) add(app, el('p', 'all-done', '🎉 Ты отгадал все ребусы! Ура!'));
 
@@ -62,7 +62,7 @@ export function renderHome(app, data, signal) {
         label += ', отгадан';
       } else if (st.status === 'revealed') {
         a.classList.add('revealed');
-        add(a, el('span', 'tile-mark', '👀'));
+        add(a, el('span', 'tile-mark', '💡'));
         label += ', ответ показан';
       } else if (st.tries > 0) {
         const left = Math.max(0, MAX_TRIES - st.tries);
@@ -76,20 +76,67 @@ export function renderHome(app, data, signal) {
     add(app, add(sec, h, grid));
   }
 
-  const reset = el('button', 'reset', 'Начать заново');
-  reset.type = 'button';
-  reset.addEventListener('click', () => {
-    let ok = true;
-    try { ok = window.confirm('Начать заново? Все звёздочки пропадут.'); } catch { /* ignore */ }
-    if (!ok) return;
+  const reset = holdButton('Начать заново', 'Держи, чтобы начать заново', () => {
     resetAll();
     renderHome(app, data, signal);
     const title = app.querySelector('h1');
     title.setAttribute('tabindex', '-1');
     title.focus();
-  });
-  const foot = el('footer', 'home-foot');
-  add(app, add(foot, installBlock(signal), reset));
+  }, signal);
+  add(app, add(el('footer', 'home-foot'), reset));
+}
+
+// Кнопка, которая срабатывает только после удержания (~1,5 с): защита от случайного нажатия.
+// Работает пальцем, мышью и клавиатурой (удержание пробела или Enter).
+const HOLD_MS = 1500;
+function holdButton(label, caption, onDone, signal) {
+  const wrap = el('div', 'hold');
+  const b = el('button', 'reset hold-btn');
+  b.type = 'button';
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('class', 'hold-ring');
+  svg.setAttribute('aria-hidden', 'true');
+  const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  rect.setAttribute('pathLength', '100');
+  svg.appendChild(rect);
+  add(b, svg, el('span', 'hold-label', label));
+  const cap = el('p', 'hold-caption', caption);
+  cap.id = 'hold-caption';
+  b.setAttribute('aria-describedby', cap.id);
+
+  let timer = 0;
+  const start = () => {
+    if (timer) return;
+    b.classList.add('holding');
+    timer = setTimeout(() => { timer = 0; b.classList.remove('holding'); onDone(); }, HOLD_MS);
+  };
+  const stop = () => {
+    clearTimeout(timer);
+    timer = 0;
+    b.classList.remove('holding');
+  };
+  const opts = signal ? { signal } : undefined;
+  b.addEventListener('pointerdown', (e) => {
+    if (e.button !== 0) return;
+    try { b.setPointerCapture(e.pointerId); } catch { /* ignore */ }
+    start();
+  }, opts);
+  for (const t of ['pointerup', 'pointercancel', 'lostpointercapture', 'blur']) b.addEventListener(t, stop, opts);
+  b.addEventListener('contextmenu', (e) => e.preventDefault(), opts);
+  b.addEventListener('keydown', (e) => {
+    if (e.key !== ' ' && e.key !== 'Enter') return;
+    e.preventDefault();
+    if (!e.repeat) start();
+  }, opts);
+  b.addEventListener('keyup', (e) => {
+    if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); stop(); }
+  }, opts);
+  b.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (!timer) { cap.classList.remove('nudge'); void cap.offsetWidth; cap.classList.add('nudge'); }
+  }, opts);
+  if (signal) signal.addEventListener('abort', stop, { once: true });
+  return add(wrap, b, cap);
 }
 
 function installBlock(signal) {

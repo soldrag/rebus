@@ -42,3 +42,23 @@ export const MAX_TRIES = 3;
 export function solvedCount(list) {
   return list.filter((r) => getState(r.id).status === 'solved').length;
 }
+
+// Какие приёмы ребусной записи ребёнок уже видел (для легенды): отдельный ключ.
+const SEEN_KEY = 'rebus-seen-v1';
+let seen = loadSeen();
+
+function loadSeen() {
+  try {
+    const raw = window.localStorage.getItem(SEEN_KEY);
+    const arr = raw ? JSON.parse(raw) : [];
+    if (Array.isArray(arr)) return new Set(arr.filter((x) => typeof x === 'string'));
+  } catch { /* ignore */ }
+  return new Set();
+}
+
+export function hasSeen(kind) { return seen.has(kind); }
+
+export function markSeen(kinds) {
+  for (const k of kinds) seen.add(k);
+  try { window.localStorage.setItem(SEEN_KEY, JSON.stringify([...seen])); } catch { /* ignore */ }
+}

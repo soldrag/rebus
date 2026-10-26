@@ -796,32 +796,6 @@
       "source": "классика"
     },
     {
-      "id": "nosorog",
-      "answer": "НОСОРОГ",
-      "accept": [],
-      "level": 3,
-      "hint": "Огромный толстокожий зверь из Африки, очень сильный",
-      "parts": [
-        {
-          "type": "pic",
-          "emoji": "👃",
-          "word": "НОС"
-        },
-        {
-          "type": "letters",
-          "text": "О"
-        },
-        {
-          "type": "pic",
-          "emoji": "⛰️",
-          "word": "ГОРА",
-          "flip": true,
-          "cutStart": 1
-        }
-      ],
-      "source": "классика"
-    },
-    {
       "id": "kot",
       "answer": "КОТ",
       "accept": [],
