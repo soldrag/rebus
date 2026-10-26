@@ -1,5 +1,5 @@
 // Картинка ребуса, раскладка под размер экрана, разбор решения.
-import { partLetters, normalize } from '../rebus-core.js';
+import { partLetters, normalize, keepYo } from '../rebus-core.js';
 export { techniques } from '../rebus-core.js';
 import { el, add, plural } from './dom.js';
 
@@ -273,7 +273,7 @@ function explainPart(p) {
   pic.setAttribute('aria-hidden', 'true');
   const arrow = el('span', 'step-arrow', '→');
   arrow.setAttribute('aria-hidden', 'true');
-  add(li, pic, what, arrow, el('span', 'step-res', p.type === 'letters' ? show(p.text) : partLetters(p)));
+  add(li, pic, what, arrow, el('span', 'step-res', partLetters(p, keepYo)));
   return li;
 }
 

@@ -2,7 +2,7 @@
 import { normalize, isCorrect } from '../rebus-core.js';
 import { el, add, reduceMotion, finePointer } from './dom.js';
 import { getState, setState, MAX_TRIES, hasSeen, markSeen } from '../store.js';
-import { levelInfo, levelNext, levelProgress } from '../levels.js';
+import { levelInfo, stageNext, stageOf, stageProgress } from '../levels.js';
 import { renderBoard, renderExplain, techniques, show } from './board.js';
 import { openLegend, ALL_KINDS } from './legend.js';
 import { celebrate } from './confetti.js';
@@ -31,13 +31,14 @@ function isClose(rebus, input) {
   return [rebus.answer].concat(rebus.accept || []).some((a) => distance(normalize(a), n) <= 2);
 }
 
-// «Дальше» — следующий ребус того же уровня; когда уровень пройден — на главную.
+// «Дальше» — следующий ребус этапа; когда этап пройден — за кубком.
 function nextButton(data, rebus) {
-  const n = levelNext(data.list, rebus);
-  const b = el('button', 'btn btn-next', n ? 'Дальше →' : 'Уровень пройден! 🏆');
+  const n = stageNext(data.list, rebus);
+  const { index } = stageOf(data.list, rebus);
+  const b = el('button', 'btn btn-next', n ? 'Дальше →' : 'Забрать кубок! 🏆');
   b.type = 'button';
   b.addEventListener('click', () => {
-    location.hash = n ? '#/r/' + encodeURIComponent(n.id) : '#/';
+    location.hash = n ? '#/r/' + encodeURIComponent(n.id) : `#/cup/${rebus.level}/${index}`;
   });
   return b;
 }
@@ -125,6 +126,7 @@ export function renderRebus(app, data, id, signal, backTo = '#/') {
   const { rebus } = info;
   const st = getState(id);
   const L = levelInfo(rebus.level);
+  const stage = stageOf(data.list, rebus);
   document.title = 'Ребусы — ' + L.title;
   app.className = 'app play';
 
@@ -134,14 +136,16 @@ export function renderRebus(app, data, id, signal, backTo = '#/') {
   back.setAttribute('aria-label', backTo === '#/' ? 'На главную' : 'Ко всем ребусам');
   const stars = el('span', 'mini-stars');
   const updateStars = () => {
-    const p = levelProgress(data.list, rebus.level);
+    const p = stageProgress(stage.items);
     stars.textContent = '⭐ ' + p.solved + '/' + p.total;
   };
   updateStars();
   const help = el('button', 'help-btn', '?');
   help.type = 'button';
   help.setAttribute('aria-label', 'Как читать ребус');
-  add(bar, back, el('h1', 'rebus-num', L.emoji + ' ' + L.title), stars, help);
+  const title = el('h1', 'rebus-num', L.emoji + ' ' + L.title);
+  if (stage.count > 1) add(title, el('span', 'stage-no', ' · ' + stage.index));
+  add(bar, back, title, stars, help);
 
   const card = el('section', 'card');
   const panel = el('div', 'panel');

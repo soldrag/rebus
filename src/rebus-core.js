@@ -8,38 +8,43 @@ export function normalize(s) {
     .replace(/[^А-ЯA-Z0-9]/g, '');
 }
 
+// Как normalize, но Ё остаётся Ё — для проверки, что буквы ребуса честно дают ответ.
+export function keepYo(s) {
+  return String(s || '').toUpperCase().replace(/[^А-ЯЁA-Z0-9]/g, '');
+}
+
 export const PREPOSITIONS = ['В', 'НА'];
 
 // Буквы, которые даёт одна часть ребуса.
 // Картинка и число: переворот → замены букв → замены по номеру → зачёркивание
 // → цифры над картинкой (какие буквы и в каком порядке) → запятые.
-export function partLetters(part) {
+export function partLetters(part, norm = normalize) {
   switch (part.type) {
     case 'letters':
-      return normalize(part.text);
+      return norm(part.text);
     case 'initials': // первые буквы картинок
-      return (part.items || []).map((it) => normalize(it.word).charAt(0)).join('');
+      return (part.items || []).map((it) => norm(it.word).charAt(0)).join('');
     case 'position': { // «ДА в О» = В-О-ДА, «СО в А» = СО-В-А, «ПА на МА» = ПА-НА-МА
-      const prep = normalize(part.prep), outer = normalize(part.outer), inner = normalize(part.inner);
+      const prep = norm(part.prep), outer = norm(part.outer), inner = norm(part.inner);
       return part.prepFirst ? prep + outer + inner : inner + prep + outer;
     }
     default:
-      return wordLetters(part);
+      return wordLetters(part, norm);
   }
 }
 
-function wordLetters(part) {
-  let w = normalize(part.word);
+function wordLetters(part, norm) {
+  let w = norm(part.word);
   if (part.flip) w = w.split('').reverse().join('');
   (part.replace || []).forEach(function (pair) {
-    w = w.split(normalize(pair[0])).join(normalize(pair[1]));
+    w = w.split(norm(pair[0])).join(norm(pair[1]));
   });
   (part.replaceAt || []).forEach(function (pair) {
     const i = pair[0] - 1;
-    if (i >= 0 && i < w.length) w = w.slice(0, i) + normalize(pair[1]) + w.slice(i + 1);
+    if (i >= 0 && i < w.length) w = w.slice(0, i) + norm(pair[1]) + w.slice(i + 1);
   });
   (part.remove || []).forEach(function (ch) {
-    const i = w.indexOf(normalize(ch));
+    const i = w.indexOf(norm(ch));
     if (i >= 0) w = w.slice(0, i) + w.slice(i + 1);
   });
   if (part.pick) w = part.pick.map((n) => w.charAt(n - 1)).join('');
@@ -48,8 +53,8 @@ function wordLetters(part) {
   return w.slice(start, w.length - end);
 }
 
-export function solve(rebus) {
-  return rebus.parts.map(partLetters).join('');
+export function solve(rebus, norm = normalize) {
+  return rebus.parts.map((p) => partLetters(p, norm)).join('');
 }
 
 export function isCorrect(rebus, input) {
@@ -109,6 +114,9 @@ export function formatProblems(r) {
   r.parts.forEach((part, i) => partProblems(part).forEach((x) => p.push(`часть ${i + 1}: ${x}`)));
   if (!p.length && solve(r) !== normalize(r.answer)) {
     p.push(`ответ ${r.answer}, а по картинке выходит ${solve(r)}`);
+  } else if (!p.length && solve(r, keepYo) !== keepYo(r.answer)) {
+    // Ребёнок не узнает МЕД в «мёде»: Ё из картинки должна остаться Ё в ответе, Е — Е.
+    p.push(`Ё/Е: ответ ${keepYo(r.answer)}, а по картинкам выходит ${solve(r, keepYo)}`);
   }
   return p;
 }

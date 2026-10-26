@@ -1115,3 +1115,32 @@ h1[tabindex="-1"]:focus { outline: none; }
   .legend-title { font-size: 20px; margin-bottom: 8px; }
   .legend-ok { margin-top: 8px; min-height: 52px; }
 }
+
+/* ---------- Кубок за этап ---------- */
+.cup-card {
+  max-width: 520px;
+  margin: max(24px, 8vh) auto 0;
+  padding: 28px 24px 24px;
+  text-align: center;
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.cup-trophy {
+  font-size: clamp(110px, 32vw, 180px);
+  line-height: 1;
+  animation: cup-in .8s cubic-bezier(.2, 1.4, .4, 1) both;
+}
+@keyframes cup-in {
+  from { transform: scale(.2) rotate(-20deg); opacity: 0; }
+  to { transform: scale(1) rotate(0); opacity: 1; }
+}
+.cup-title { margin: 12px 0 4px; font-size: clamp(28px, 7vw, 40px); font-weight: 900; }
+.cup-level { margin: 0; font-size: 22px; font-weight: 800; color: var(--ink-soft); }
+.cup-stars { margin: 8px 0 20px; font-size: 26px; font-weight: 900; }
+.cup-actions { display: grid; gap: 10px; justify-items: center; }
+.cup-actions .btn-next { display: flex; align-items: center; justify-content: center; width: 100%; text-decoration: none; }
+.cup-home { padding: 10px; font-weight: 800; color: var(--ink-soft); }
+.level-cups { margin-left: 10px; white-space: nowrap; }
+.stage-no { color: var(--ink-soft); }
+.stage-title { margin: 14px 0 8px 4px; font-size: 18px; font-weight: 800; color: var(--ink-soft); }

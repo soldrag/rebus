@@ -1,7 +1,7 @@
 // Все ребусы по номерам — для тех, кто хочет выбрать конкретный ребус.
 import { el, add } from './dom.js';
 import { getState, MAX_TRIES } from '../store.js';
-import { LEVELS, levelItems } from '../levels.js';
+import { LEVELS, stages, stageProgress } from '../levels.js';
 
 function tile(r, num) {
   const st = getState(r.id);
@@ -39,12 +39,20 @@ export function renderAll(app, data) {
   app.replaceChildren(bar);
 
   for (const L of LEVELS) {
-    const items = levelItems(data.list, L.level);
-    if (!items.length) continue;
+    const parts = stages(data.list, L.level);
+    if (!parts.length) continue;
     const h = el('h2', 'level-title');
     add(h, el('span', 'level-dots', '●'.repeat(L.level)), document.createTextNode(' ' + L.title));
-    const grid = el('div', 'grid');
-    items.forEach((r) => add(grid, tile(r, data.byId[r.id].num)));
-    add(app, add(el('section', 'all-level ' + L.cls), h, grid));
+    const sec = add(el('section', 'all-level ' + L.cls), h);
+    parts.forEach((items, i) => {
+      if (parts.length > 1) {
+        const done = stageProgress(items).done;
+        add(sec, el('h3', 'stage-title', 'Этап ' + (i + 1) + (done ? ' 🏆' : '')));
+      }
+      const grid = el('div', 'grid');
+      items.forEach((r) => add(grid, tile(r, data.byId[r.id].num)));
+      add(sec, grid);
+    });
+    add(app, sec);
   }
 }

@@ -22,13 +22,12 @@ function levelCard(list, L) {
   const bar = el('span', 'level-bar');
   const fill = el('span', 'level-fill');
   fill.style.width = (p.total ? (p.finished / p.total) * 100 : 0) + '%';
-  add(body,
-    el('span', 'level-name', L.title),
-    el('span', 'level-count', '⭐ ' + p.solved + ' из ' + p.total),
-    add(bar, fill));
+  const count = el('span', 'level-count', '⭐ ' + p.solved + ' из ' + p.total);
+  if (p.stages > 1) add(count, el('span', 'level-cups', '🏆 ' + p.cups + ' из ' + p.stages));
+  add(body, el('span', 'level-name', L.title), count, add(bar, fill));
   const cta = p.done ? 'Ещё раз' : p.finished ? 'Дальше' : 'Играть';
   add(a, icon, body, el('span', 'level-go', p.done ? '🏆' : '▶'));
-  a.setAttribute('aria-label', `${L.title}: отгадано ${p.solved} из ${p.total}. ${cta}`);
+  a.setAttribute('aria-label', `${L.title}: отгадано ${p.solved} из ${p.total}, кубков ${p.cups} из ${p.stages}. ${cta}`);
   return a;
 }
 

@@ -1,4 +1,5 @@
-// Точка входа: загрузка данных и маршрутизация по hash (#/, #/all, #/about, #/level/<n>, #/r/<id>).
+// Точка входа: загрузка данных и маршрутизация по hash
+// (#/, #/all, #/about, #/level/<n>, #/r/<id>, #/cup/<уровень>/<этап>).
 // Только кириллица и латиница: остальные наборы глифов не нужны и лишь раздувают офлайн-кеш.
 import '@fontsource/nunito/cyrillic-700.css';
 import '@fontsource/nunito/cyrillic-800.css';
@@ -14,6 +15,7 @@ import { renderHome, renderStatus } from './ui/home.js';
 import { renderRebus } from './ui/rebus.js';
 import { renderAll } from './ui/all.js';
 import { renderAbout } from './ui/about.js';
+import { renderCup } from './ui/cup.js';
 import { levelStart } from './levels.js';
 import { clearConfetti } from './ui/confetti.js';
 
@@ -47,6 +49,9 @@ function route({ keepScroll = false } = {}) {
   if (id) {
     renderRebus(app, data, id, signal, backTo);
     if (data.byId[id]) { lastLevel = data.byId[id].rebus.level; lastId = id; }
+  } else if (/^#\/cup\/\d\/\d+$/.test(location.hash)) {
+    const [, level, stage] = location.hash.match(/(\d)\/(\d+)$/);
+    renderCup(app, data, Number(level), Number(stage));
   } else if (location.hash === '#/about') {
     renderAbout(app);
   } else if (location.hash === '#/all') {
