@@ -65,13 +65,20 @@ export function pickNumbers(pick) {
   return box;
 }
 
+// Замена по номеру: номер — в кружке, как в цифрах над картинкой, чтобы «3» не читалась как «З».
+export function numberSwap(n, to) {
+  const box = el('span', 'swap swap-n');
+  box.setAttribute('aria-label', 'букву номер ' + n + ' меняем на ' + show(to));
+  return add(box, el('span', 'pick-n', String(n)), document.createTextNode(' = ' + show(to)));
+}
+
 // Картинка или число (у числа вместо эмодзи — крупные цифры).
 function renderPic(p) {
   const box = el('div', 'part pic' + (p.type === 'number' ? ' number' : ''));
   const top = el('div', 'part-top');
   if (p.pick) add(top, pickNumbers(p.pick));
   for (const [from, to] of p.replace || []) add(top, el('span', 'swap', show(from) + ' = ' + show(to)));
-  for (const [n, to] of p.replaceAt || []) add(top, el('span', 'swap swap-n', n + ' = ' + show(to)));
+  for (const [n, to] of p.replaceAt || []) add(top, numberSwap(n, to));
   const row = el('div', 'pic-row');
   if (p.cutStart) add(row, commas(p.cutStart, 'l'));
   if (p.type === 'number') {
@@ -91,6 +98,8 @@ function renderLetters(p, seed) {
   const box = el('div', 'part text');
   const row = el('div', 'letters-row');
   show(p.text).split('').forEach((ch) => {
+    // Красная «Х» похожа на крестик «нельзя» — красим её другим цветом.
+    if (ch === 'Х' && seed.n % LETTER_COLORS === 0) seed.n++;
     add(row, el('span', 'big-letter c' + (seed.n++ % LETTER_COLORS), ch));
   });
   return add(box, el('div', 'part-top'), row, el('div', 'part-bottom'));
@@ -210,6 +219,11 @@ export function renderBoard(rebus, signal) {
   if (!hasTop) inner.classList.add('no-top');
   if (!hasBottom) inner.classList.add('no-bottom');
   const parts = rebus.parts.map((p) => renderPart(p, seed));
+  // Запятые справа у одной части и слева у следующей не должны слиться в одну группу.
+  rebus.parts.forEach((p, i) => {
+    const next = rebus.parts[i + 1];
+    if (p.cutEnd && next && next.cutStart) parts[i].classList.add('comma-gap');
+  });
   const rows = [el('div', 'board-row'), el('div', 'board-row')];
   add(rows[0], ...parts);
   add(inner, rows[0]);
@@ -246,7 +260,7 @@ function explainPart(p) {
   const what = el('span', 'step-what');
   let pic;
   if (p.type === 'letters') {
-    pic = el('span', 'step-pic', '🔤');
+    pic = el('span', 'step-pic step-chip', 'АБВ');
     add(what, el('span', 'step-notes step-plain', 'просто буквы'));
   } else if (p.type === 'initials') {
     pic = el('span', 'step-pic step-multi', p.items.map((it) => it.emoji).join(''));
@@ -254,7 +268,7 @@ function explainPart(p) {
       el('span', 'step-notes', 'берём первые буквы'));
   } else if (p.type === 'position') {
     const on = normalize(p.prep) === 'НА';
-    pic = el('span', 'step-pic step-pos', on ? '⬆️' : '🔠');
+    pic = el('span', 'step-pic step-chip', on ? 'НА' : 'В');
     add(what, el('b', 'step-word', show(p.inner) + (on ? ' на ' : ' в ') + show(p.outer)),
       el('span', 'step-notes', 'читаем со словом «' + (on ? 'НА' : 'В') + '»'));
   } else {

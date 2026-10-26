@@ -532,8 +532,10 @@ h1[tabindex="-1"]:focus { outline: none; }
   height: calc(var(--e) * .4);
   fill: var(--ink);
 }
-.commas-l { margin-right: calc(var(--e) * -.02); }
-.commas-r { margin-left: calc(var(--e) * -.02); }
+.commas-l { margin-right: calc(var(--e) * -.1); }
+.commas-r { margin-left: calc(var(--e) * -.1); }
+/* Стык «запятые справа | запятые слева»: заметный промежуток между группами. */
+.part.comma-gap { padding-right: calc(var(--e) * .3); }
 
 .letters-row {
   display: flex;
@@ -585,8 +587,11 @@ h1[tabindex="-1"]:focus { outline: none; }
   height: max(4px, calc(var(--e) * .055));
   background: var(--strike);
   border-radius: 99px;
-  transform: translateY(-50%) rotate(-45deg);
+  box-shadow: 0 0 0 max(1px, calc(var(--e) * .012)) #FFF;
+  /* Сверху-слева вниз-направо: так линия пересекает диагонали И и А, а не ложится вдоль них. */
+  transform: translateY(-50%) rotate(45deg);
 }
+
 
 /* Цифры над картинкой и замена по номеру */
 .pick { display: flex; gap: calc(var(--e) * .06); }
@@ -603,7 +608,8 @@ h1[tabindex="-1"]:focus { outline: none; }
   background: var(--sun);
   border-radius: 50%;
 }
-.swap-n { background: var(--sun); color: var(--ink); }
+.swap-n { display: inline-flex; align-items: center; gap: calc(var(--e) * .06); background: var(--sun); color: var(--ink); }
+.swap-n .pick-n { background: #FFF; width: calc(var(--e) * .32); height: calc(var(--e) * .32); font-size: calc(var(--e) * .22); }
 
 /* Число */
 /* Число — в рамке, как на кубике: так цифру не спутать с буквой. */
@@ -1190,3 +1196,16 @@ html.lay-land-phone .step-res { font-size: 20px; }
 .level-cups { margin-left: 10px; white-space: nowrap; }
 .stage-no { color: var(--ink-soft); }
 .stage-title { margin: 14px 0 8px 4px; font-size: 18px; font-weight: 800; color: var(--ink-soft); }
+
+/* Разбор: число и значки-«чипы» не налезают на текст (перебивает размер .step-pic в media). */
+.step .step-pic.step-num { font-size: 22px; }
+.step .step-pic.step-multi { font-size: 20px; }
+.step .step-pic.step-chip {
+  font-size: 15px;
+  font-weight: 900;
+  padding: 6px 6px;
+  border-radius: 10px;
+  background: var(--sun);
+  color: var(--ink);
+  font-family: var(--font);
+}

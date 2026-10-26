@@ -2,7 +2,7 @@
 // Примеры не должны совпадать с ответами набора — их список в LEGEND_WORDS (rebus-core.js),
 // валидатор это проверяет.
 import { el, add } from './dom.js';
-import { commaSvg, picEmoji, struckLetter, pickNumbers } from './board.js';
+import { commaSvg, picEmoji, struckLetter, pickNumbers, numberSwap } from './board.js';
 
 const stack = (...nodes) => add(el('div', 'legend-stack'), ...nodes);
 const top = (...nodes) => add(el('div', 'part-top'), ...nodes);
@@ -58,7 +58,7 @@ const CARDS = {
   replaceAt: {
     title: '2 = О — поменяй вторую букву',
     words: 'СЫР → СОР',
-    sample() { return stack(top(el('span', 'swap swap-n', '2 = О')), picEmoji('🧀')); },
+    sample() { return stack(top(numberSwap(2, 'О')), picEmoji('🧀')); },
   },
   in: {
     title: 'Буквы внутри буквы — добавь «В», чтобы вышло слово',
