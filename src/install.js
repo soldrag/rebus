@@ -2,15 +2,16 @@
 // на iPhone/iPad — подсказка (Safari не умеет показывать окно сам).
 let deferred = null;
 const listeners = new Set();
+const notify = () => listeners.forEach((fn) => fn());
 
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferred = e;
-  listeners.forEach((fn) => fn());
+  notify();
 });
 window.addEventListener('appinstalled', () => {
   deferred = null;
-  listeners.forEach((fn) => fn());
+  notify();
 });
 
 export function isStandalone() {
@@ -28,11 +29,16 @@ export function canInstall() {
   return !!deferred || isIOS();
 }
 
+// 'ios' — нужно показать подсказку, 'prompted' — показали системное окно.
 export async function install() {
-  if (!deferred) return 'ios';
+  if (!deferred) return isIOS() ? 'ios' : 'unavailable';
   const e = deferred;
-  deferred = null;
-  await e.prompt();
+  deferred = null; // окно можно показать только один раз
+  try {
+    await e.prompt();
+    await e.userChoice;
+  } catch { /* ignore */ }
+  notify();
   return 'prompted';
 }
 

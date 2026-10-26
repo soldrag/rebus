@@ -226,7 +226,7 @@
       "answer": "РЫБАК",
       "accept": [],
       "level": 1,
-      "hint": "Сидит с удочкой у речки",
+      "hint": "Сидит с удочкой у речки и ловит рыбу",
       "parts": [
         {
           "type": "pic",
@@ -284,7 +284,7 @@
       "answer": "СОВОК",
       "accept": [],
       "level": 1,
-      "hint": "С ним играют в песочнице",
+      "hint": "Им насыпают песок в ведёрко, а дома собирают мусор",
       "parts": [
         {
           "type": "pic",
@@ -340,10 +340,29 @@
       "source": "классика"
     },
     {
+      "id": "limonad",
+      "answer": "ЛИМОНАД",
+      "accept": [],
+      "level": 1,
+      "hint": "Сладкий напиток с пузырьками",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🍋",
+          "word": "ЛИМОН"
+        },
+        {
+          "type": "letters",
+          "text": "АД"
+        }
+      ],
+      "source": "классика"
+    },
+    {
       "id": "domino",
       "answer": "ДОМИНО",
       "accept": [],
-      "level": 1,
+      "level": 2,
       "hint": "Игра с костяшками в точечках",
       "parts": [
         {
@@ -362,7 +381,7 @@
       "id": "koster",
       "answer": "КОСТЁР",
       "accept": [],
-      "level": 1,
+      "level": 2,
       "hint": "Горит в походе, у него греются",
       "parts": [
         {
@@ -374,25 +393,6 @@
         {
           "type": "letters",
           "text": "ЁР"
-        }
-      ],
-      "source": "классика"
-    },
-    {
-      "id": "limonad",
-      "answer": "ЛИМОНАД",
-      "accept": [],
-      "level": 1,
-      "hint": "Сладкий напиток с пузырьками",
-      "parts": [
-        {
-          "type": "pic",
-          "emoji": "🍋",
-          "word": "ЛИМОН"
-        },
-        {
-          "type": "letters",
-          "text": "АД"
         }
       ],
       "source": "классика"
@@ -575,14 +575,16 @@
       "hint": "Даёт молоко, говорит «му-у»",
       "parts": [
         {
-          "type": "letters",
-          "text": "КОР"
+          "type": "pic",
+          "emoji": "👑",
+          "word": "КОРОНА",
+          "cutEnd": 2
         },
         {
           "type": "pic",
           "emoji": "🦉",
           "word": "СОВА",
-          "cutStart": 1
+          "cutStart": 2
         }
       ],
       "source": "https://infourok.ru/rebusy-zhivotnye-4724534.html"
@@ -592,7 +594,7 @@
       "answer": "МЕДУЗА",
       "accept": [],
       "level": 2,
-      "hint": "Прозрачная, плавает в море",
+      "hint": "Похожа на прозрачный зонтик, плавает в море и может обжечь",
       "parts": [
         {
           "type": "pic",
@@ -619,27 +621,14 @@
           "word": "МЁД"
         },
         {
-          "type": "letters",
-          "text": "ВЕДЬ"
-        }
-      ],
-      "source": "классика"
-    },
-    {
-      "id": "nosorog",
-      "answer": "НОСОРОГ",
-      "accept": [],
-      "level": 2,
-      "hint": "Большой зверь с рогом на носу",
-      "parts": [
-        {
           "type": "pic",
-          "emoji": "👃",
-          "word": "НОС"
+          "emoji": "🪣",
+          "word": "ВЕДРО",
+          "cutEnd": 2
         },
         {
           "type": "letters",
-          "text": "ОРОГ"
+          "text": "Ь"
         }
       ],
       "source": "классика"
@@ -688,7 +677,7 @@
       "answer": "СЛОНЁНОК",
       "accept": [],
       "level": 2,
-      "hint": "Детёныш слона",
+      "hint": "Маленький, с хоботом, всюду ходит за мамой",
       "parts": [
         {
           "type": "pic",
@@ -697,7 +686,17 @@
         },
         {
           "type": "letters",
-          "text": "ЁНОК"
+          "text": "Ё"
+        },
+        {
+          "type": "pic",
+          "emoji": "👃",
+          "word": "НОС",
+          "cutEnd": 1
+        },
+        {
+          "type": "letters",
+          "text": "К"
         }
       ],
       "source": "классика"
@@ -720,8 +719,10 @@
           "cutEnd": 2
         },
         {
-          "type": "letters",
-          "text": "НА"
+          "type": "pic",
+          "emoji": "🌕",
+          "word": "ЛУНА",
+          "cutStart": 2
         }
       ],
       "source": "классика"
@@ -731,7 +732,7 @@
       "answer": "ИГРУШКА",
       "accept": [],
       "level": 2,
-      "hint": "С ней играют дети",
+      "hint": "Её дарят на день рождения, с ней можно спать в кроватке",
       "parts": [
         {
           "type": "letters",
@@ -775,52 +776,50 @@
       "source": "https://infourok.ru/rebusy-zhivotnye-4724534.html"
     },
     {
-      "id": "pautina",
-      "answer": "ПАУТИНА",
+      "id": "akula",
+      "answer": "АКУЛА",
       "accept": [],
       "level": 2,
-      "hint": "Сеточка, которую плетёт паук",
+      "hint": "Зубастая рыба в море",
       "parts": [
         {
           "type": "letters",
-          "text": "ПА"
+          "text": "А"
         },
         {
           "type": "pic",
-          "emoji": "🦆",
-          "word": "УТКА",
-          "cutEnd": 2
-        },
-        {
-          "type": "letters",
-          "text": "ИНА"
+          "emoji": "✊",
+          "word": "КУЛАК",
+          "cutEnd": 1
         }
       ],
       "source": "классика"
     },
     {
-      "id": "lastochka",
-      "answer": "ЛАСТОЧКА",
+      "id": "nosorog",
+      "answer": "НОСОРОГ",
       "accept": [],
-      "level": 2,
-      "hint": "Птичка с хвостом-вилочкой, летает низко перед дождём",
+      "level": 3,
+      "hint": "Огромный толстокожий зверь из Африки, очень сильный",
       "parts": [
         {
+          "type": "pic",
+          "emoji": "👃",
+          "word": "НОС"
+        },
+        {
           "type": "letters",
-          "text": "ЛАСТ"
+          "text": "О"
         },
         {
           "type": "pic",
-          "emoji": "👓",
-          "word": "ОЧКИ",
-          "cutEnd": 1
-        },
-        {
-          "type": "letters",
-          "text": "А"
+          "emoji": "⛰️",
+          "word": "ГОРА",
+          "flip": true,
+          "cutStart": 1
         }
       ],
-      "source": "https://infourok.ru/rebusy-zhivotnye-4724534.html"
+      "source": "классика"
     },
     {
       "id": "kot",
@@ -1092,31 +1091,6 @@
       "source": "классика"
     },
     {
-      "id": "kotleta",
-      "answer": "КОТЛЕТА",
-      "accept": [],
-      "level": 3,
-      "hint": "Её едят с макаронами или пюре",
-      "parts": [
-        {
-          "type": "pic",
-          "emoji": "🐳",
-          "word": "КИТ",
-          "replace": [
-            [
-              "И",
-              "О"
-            ]
-          ]
-        },
-        {
-          "type": "letters",
-          "text": "ЛЕТА"
-        }
-      ],
-      "source": "классика"
-    },
-    {
       "id": "romashka",
       "answer": "РОМАШКА",
       "accept": [],
@@ -1142,27 +1116,6 @@
       "source": "классика"
     },
     {
-      "id": "akula",
-      "answer": "АКУЛА",
-      "accept": [],
-      "level": 3,
-      "hint": "Зубастая рыба в море",
-      "parts": [
-        {
-          "type": "pic",
-          "emoji": "✋",
-          "word": "РУКА",
-          "flip": true,
-          "cutEnd": 1
-        },
-        {
-          "type": "letters",
-          "text": "ЛА"
-        }
-      ],
-      "source": "классика"
-    },
-    {
       "id": "komar",
       "answer": "КОМАР",
       "accept": [],
@@ -1171,7 +1124,7 @@
       "parts": [
         {
           "type": "pic",
-          "emoji": "🏰",
+          "emoji": "🔒",
           "word": "ЗАМОК",
           "flip": true,
           "cutEnd": 1
@@ -1182,51 +1135,6 @@
         }
       ],
       "source": "https://infourok.ru/rebusy-zhivotnye-4724534.html"
-    },
-    {
-      "id": "pomidor",
-      "answer": "ПОМИДОР",
-      "accept": [],
-      "level": 3,
-      "hint": "Красный овощ, растёт на грядке",
-      "parts": [
-        {
-          "type": "letters",
-          "text": "ПОМИ"
-        },
-        {
-          "type": "pic",
-          "emoji": "🏠",
-          "word": "ДОМ",
-          "replace": [
-            [
-              "М",
-              "Р"
-            ]
-          ]
-        }
-      ],
-      "source": "классика"
-    },
-    {
-      "id": "velosiped",
-      "answer": "ВЕЛОСИПЕД",
-      "accept": [],
-      "level": 3,
-      "hint": "Два колеса, руль и педали",
-      "parts": [
-        {
-          "type": "pic",
-          "emoji": "🦁",
-          "word": "ЛЕВ",
-          "flip": true
-        },
-        {
-          "type": "letters",
-          "text": "ОСИПЕД"
-        }
-      ],
-      "source": "классика"
     }
   ]
 }

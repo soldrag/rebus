@@ -43,8 +43,9 @@ function renderHint(rebus) {
   return box;
 }
 
+// Фокус на кнопку «Дальше»: экранную клавиатуру он не открывает, поэтому и на телефоне.
 function focusSoon(node) {
-  if (node && finePointer()) setTimeout(() => node.focus({ preventScroll: true }), 60);
+  if (node) setTimeout(() => node.focus({ preventScroll: true }), 60);
 }
 
 function markDone(panel) {
@@ -55,6 +56,7 @@ function markDone(panel) {
 function showSolved(panel, rebus, data, index, fresh) {
   markDone(panel);
   const res = el('div', 'result ok');
+  res.setAttribute('role', 'status');
   add(res, el('p', 'result-title', fresh ? 'Молодец! 🎉' : 'Отгадано! ⭐'), el('p', 'result-word', normalize(rebus.answer)));
   const actions = add(el('div', 'actions'), nextButton(data, index));
   panel.replaceChildren(res, actions);
@@ -66,13 +68,14 @@ function showSolved(panel, rebus, data, index, fresh) {
 function showRevealed(panel, rebus, data, index) {
   markDone(panel);
   const res = el('div', 'result reveal');
+  res.setAttribute('role', 'status');
   add(res, el('p', 'result-title', 'Вот какое слово было!'), el('p', 'result-word', normalize(rebus.answer)));
   const actions = add(el('div', 'actions'), nextButton(data, index));
   panel.replaceChildren(res, renderExplain(rebus), actions);
   focusSoon(actions.firstChild);
 }
 
-export function renderRebus(app, data, id) {
+export function renderRebus(app, data, id, signal) {
   const info = data.byId[id];
   if (!info) { location.replace('#/'); return; }
   const { rebus, num, index } = info;
@@ -124,11 +127,7 @@ export function renderRebus(app, data, id) {
     catch { btn.scrollIntoView(false); }
   };
   input.addEventListener('focus', () => setTimeout(keepVisible, 350));
-  if (window.visualViewport) {
-    const vv = window.visualViewport;
-    const onResize = () => { if (!document.body.contains(input)) vv.removeEventListener('resize', onResize); else keepVisible(); };
-    vv.addEventListener('resize', onResize);
-  }
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', keepVisible, { signal });
   input.addEventListener('input', () => {
     input.classList.remove('shake');
     if (msg.classList.contains('empty-note')) { msg.textContent = ''; msg.className = 'msg'; }

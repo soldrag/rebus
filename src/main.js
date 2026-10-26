@@ -8,26 +8,49 @@ import '@fontsource/nunito/latin-800.css';
 import '@fontsource/nunito/latin-900.css';
 import './styles/main.css';
 import { loadRebuses } from './data.js';
-import { reload, STORE_KEY } from './store.js';
+import { registerSW } from 'virtual:pwa-register';
+import { getState, reload, STORE_KEY } from './store.js';
 import { renderHome, renderStatus } from './ui/home.js';
 import { renderRebus } from './ui/rebus.js';
 import { clearConfetti } from './ui/confetti.js';
 
 const app = document.getElementById('app');
 let data = null;
+let current = null; // { id, controller } — открытый экран
+let lastRebusId = null;
 
-function route() {
+function currentId() {
+  const m = /^#\/r\/(.+)$/.exec(location.hash);
+  if (!m) return null;
+  try { return decodeURIComponent(m[1]); } catch { return m[1]; }
+}
+
+// Перерисовка экрана. Слушатели прошлого экрана снимаются через AbortController.
+function route({ keepScroll = false } = {}) {
   if (!data) return;
   clearConfetti();
-  const m = /^#\/r\/(.+)$/.exec(location.hash);
-  if (m) {
-    let id;
-    try { id = decodeURIComponent(m[1]); } catch { id = m[1]; }
-    renderRebus(app, data, id);
+  if (current) current.controller.abort();
+  const id = currentId();
+  current = { id, controller: new AbortController() };
+  const { signal } = current.controller;
+  if (id) {
+    renderRebus(app, data, id, signal);
+    lastRebusId = id;
   } else {
-    renderHome(app, data);
+    renderHome(app, data, signal);
   }
+  if (keepScroll) return;
   window.scrollTo(0, 0);
+  focusAfterRoute(id);
+}
+
+// Для клавиатуры и скринридера: фокус на заголовок или на плитку, откуда пришли.
+function focusAfterRoute(id) {
+  const tile = !id && lastRebusId && app.querySelector(`.tile[data-id="${CSS.escape(lastRebusId)}"]`);
+  const target = tile || app.querySelector('h1');
+  if (!target) return;
+  if (!tile) target.setAttribute('tabindex', '-1');
+  target.focus({ preventScroll: true });
 }
 
 async function start() {
@@ -52,8 +75,27 @@ syncViewportHeight();
 (window.visualViewport || window).addEventListener('resize', syncViewportHeight);
 window.addEventListener('orientationchange', syncViewportHeight);
 
-window.addEventListener('hashchange', route);
+window.addEventListener('hashchange', () => route());
+
+// Прогресс поменяли в другой вкладке. Открытый ребус перерисовываем, только если
+// поменялся именно он, чтобы не стереть то, что ребёнок сейчас печатает.
 window.addEventListener('storage', (e) => {
-  if (e.key === STORE_KEY || e.key === null) { reload(); route(); }
+  if (e.key !== STORE_KEY && e.key !== null) return;
+  const id = currentId();
+  const before = id && JSON.stringify(getState(id));
+  reload();
+  if (!id || before !== JSON.stringify(getState(id))) route({ keepScroll: true });
+});
+
+// Офлайн-режим. Новая версия подхватывается сама; открытое надолго приложение
+// проверяет обновления, когда его снова показывают на экране.
+registerSW({
+  immediate: true,
+  onRegisteredSW(_url, reg) {
+    if (!reg) return;
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') reg.update().catch(() => {});
+    });
+  },
 });
 start();

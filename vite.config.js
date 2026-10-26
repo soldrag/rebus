@@ -13,6 +13,7 @@ export default defineConfig({
         short_name: 'Ребусы',
         description: 'Весёлые ребусы на русском для детей 5–8 лет',
         lang: 'ru',
+        id: './',
         start_url: './',
         scope: './',
         display: 'standalone',

@@ -16,7 +16,7 @@ function header() {
   return add(head, mascot, el('h1', 'title', 'Ребусы'));
 }
 
-export function renderHome(app, data) {
+export function renderHome(app, data, signal) {
   const { list, byId } = data;
   document.title = 'Ребусы для детей';
   app.className = 'app home';
@@ -53,6 +53,7 @@ export function renderHome(app, data) {
       const st = getState(r.id);
       const a = el('a', 'tile');
       a.href = '#/r/' + encodeURIComponent(r.id);
+      a.dataset.id = r.id;
       add(a, el('span', 'tile-num', String(num)));
       let label = 'Ребус ' + num;
       if (st.status === 'solved') {
@@ -82,13 +83,16 @@ export function renderHome(app, data) {
     try { ok = window.confirm('Начать заново? Все звёздочки пропадут.'); } catch { /* ignore */ }
     if (!ok) return;
     resetAll();
-    renderHome(app, data);
+    renderHome(app, data, signal);
+    const title = app.querySelector('h1');
+    title.setAttribute('tabindex', '-1');
+    title.focus();
   });
   const foot = el('footer', 'home-foot');
-  add(app, add(foot, installBlock(), reset));
+  add(app, add(foot, installBlock(signal), reset));
 }
 
-function installBlock() {
+function installBlock(signal) {
   const box = el('div', 'install');
   const draw = () => {
     box.replaceChildren();
@@ -103,7 +107,8 @@ function installBlock() {
     add(box, b);
   };
   draw();
-  const off = onInstallChange(() => (box.isConnected ? draw() : off()));
+  const off = onInstallChange(draw);
+  if (signal) signal.addEventListener('abort', off, { once: true });
   return box;
 }
 

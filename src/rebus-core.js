@@ -38,3 +38,32 @@ export function isCorrect(rebus, input) {
   });
 }
 
+
+const PART_TYPES = ['pic', 'letters'];
+
+// Ошибки формата одного ребуса (пустой список — всё в порядке).
+// Используется и при загрузке в браузере, и в tools/validate.mjs.
+export function formatProblems(r) {
+  if (!r || typeof r !== 'object') return ['не объект'];
+  const p = [];
+  if (typeof r.id !== 'string' || !r.id) p.push('нет id');
+  if (typeof r.answer !== 'string' || !normalize(r.answer)) p.push('нет answer');
+  if (![1, 2, 3].includes(r.level)) p.push('level должен быть 1, 2 или 3');
+  if (typeof r.hint !== 'string' || !r.hint.trim()) p.push('нет hint');
+  if (!Array.isArray(r.parts) || !r.parts.length) return p.concat('нет parts');
+  r.parts.forEach((part, i) => {
+    if (!part || !PART_TYPES.includes(part.type)) p.push(`часть ${i + 1}: неизвестный type`);
+    else if (part.type === 'pic' && (!part.emoji || !normalize(part.word))) p.push(`часть ${i + 1}: нет emoji или word`);
+    else if (part.type === 'letters' && !normalize(part.text)) p.push(`часть ${i + 1}: нет text`);
+  });
+  if (!p.length && solve(r) !== normalize(r.answer)) {
+    p.push(`ответ ${r.answer}, а по картинке выходит ${solve(r)}`);
+  }
+  return p;
+}
+
+// Список ребусов из содержимого public/data/rebuses.json.
+export function rebusList(json) {
+  if (!json || !Array.isArray(json.rebuses)) throw new Error('ожидается { "rebuses": [...] }');
+  return json.rebuses;
+}
