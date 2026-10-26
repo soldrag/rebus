@@ -60,7 +60,9 @@ export function renderHome(app, data, signal) {
     title.setAttribute('tabindex', '-1');
     title.focus();
   }, signal);
-  add(app, add(el('footer', 'home-foot'), installBlock(signal), reset));
+  const all = el('a', 'all-link', 'Все ребусы по номерам');
+  all.href = '#/all';
+  add(app, add(el('footer', 'home-foot'), installBlock(signal), all, reset));
 }
 
 // Кнопка, которая срабатывает только после удержания (~1,5 с): защита от случайного нажатия.

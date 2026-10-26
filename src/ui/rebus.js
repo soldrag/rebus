@@ -119,7 +119,7 @@ function watchKeyboard(app, input, signal) {
   return check;
 }
 
-export function renderRebus(app, data, id, signal) {
+export function renderRebus(app, data, id, signal, backTo = '#/') {
   const info = data.byId[id];
   if (!info) { location.replace('#/'); return; }
   const { rebus } = info;
@@ -130,8 +130,8 @@ export function renderRebus(app, data, id, signal) {
 
   const bar = el('div', 'topbar');
   const back = el('a', 'back', '←');
-  back.href = '#/';
-  back.setAttribute('aria-label', 'На главную');
+  back.href = backTo;
+  back.setAttribute('aria-label', backTo === '#/' ? 'На главную' : 'Ко всем ребусам');
   const stars = el('span', 'mini-stars');
   const updateStars = () => {
     const p = levelProgress(data.list, rebus.level);
