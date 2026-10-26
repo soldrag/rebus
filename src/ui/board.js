@@ -190,7 +190,7 @@ export function renderBoard(rebus, signal) {
     window.addEventListener('resize', relayout, signal ? { signal } : undefined);
   }
   // После загрузки шрифта ширина букв меняется — перемеряем.
-  if (document.fonts && document.fonts.ready) {
+  if (document.fonts && document.fonts.status !== 'loaded') {
     document.fonts.ready.then(() => { m = null; relayout(); });
   }
   return board;

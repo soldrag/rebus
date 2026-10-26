@@ -110,10 +110,21 @@ window.addEventListener('storage', (e) => {
   if (!id || before !== JSON.stringify(getState(id))) route({ keepScroll: true });
 });
 
-// Офлайн-режим. Новая версия подхватывается сама; открытое надолго приложение
-// проверяет обновления, когда его снова показывают на экране.
-registerSW({
-  immediate: true,
+// Офлайн-режим. Service worker регистрируется после загрузки страницы, чтобы не
+// отнимать канал у шрифтов. Открытое надолго приложение проверяет обновления, когда
+// его снова показывают. Новую версию ставим (с перезагрузкой), только когда это
+// не мешает: страница скрыта или ребёнок на главной, — чтобы не стереть набранный ответ.
+let applyUpdate = null;
+const updateIfIdle = () => {
+  if (applyUpdate && (document.visibilityState === 'hidden' || !currentId())) applyUpdate();
+};
+window.addEventListener('hashchange', updateIfIdle);
+document.addEventListener('visibilitychange', updateIfIdle);
+const updateSW = registerSW({
+  onNeedRefresh() {
+    applyUpdate = () => { applyUpdate = null; updateSW(true); };
+    updateIfIdle();
+  },
   onRegisteredSW(_url, reg) {
     if (!reg) return;
     document.addEventListener('visibilitychange', () => {

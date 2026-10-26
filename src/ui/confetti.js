@@ -17,7 +17,7 @@ export function celebrate() {
   if (!b) return;
   clearConfetti();
   if (reduceMotion()) return;
-  for (let i = 0; i < 70; i++) {
+  for (let i = 0; i < 35; i++) {
     const shape = SHAPES[i % SHAPES.length];
     const c = el('span', 'bit' + (shape ? ' bit-star' : ''), shape || null);
     c.style.left = Math.random() * 100 + 'vw';
