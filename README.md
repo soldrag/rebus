@@ -8,12 +8,13 @@
 npm ci
 npm run dev        # локальный сервер
 npm run validate   # проверка ребусов
+npm run stats      # какие ответы и картинки уже есть
 npm run build      # проверка + сборка в dist/
 ```
 
 ## Устройство
 
-- `public/data/rebuses.json` — все ребусы (данные отдельно от кода)
+- `public/data/rebuses.json` — все ребусы (данные отдельно от кода); как их составлять — [docs/REBUSES.md](docs/REBUSES.md)
 - `src/rebus-core.js` — правила ребуса: запятые, зачёркнутые буквы, замены, перевёрнутые картинки
 - `src/ui/` — экраны, `src/store.js` — прогресс, `src/install.js` — установка на главный экран
 - `tools/validate.mjs` — проверяет, что каждый ребус складывается в свой ответ
