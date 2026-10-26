@@ -409,9 +409,10 @@ h1[tabindex="-1"]:focus { outline: none; }
   box-shadow: 0 4px 0 var(--line), var(--shadow);
   touch-action: manipulation;
 }
-.rebus-num { margin: 0; font-size: 28px; font-weight: 900; white-space: nowrap; }
+.rebus-num { margin: 0; min-width: 0; font-size: 28px; font-weight: 900; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .mini-stars {
   margin-left: auto;
+  flex: none;
   font-size: 20px;
   font-weight: 800;
   background: var(--card);
@@ -1034,6 +1035,19 @@ html.lay-land-phone .step-res { font-size: 20px; }
 
 @media (max-width: 359px) {
   :root { --gutter: 12px; }
+}
+/* Телефоны: компактная шапка, чтобы «?» всегда помещалась. */
+@media (max-width: 520px) {
+  .topbar { gap: 8px; }
+  .back, .help-btn { width: 52px; height: 52px; font-size: 28px; }
+  .rebus-num { font-size: 24px; }
+  .mini-stars { font-size: 17px; padding: 6px 10px; }
+}
+@media (max-width: 420px) {
+  .topbar { gap: 6px; }
+  .back, .help-btn { width: 46px; height: 46px; font-size: 26px; }
+  .rebus-num { font-size: 21px; }
+  .mini-stars { font-size: 15px; padding: 5px 8px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
