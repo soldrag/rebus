@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['icons/apple-touch-icon.png', 'icons/favicon-32.png'],
+      includeAssets: ['icons/apple-touch-icon.png'],
       manifest: {
         name: 'Ребусы для детей',
         short_name: 'Ребусы',
@@ -18,7 +18,7 @@ export default defineConfig({
         display: 'standalone',
         orientation: 'any',
         background_color: '#FFF8EC',
-        theme_color: '#FFB86B',
+        theme_color: '#FFF8EC',
         icons: [
           { src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png' },
           { src: 'icons/icon-512.png', sizes: '512x512', type: 'image/png' },
@@ -26,7 +26,9 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,png,svg,woff2}'],
+        globPatterns: ['**/*.{js,css,html,png,svg,woff2,json}'],
+        // Без внешних запросов и без сторонних сервисов: всё кешируется локально.
+        navigateFallback: 'index.html',
       },
     }),
   ],
