@@ -2,21 +2,17 @@
   "version": 1,
   "rebuses": [
     {
-      "id": "dub",
-      "answer": "ДУБ",
+      "id": "shar",
+      "answer": "ШАР",
       "accept": [],
       "level": 1,
-      "hint": "Большое дерево, на нём растут жёлуди",
+      "hint": "Круглый, его надувают и отпускают в небо",
       "parts": [
         {
-          "type": "letters",
-          "text": "Д"
-        },
-        {
           "type": "pic",
-          "emoji": "🦷",
-          "word": "ЗУБ",
-          "cutStart": 1
+          "emoji": "🧣",
+          "word": "ШАРФ",
+          "cutEnd": 1
         }
       ],
       "source": "классика"
@@ -42,6 +38,66 @@
       "source": "классика"
     },
     {
+      "id": "osa",
+      "answer": "ОСА",
+      "accept": [],
+      "level": 1,
+      "hint": "Жёлто-чёрная, жужжит и может ужалить",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "👃",
+          "word": "НОС",
+          "cutStart": 1
+        },
+        {
+          "type": "letters",
+          "text": "А"
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "nozh",
+      "answer": "НОЖ",
+      "accept": [],
+      "level": 1,
+      "hint": "Им режут хлеб",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "👃",
+          "word": "НОС",
+          "cutEnd": 1
+        },
+        {
+          "type": "letters",
+          "text": "Ж"
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "dub",
+      "answer": "ДУБ",
+      "accept": [],
+      "level": 1,
+      "hint": "Большое дерево, на нём растут жёлуди",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "Д"
+        },
+        {
+          "type": "pic",
+          "emoji": "🦷",
+          "word": "ЗУБ",
+          "cutStart": 1
+        }
+      ],
+      "source": "классика"
+    },
+    {
       "id": "luk",
       "answer": "ЛУК",
       "accept": [],
@@ -62,6 +118,101 @@
       "source": "классика"
     },
     {
+      "id": "zhuk",
+      "answer": "ЖУК",
+      "accept": [],
+      "level": 1,
+      "hint": "Ползает по травинке, у него твёрдые крылышки",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "Ж"
+        },
+        {
+          "type": "pic",
+          "emoji": "🧅",
+          "word": "ЛУК",
+          "cutStart": 1
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "usy",
+      "answer": "УСЫ",
+      "accept": [],
+      "level": 1,
+      "hint": "Длинные у кота, торчат возле носа",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "У"
+        },
+        {
+          "type": "pic",
+          "emoji": "🧀",
+          "word": "СЫР",
+          "cutEnd": 1
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "puh",
+      "answer": "ПУХ",
+      "accept": [],
+      "level": 1,
+      "hint": "Лёгкий и мягкий, есть у цыплёнка и летит с тополя",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "П"
+        },
+        {
+          "type": "pic",
+          "emoji": "👂",
+          "word": "УХО",
+          "cutEnd": 1
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "rybak",
+      "answer": "РЫБАК",
+      "accept": [],
+      "level": 1,
+      "hint": "Сидит с удочкой у речки и ждёт, когда клюнет",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🐟",
+          "word": "РЫБА"
+        },
+        {
+          "type": "letters",
+          "text": "К"
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "rog",
+      "answer": "РОГ",
+      "accept": [],
+      "level": 1,
+      "hint": "У коровы их два на голове",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🥧",
+          "word": "ПИРОГ",
+          "cutStart": 2
+        }
+      ],
+      "source": "классика"
+    },
+    {
       "id": "koza",
       "answer": "КОЗА",
       "accept": [],
@@ -77,106 +228,6 @@
           "emoji": "🌹",
           "word": "РОЗА",
           "cutStart": 1
-        }
-      ],
-      "source": "классика"
-    },
-    {
-      "id": "pauk",
-      "answer": "ПАУК",
-      "accept": [],
-      "level": 1,
-      "hint": "Восемь лапок, ловит мух в свою сетку",
-      "parts": [
-        {
-          "type": "letters",
-          "text": "ПА"
-        },
-        {
-          "type": "pic",
-          "emoji": "🪲",
-          "word": "ЖУК",
-          "cutStart": 1
-        }
-      ],
-      "source": "классика"
-    },
-    {
-      "id": "gnom",
-      "answer": "ГНОМ",
-      "accept": [],
-      "level": 1,
-      "hint": "Маленький сказочный человечек в колпаке",
-      "parts": [
-        {
-          "type": "letters",
-          "text": "ГН"
-        },
-        {
-          "type": "pic",
-          "emoji": "🏠",
-          "word": "ДОМ",
-          "cutStart": 1
-        }
-      ],
-      "source": "классика"
-    },
-    {
-      "id": "kran",
-      "answer": "КРАН",
-      "accept": [],
-      "level": 1,
-      "hint": "Из него на кухне течёт вода",
-      "parts": [
-        {
-          "type": "pic",
-          "emoji": "🦀",
-          "word": "КРАБ",
-          "cutEnd": 1
-        },
-        {
-          "type": "letters",
-          "text": "Н"
-        }
-      ],
-      "source": "классика"
-    },
-    {
-      "id": "kino",
-      "answer": "КИНО",
-      "accept": [],
-      "level": 1,
-      "hint": "Смотрим мультики на большом экране",
-      "parts": [
-        {
-          "type": "pic",
-          "emoji": "🐳",
-          "word": "КИТ",
-          "cutEnd": 1
-        },
-        {
-          "type": "letters",
-          "text": "НО"
-        }
-      ],
-      "source": "классика"
-    },
-    {
-      "id": "luna",
-      "answer": "ЛУНА",
-      "accept": [],
-      "level": 1,
-      "hint": "Светит на небе ночью",
-      "parts": [
-        {
-          "type": "pic",
-          "emoji": "🧅",
-          "word": "ЛУК",
-          "cutEnd": 1
-        },
-        {
-          "type": "letters",
-          "text": "НА"
         }
       ],
       "source": "классика"
@@ -222,20 +273,37 @@
       "source": "классика"
     },
     {
-      "id": "rybak",
-      "answer": "РЫБАК",
+      "id": "dochka",
+      "answer": "ДОЧКА",
       "accept": [],
       "level": 1,
-      "hint": "Сидит с удочкой у речки и ловит рыбу",
+      "hint": "Девочка для мамы и папы",
       "parts": [
         {
           "type": "pic",
-          "emoji": "🐟",
-          "word": "РЫБА"
-        },
+          "emoji": "🎣",
+          "word": "УДОЧКА",
+          "cutStart": 1
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "nora",
+      "answer": "НОРА",
+      "accept": [],
+      "level": 1,
+      "hint": "Подземный домик лисы",
+      "parts": [
         {
           "type": "letters",
-          "text": "К"
+          "text": "Н"
+        },
+        {
+          "type": "pic",
+          "emoji": "⛰️",
+          "word": "ГОРА",
+          "cutStart": 1
         }
       ],
       "source": "классика"
@@ -255,6 +323,102 @@
         {
           "type": "letters",
           "text": "ОК"
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "shishka",
+      "answer": "ШИШКА",
+      "accept": [],
+      "level": 1,
+      "hint": "Растёт на ёлке, её грызёт белка",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "Ш"
+        },
+        {
+          "type": "pic",
+          "emoji": "🧸",
+          "word": "МИШКА",
+          "cutStart": 1
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "repka",
+      "answer": "РЕПКА",
+      "accept": [],
+      "level": 1,
+      "hint": "Тянут-потянут, вытянуть не могут",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "Р"
+        },
+        {
+          "type": "pic",
+          "emoji": "🧢",
+          "word": "КЕПКА",
+          "cutStart": 1
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "hobot",
+      "answer": "ХОБОТ",
+      "accept": [],
+      "level": 1,
+      "hint": "Длинный нос у слона",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "Х"
+        },
+        {
+          "type": "pic",
+          "emoji": "🤖",
+          "word": "РОБОТ",
+          "cutStart": 1
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "parta",
+      "answer": "ПАРТА",
+      "accept": [],
+      "level": 1,
+      "hint": "За ней сидят на уроке в школе",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "П"
+        },
+        {
+          "type": "pic",
+          "emoji": "🗺️",
+          "word": "КАРТА",
+          "cutStart": 1
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "bochka",
+      "answer": "БОЧКА",
+      "accept": [],
+      "level": 1,
+      "hint": "Деревянная, круглая, в ней солят огурцы",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🦋",
+          "word": "БАБОЧКА",
+          "cutStart": 2
         }
       ],
       "source": "классика"
@@ -359,58 +523,57 @@
       "source": "классика"
     },
     {
-      "id": "domino",
-      "answer": "ДОМИНО",
+      "id": "kroshka",
+      "answer": "КРОШКА",
       "accept": [],
-      "level": 2,
-      "hint": "Игра с костяшками в точечках",
+      "level": 1,
+      "hint": "Маленький кусочек хлеба, её клюют воробьи",
       "parts": [
         {
-          "type": "pic",
-          "emoji": "🏠",
-          "word": "ДОМ"
+          "type": "letters",
+          "text": "КР"
         },
         {
-          "type": "letters",
-          "text": "ИНО"
+          "type": "pic",
+          "emoji": "🐈",
+          "word": "КОШКА",
+          "cutStart": 1
         }
       ],
       "source": "классика"
     },
     {
-      "id": "koster",
-      "answer": "КОСТЁР",
+      "id": "shina",
+      "answer": "ШИНА",
       "accept": [],
-      "level": 2,
-      "hint": "Горит в походе, у него греются",
+      "level": 1,
+      "hint": "Резиновая, её надевают на колесо",
       "parts": [
         {
           "type": "pic",
-          "emoji": "🦴",
-          "word": "КОСТЬ",
-          "cutEnd": 1
-        },
-        {
-          "type": "letters",
-          "text": "ЁР"
+          "emoji": "🚗",
+          "word": "МАШИНА",
+          "cutStart": 2
         }
       ],
       "source": "классика"
     },
     {
-      "id": "son",
-      "answer": "СОН",
+      "id": "feya",
+      "answer": "ФЕЯ",
       "accept": [],
-      "level": 2,
-      "hint": "Его видят ночью, когда спят",
+      "level": 1,
+      "hint": "Сказочная волшебница с крылышками и палочкой",
       "parts": [
         {
+          "type": "letters",
+          "text": "Ф"
+        },
+        {
           "type": "pic",
-          "emoji": "🐘",
-          "word": "СЛОН",
-          "remove": [
-            "Л"
-          ]
+          "emoji": "🐍",
+          "word": "ЗМЕЯ",
+          "cutStart": 2
         }
       ],
       "source": "классика"
@@ -419,7 +582,7 @@
       "id": "muha",
       "answer": "МУХА",
       "accept": [],
-      "level": 2,
+      "level": 1,
       "hint": "Жужжит и садится на варенье",
       "parts": [
         {
@@ -443,7 +606,7 @@
       "id": "shuba",
       "answer": "ШУБА",
       "accept": [],
-      "level": 2,
+      "level": 1,
       "hint": "Тёплая одежда для зимы",
       "parts": [
         {
@@ -464,81 +627,267 @@
       "source": "классика"
     },
     {
-      "id": "luzha",
-      "answer": "ЛУЖА",
+      "id": "akula",
+      "answer": "АКУЛА",
       "accept": [],
-      "level": 2,
-      "hint": "Остаётся на дороге после дождя",
+      "level": 1,
+      "hint": "Зубастая рыба в море",
       "parts": [
         {
-          "type": "pic",
-          "emoji": "🧅",
-          "word": "ЛУК",
-          "cutEnd": 1
+          "type": "letters",
+          "text": "А"
         },
         {
-          "type": "letters",
-          "text": "ЖА"
+          "type": "pic",
+          "emoji": "✊",
+          "word": "КУЛАК",
+          "cutEnd": 1
         }
       ],
       "source": "классика"
     },
     {
-      "id": "doska",
-      "answer": "ДОСКА",
+      "id": "kon",
+      "answer": "КОНЬ",
       "accept": [],
       "level": 2,
-      "hint": "На ней в школе пишут мелом",
+      "hint": "Скачет, у него грива и копыта",
       "parts": [
         {
           "type": "pic",
-          "emoji": "🏠",
-          "word": "ДОМ",
-          "cutEnd": 1
-        },
-        {
-          "type": "letters",
-          "text": "СКА"
-        }
-      ],
-      "source": "классика"
-    },
-    {
-      "id": "kaban",
-      "answer": "КАБАН",
-      "accept": [],
-      "level": 2,
-      "hint": "Дикая свинья с клыками",
-      "parts": [
-        {
-          "type": "letters",
-          "text": "КА"
-        },
-        {
-          "type": "pic",
-          "emoji": "🍌",
-          "word": "БАНАН",
+          "emoji": "⛸️",
+          "word": "КОНЬКИ",
           "cutEnd": 2
         }
       ],
       "source": "классика"
     },
     {
-      "id": "bant",
-      "answer": "БАНТ",
+      "id": "chay",
+      "answer": "ЧАЙ",
       "accept": [],
       "level": 2,
-      "hint": "Его завязывают девочкам на косички",
+      "hint": "Горячий напиток, его пьют с вареньем",
       "parts": [
         {
           "type": "pic",
-          "emoji": "🍌",
-          "word": "БАНАН",
+          "emoji": "🫖",
+          "word": "ЧАЙНИК",
+          "cutEnd": 3
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "rak",
+      "answer": "РАК",
+      "accept": [],
+      "level": 2,
+      "hint": "Пятится назад и щиплется клешнями",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🐉",
+          "word": "ДРАКОН",
+          "cutStart": 1,
+          "cutEnd": 2
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "loto",
+      "answer": "ЛОТО",
+      "accept": [],
+      "level": 2,
+      "hint": "Игра с бочонками и карточками",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🔨",
+          "word": "МОЛОТОК",
+          "cutStart": 2,
+          "cutEnd": 1
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "schit",
+      "answer": "ЩИТ",
+      "accept": [],
+      "level": 2,
+      "hint": "Рыцарь закрывается им от стрел",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "Щ"
+        },
+        {
+          "type": "pic",
+          "emoji": "🐳",
+          "word": "КИТ",
+          "cutStart": 1
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "seno",
+      "answer": "СЕНО",
+      "accept": [],
+      "level": 2,
+      "hint": "Сухая трава, её зимой едят коровы",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "С"
+        },
+        {
+          "type": "pic",
+          "emoji": "🦝",
+          "word": "ЕНОТ",
+          "cutEnd": 1
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "klubok",
+      "answer": "КЛУБОК",
+      "accept": [],
+      "level": 2,
+      "hint": "Его гоняет котёнок, из него вяжут",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "КЛ"
+        },
+        {
+          "type": "pic",
+          "emoji": "🏆",
+          "word": "КУБОК",
+          "cutStart": 1
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "gorb",
+      "answer": "ГОРБ",
+      "accept": [],
+      "level": 2,
+      "hint": "У верблюда их бывает два",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "⛰️",
+          "word": "ГОРА",
+          "cutEnd": 1
+        },
+        {
+          "type": "letters",
+          "text": "Б"
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "byk",
+      "answer": "БЫК",
+      "accept": [],
+      "level": 2,
+      "hint": "Большой, с рогами, сердится на красную тряпку",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "Б"
+        },
+        {
+          "type": "pic",
+          "emoji": "👅",
+          "word": "ЯЗЫК",
+          "cutStart": 2
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "yula",
+      "answer": "ЮЛА",
+      "accept": [],
+      "level": 2,
+      "hint": "Игрушка: крутится на одной ножке и гудит",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "Ю"
+        },
+        {
+          "type": "pic",
+          "emoji": "🪚",
+          "word": "ПИЛА",
+          "cutStart": 2
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "pen",
+      "answer": "ПЕНЬ",
+      "accept": [],
+      "level": 2,
+      "hint": "Остаётся в лесу от спиленного дерева",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "П"
+        },
+        {
+          "type": "pic",
+          "emoji": "🦌",
+          "word": "ОЛЕНЬ",
+          "cutStart": 2
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "yubka",
+      "answer": "ЮБКА",
+      "accept": [],
+      "level": 2,
+      "hint": "Её носят девочки вместе с кофточкой",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "Ю"
+        },
+        {
+          "type": "pic",
+          "emoji": "🧽",
+          "word": "ГУБКА",
+          "cutStart": 2
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "volk",
+      "answer": "ВОЛК",
+      "accept": [],
+      "level": 2,
+      "hint": "Серый, зубастый, воет на луну",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🌊",
+          "word": "ВОЛНА",
           "cutEnd": 2
         },
         {
           "type": "letters",
-          "text": "Т"
+          "text": "К"
         }
       ],
       "source": "классика"
@@ -568,67 +917,121 @@
       "source": "классика"
     },
     {
-      "id": "korova",
-      "answer": "КОРОВА",
+      "id": "pedal",
+      "answer": "ПЕДАЛЬ",
       "accept": [],
       "level": 2,
-      "hint": "Даёт молоко, говорит «му-у»",
+      "hint": "Её крутят ногой на велосипеде",
       "parts": [
-        {
-          "type": "pic",
-          "emoji": "👑",
-          "word": "КОРОНА",
-          "cutEnd": 2
-        },
-        {
-          "type": "pic",
-          "emoji": "🦉",
-          "word": "СОВА",
-          "cutStart": 2
-        }
-      ],
-      "source": "https://infourok.ru/rebusy-zhivotnye-4724534.html"
-    },
-    {
-      "id": "meduza",
-      "answer": "МЕДУЗА",
-      "accept": [],
-      "level": 2,
-      "hint": "Похожа на прозрачный зонтик, плавает в море и может обжечь",
-      "parts": [
-        {
-          "type": "pic",
-          "emoji": "🍯",
-          "word": "МЁД"
-        },
         {
           "type": "letters",
-          "text": "УЗА"
+          "text": "П"
+        },
+        {
+          "type": "pic",
+          "emoji": "🥇",
+          "word": "МЕДАЛЬ",
+          "cutStart": 1
         }
       ],
       "source": "классика"
     },
     {
-      "id": "medved",
-      "answer": "МЕДВЕДЬ",
+      "id": "baranka",
+      "answer": "БАРАНКА",
       "accept": [],
       "level": 2,
-      "hint": "Косолапый, зимой спит в берлоге",
+      "hint": "Круглая, с дыркой, её нанизывают на верёвочку",
       "parts": [
         {
           "type": "pic",
-          "emoji": "🍯",
-          "word": "МЁД"
-        },
-        {
-          "type": "pic",
-          "emoji": "🪣",
-          "word": "ВЕДРО",
-          "cutEnd": 2
+          "emoji": "🐏",
+          "word": "БАРАН"
         },
         {
           "type": "letters",
-          "text": "Ь"
+          "text": "КА"
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "drova",
+      "answer": "ДРОВА",
+      "accept": [],
+      "level": 2,
+      "hint": "Их колют топором и кладут в печку",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "Д"
+        },
+        {
+          "type": "pic",
+          "emoji": "🐄",
+          "word": "КОРОВА",
+          "cutStart": 2
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "bulka",
+      "answer": "БУЛКА",
+      "accept": [],
+      "level": 2,
+      "hint": "Мягкая, сдобная, её покупают к чаю",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "Б"
+        },
+        {
+          "type": "pic",
+          "emoji": "🌋",
+          "word": "ВУЛКАН",
+          "cutStart": 1,
+          "cutEnd": 1
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "koster",
+      "answer": "КОСТЁР",
+      "accept": [],
+      "level": 2,
+      "hint": "Горит в походе, у него греются",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🦴",
+          "word": "КОСТЬ",
+          "cutEnd": 1
+        },
+        {
+          "type": "letters",
+          "text": "ЁР"
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "kaban",
+      "answer": "КАБАН",
+      "accept": [],
+      "level": 2,
+      "hint": "Дикая свинья с клыками",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "КА"
+        },
+        {
+          "type": "pic",
+          "emoji": "🍌",
+          "word": "БАНАН",
+          "cutEnd": 2
         }
       ],
       "source": "классика"
@@ -649,80 +1052,6 @@
         {
           "type": "letters",
           "text": "НЯ"
-        }
-      ],
-      "source": "классика"
-    },
-    {
-      "id": "tarelka",
-      "answer": "ТАРЕЛКА",
-      "accept": [],
-      "level": 2,
-      "hint": "В неё наливают суп",
-      "parts": [
-        {
-          "type": "letters",
-          "text": "ТАР"
-        },
-        {
-          "type": "pic",
-          "emoji": "🌲",
-          "word": "ЁЛКА"
-        }
-      ],
-      "source": "классика"
-    },
-    {
-      "id": "slonenok",
-      "answer": "СЛОНЁНОК",
-      "accept": [],
-      "level": 2,
-      "hint": "Маленький, с хоботом, всюду ходит за мамой",
-      "parts": [
-        {
-          "type": "pic",
-          "emoji": "🐘",
-          "word": "СЛОН"
-        },
-        {
-          "type": "letters",
-          "text": "Ё"
-        },
-        {
-          "type": "pic",
-          "emoji": "👃",
-          "word": "НОС",
-          "cutEnd": 1
-        },
-        {
-          "type": "letters",
-          "text": "К"
-        }
-      ],
-      "source": "классика"
-    },
-    {
-      "id": "malina",
-      "answer": "МАЛИНА",
-      "accept": [],
-      "level": 2,
-      "hint": "Красная ягода, её любит медведь",
-      "parts": [
-        {
-          "type": "letters",
-          "text": "МА"
-        },
-        {
-          "type": "pic",
-          "emoji": "🦊",
-          "word": "ЛИСА",
-          "cutEnd": 2
-        },
-        {
-          "type": "pic",
-          "emoji": "🌕",
-          "word": "ЛУНА",
-          "cutStart": 2
         }
       ],
       "source": "классика"
@@ -752,6 +1081,656 @@
       "source": "классика"
     },
     {
+      "id": "telenok",
+      "answer": "ТЕЛЁНОК",
+      "accept": [],
+      "level": 2,
+      "hint": "Детёныш коровы",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "ТЕ"
+        },
+        {
+          "type": "pic",
+          "emoji": "🐤",
+          "word": "ЦЫПЛЁНОК",
+          "cutStart": 3
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "luna",
+      "answer": "ЛУНА",
+      "accept": [],
+      "level": 2,
+      "hint": "Светит на небе ночью",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🧅",
+          "word": "ЛУК",
+          "cutEnd": 1
+        },
+        {
+          "type": "pic",
+          "emoji": "🌊",
+          "word": "ВОЛНА",
+          "cutStart": 3
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "son",
+      "answer": "СОН",
+      "accept": [],
+      "level": 2,
+      "hint": "Его смотрят ночью с закрытыми глазами",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🐘",
+          "word": "СЛОН",
+          "remove": [
+            "Л"
+          ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "ruka",
+      "answer": "РУКА",
+      "accept": [],
+      "level": 2,
+      "hint": "Ей держат ложку и машут «пока»",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🖊️",
+          "word": "РУЧКА",
+          "remove": [
+            "Ч"
+          ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "plasch",
+      "answer": "ПЛАЩ",
+      "accept": [],
+      "level": 2,
+      "hint": "Его надевают в дождь поверх одежды",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🪚",
+          "word": "ПИЛА",
+          "remove": [
+            "И"
+          ]
+        },
+        {
+          "type": "letters",
+          "text": "Щ"
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "shkola",
+      "answer": "ШКОЛА",
+      "accept": [],
+      "level": 2,
+      "hint": "Туда идут первого сентября с букетом",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "Ш"
+        },
+        {
+          "type": "pic",
+          "emoji": "🐨",
+          "word": "КОАЛА",
+          "remove": [
+            "А"
+          ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "domino",
+      "answer": "ДОМИНО",
+      "accept": [],
+      "level": 2,
+      "hint": "Игра с костяшками в точечках",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🏠",
+          "word": "ДОМ"
+        },
+        {
+          "type": "letters",
+          "text": "И"
+        },
+        {
+          "type": "pic",
+          "emoji": "🦵",
+          "word": "НОГА",
+          "cutEnd": 2
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "myaso",
+      "answer": "МЯСО",
+      "accept": [],
+      "level": 2,
+      "hint": "Из него делают котлеты",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "⚽",
+          "word": "МЯЧ",
+          "cutEnd": 1
+        },
+        {
+          "type": "pic",
+          "emoji": "🧃",
+          "word": "СОК",
+          "cutEnd": 1
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "okno",
+      "answer": "ОКНО",
+      "accept": [],
+      "level": 2,
+      "hint": "В нём стекло, через него смотрят на улицу",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🧃",
+          "word": "СОК",
+          "cutStart": 1
+        },
+        {
+          "type": "pic",
+          "emoji": "🔪",
+          "word": "НОЖ",
+          "cutEnd": 1
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "tarelka",
+      "answer": "ТАРЕЛКА",
+      "accept": [],
+      "level": 2,
+      "hint": "В неё наливают суп",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🎸",
+          "word": "ГИТАРА",
+          "cutStart": 2,
+          "cutEnd": 1
+        },
+        {
+          "type": "pic",
+          "emoji": "🐿️",
+          "word": "БЕЛКА",
+          "cutStart": 1
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "sokol",
+      "answer": "СОКОЛ",
+      "accept": [],
+      "level": 2,
+      "hint": "Быстрая птица, камнем падает с неба на добычу",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🧃",
+          "word": "СОК"
+        },
+        {
+          "type": "pic",
+          "emoji": "🐺",
+          "word": "ВОЛК",
+          "cutStart": 1,
+          "cutEnd": 1
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "pesok",
+      "answer": "ПЕСОК",
+      "accept": [],
+      "level": 2,
+      "hint": "Жёлтый, из него лепят куличики на пляже",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🪶",
+          "word": "ПЕРО",
+          "cutEnd": 2
+        },
+        {
+          "type": "pic",
+          "emoji": "🧃",
+          "word": "СОК"
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "klyk",
+      "answer": "КЛЫК",
+      "accept": [],
+      "level": 2,
+      "hint": "Острый длинный зуб у кабана или моржа",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🔑",
+          "word": "КЛЮЧ",
+          "cutEnd": 2
+        },
+        {
+          "type": "pic",
+          "emoji": "🐂",
+          "word": "БЫК",
+          "cutStart": 1
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "homyak",
+      "answer": "ХОМЯК",
+      "accept": [],
+      "level": 2,
+      "hint": "Набивает щёки зёрнышками",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "👂",
+          "word": "УХО",
+          "cutStart": 1
+        },
+        {
+          "type": "pic",
+          "emoji": "⚽",
+          "word": "МЯЧ",
+          "cutEnd": 1
+        },
+        {
+          "type": "letters",
+          "text": "К"
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "doska",
+      "answer": "ДОСКА",
+      "accept": [],
+      "level": 2,
+      "hint": "На ней в школе пишут мелом",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🏠",
+          "word": "ДОМ",
+          "cutEnd": 1
+        },
+        {
+          "type": "pic",
+          "emoji": "🤿",
+          "word": "МАСКА",
+          "cutStart": 2
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "stupa",
+      "answer": "СТУПА",
+      "accept": [],
+      "level": 2,
+      "hint": "В ней летает Баба-Яга",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🪑",
+          "word": "СТУЛ",
+          "cutEnd": 1
+        },
+        {
+          "type": "pic",
+          "emoji": "🕷️",
+          "word": "ПАУК",
+          "cutEnd": 2
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "pilot",
+      "answer": "ПИЛОТ",
+      "accept": [],
+      "level": 2,
+      "hint": "Управляет самолётом",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🪚",
+          "word": "ПИЛА",
+          "cutEnd": 1
+        },
+        {
+          "type": "pic",
+          "emoji": "🦝",
+          "word": "ЕНОТ",
+          "cutStart": 2
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "vilka",
+      "answer": "ВИЛКА",
+      "accept": [],
+      "level": 2,
+      "hint": "Ей накалывают котлету, у неё зубчики",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🥝",
+          "word": "КИВИ",
+          "cutStart": 2
+        },
+        {
+          "type": "pic",
+          "emoji": "🌲",
+          "word": "ЁЛКА",
+          "cutStart": 1
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "baraban",
+      "answer": "БАРАБАН",
+      "accept": [],
+      "level": 2,
+      "hint": "По нему стучат палочками: бум-бум",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🐏",
+          "word": "БАРАН",
+          "cutEnd": 1
+        },
+        {
+          "type": "pic",
+          "emoji": "🎀",
+          "word": "БАНТ",
+          "cutEnd": 1
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "baton",
+      "answer": "БАТОН",
+      "accept": [],
+      "level": 2,
+      "hint": "Длинный белый хлеб",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🎀",
+          "word": "БАНТ",
+          "remove": [
+            "Н"
+          ]
+        },
+        {
+          "type": "pic",
+          "emoji": "🐘",
+          "word": "СЛОН",
+          "cutStart": 2
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "klyushka",
+      "answer": "КЛЮШКА",
+      "accept": [],
+      "level": 2,
+      "hint": "Ей гоняют шайбу на льду",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🔑",
+          "word": "КЛЮЧ",
+          "cutEnd": 1
+        },
+        {
+          "type": "pic",
+          "emoji": "🧸",
+          "word": "МИШКА",
+          "cutStart": 2
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "kraski",
+      "answer": "КРАСКИ",
+      "accept": [],
+      "level": 2,
+      "hint": "Ими рисуют кисточкой",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🦀",
+          "word": "КРАБ",
+          "cutEnd": 1
+        },
+        {
+          "type": "pic",
+          "emoji": "🧦",
+          "word": "НОСКИ",
+          "cutStart": 2
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "ananas",
+      "answer": "АНАНАС",
+      "accept": [],
+      "level": 2,
+      "hint": "Колючий тропический фрукт с хохолком",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🍌",
+          "word": "БАНАН",
+          "cutStart": 1
+        },
+        {
+          "type": "pic",
+          "emoji": "⌚",
+          "word": "ЧАСЫ",
+          "cutStart": 1,
+          "cutEnd": 1
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "medved",
+      "answer": "МЕДВЕДЬ",
+      "accept": [],
+      "level": 2,
+      "hint": "Косолапый, зимой спит в берлоге",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🥇",
+          "word": "МЕДАЛЬ",
+          "cutEnd": 3
+        },
+        {
+          "type": "pic",
+          "emoji": "🪣",
+          "word": "ВЕДРО",
+          "cutEnd": 2
+        },
+        {
+          "type": "letters",
+          "text": "Ь"
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "kartoshka",
+      "answer": "КАРТОШКА",
+      "accept": [],
+      "level": 2,
+      "hint": "Её копают осенью и делают из неё пюре",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🗺️",
+          "word": "КАРТА",
+          "cutEnd": 1
+        },
+        {
+          "type": "pic",
+          "emoji": "🐈",
+          "word": "КОШКА",
+          "cutStart": 1
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "pirozhok",
+      "answer": "ПИРОЖОК",
+      "accept": [],
+      "level": 2,
+      "hint": "Маленький, печёный, с капустой или с повидлом",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🥧",
+          "word": "ПИРОГ",
+          "cutEnd": 1
+        },
+        {
+          "type": "letters",
+          "text": "Ж"
+        },
+        {
+          "type": "pic",
+          "emoji": "🔒",
+          "word": "ЗАМОК",
+          "cutStart": 3
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "rubashka",
+      "answer": "РУБАШКА",
+      "accept": [],
+      "level": 2,
+      "hint": "У неё воротник и пуговицы",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🎺",
+          "word": "ТРУБА",
+          "cutStart": 1
+        },
+        {
+          "type": "pic",
+          "emoji": "🐈",
+          "word": "КОШКА",
+          "cutStart": 2
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "korova",
+      "answer": "КОРОВА",
+      "accept": [],
+      "level": 2,
+      "hint": "Даёт молоко, говорит «му-у»",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "👑",
+          "word": "КОРОНА",
+          "cutEnd": 2
+        },
+        {
+          "type": "pic",
+          "emoji": "🦉",
+          "word": "СОВА",
+          "cutStart": 2
+        }
+      ],
+      "source": "https://infourok.ru/rebusy-zhivotnye-4724534.html"
+    },
+    {
+      "id": "malina",
+      "answer": "МАЛИНА",
+      "accept": [],
+      "level": 2,
+      "hint": "Красная ягода, её любит медведь",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "МА"
+        },
+        {
+          "type": "pic",
+          "emoji": "🦊",
+          "word": "ЛИСА",
+          "cutEnd": 2
+        },
+        {
+          "type": "pic",
+          "emoji": "🌕",
+          "word": "ЛУНА",
+          "cutStart": 2
+        }
+      ],
+      "source": "классика"
+    },
+    {
       "id": "babochka",
       "answer": "БАБОЧКА",
       "accept": [],
@@ -759,38 +1738,112 @@
       "hint": "Порхает над цветами, крылья яркие",
       "parts": [
         {
+          "type": "pic",
+          "emoji": "🎀",
+          "word": "БАНТ",
+          "cutEnd": 2
+        },
+        {
           "type": "letters",
-          "text": "БАБ"
+          "text": "Б"
         },
         {
           "type": "pic",
-          "emoji": "👓",
-          "word": "ОЧКИ",
-          "cutEnd": 1
-        },
-        {
-          "type": "letters",
-          "text": "А"
+          "emoji": "🎣",
+          "word": "УДОЧКА",
+          "cutStart": 2
         }
       ],
       "source": "https://infourok.ru/rebusy-zhivotnye-4724534.html"
     },
     {
-      "id": "akula",
-      "answer": "АКУЛА",
+      "id": "muraveynik",
+      "answer": "МУРАВЕЙНИК",
       "accept": [],
       "level": 2,
-      "hint": "Зубастая рыба в море",
+      "hint": "Лесная горка из хвоинок, в ней живут тысячи крошечных насекомых",
       "parts": [
         {
-          "type": "letters",
-          "text": "А"
+          "type": "pic",
+          "emoji": "🐜",
+          "word": "МУРАВЕЙ"
         },
         {
           "type": "pic",
-          "emoji": "✊",
-          "word": "КУЛАК",
-          "cutEnd": 1
+          "emoji": "🫖",
+          "word": "ЧАЙНИК",
+          "cutStart": 3
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "kran",
+      "answer": "КРАН",
+      "accept": [],
+      "level": 3,
+      "hint": "Из него на кухне течёт вода",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🦀",
+          "word": "КРАБ",
+          "replace": [
+            [
+              "Б",
+              "Н"
+            ]
+          ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "gnom",
+      "answer": "ГНОМ",
+      "accept": [],
+      "level": 3,
+      "hint": "Маленький сказочный человечек в колпаке",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "Г"
+        },
+        {
+          "type": "pic",
+          "emoji": "👃",
+          "word": "НОС",
+          "replace": [
+            [
+              "С",
+              "М"
+            ]
+          ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "griva",
+      "answer": "ГРИВА",
+      "accept": [],
+      "level": 3,
+      "hint": "Длинные волосы на шее у лошади и льва",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🍄",
+          "word": "ГРИБ",
+          "replace": [
+            [
+              "Б",
+              "В"
+            ]
+          ]
+        },
+        {
+          "type": "letters",
+          "text": "А"
         }
       ],
       "source": "классика"
@@ -859,6 +1912,27 @@
       "source": "классика"
     },
     {
+      "id": "mech",
+      "answer": "МЕЧ",
+      "accept": [],
+      "level": 3,
+      "hint": "Им сражается богатырь",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "⚽",
+          "word": "МЯЧ",
+          "replace": [
+            [
+              "Я",
+              "Е"
+            ]
+          ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
       "id": "rosa",
       "answer": "РОСА",
       "accept": [],
@@ -875,6 +1949,466 @@
               "С"
             ]
           ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "osel",
+      "answer": "ОСЁЛ",
+      "accept": [],
+      "level": 3,
+      "hint": "Серый, упрямый, кричит «иа»",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🦅",
+          "word": "ОРЁЛ",
+          "replace": [
+            [
+              "Р",
+              "С"
+            ]
+          ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "stol",
+      "answer": "СТОЛ",
+      "accept": [],
+      "level": 3,
+      "hint": "За ним обедают всей семьёй",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🪑",
+          "word": "СТУЛ",
+          "replace": [
+            [
+              "У",
+              "О"
+            ]
+          ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "lapa",
+      "answer": "ЛАПА",
+      "accept": [],
+      "level": 3,
+      "hint": "Мягкая у кошки, а в ней острые коготки",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🔍",
+          "word": "ЛУПА",
+          "replace": [
+            [
+              "У",
+              "А"
+            ]
+          ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "park",
+      "answer": "ПАРК",
+      "accept": [],
+      "level": 3,
+      "hint": "Там гуляют, растут деревья и стоят карусели",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🕷️",
+          "word": "ПАУК",
+          "replace": [
+            [
+              "У",
+              "Р"
+            ]
+          ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "bint",
+      "answer": "БИНТ",
+      "accept": [],
+      "level": 3,
+      "hint": "Им перевязывают ранку",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🎀",
+          "word": "БАНТ",
+          "replace": [
+            [
+              "А",
+              "И"
+            ]
+          ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "kubik",
+      "answer": "КУБИК",
+      "accept": [],
+      "level": 3,
+      "hint": "Из них строят башню, на гранях бывают буквы",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🏆",
+          "word": "КУБОК",
+          "replace": [
+            [
+              "О",
+              "И"
+            ]
+          ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "lozhka",
+      "answer": "ЛОЖКА",
+      "accept": [],
+      "level": 3,
+      "hint": "Ей едят суп",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🛶",
+          "word": "ЛОДКА",
+          "replace": [
+            [
+              "Д",
+              "Ж"
+            ]
+          ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "miska",
+      "answer": "МИСКА",
+      "accept": [],
+      "level": 3,
+      "hint": "Из неё лакает молоко котёнок",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🧸",
+          "word": "МИШКА",
+          "replace": [
+            [
+              "Ш",
+              "С"
+            ]
+          ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "sushka",
+      "answer": "СУШКА",
+      "accept": [],
+      "level": 3,
+      "hint": "Маленькое сухое колечко к чаю",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "👜",
+          "word": "СУМКА",
+          "replace": [
+            [
+              "М",
+              "Ш"
+            ]
+          ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "salki",
+      "answer": "САЛКИ",
+      "accept": [],
+      "level": 3,
+      "hint": "Игра: водящий догоняет и касается рукой",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🛷",
+          "word": "САНКИ",
+          "replace": [
+            [
+              "Н",
+              "Л"
+            ]
+          ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "banan",
+      "answer": "БАНАН",
+      "accept": [],
+      "level": 3,
+      "hint": "Жёлтый, изогнутый, его любят обезьяны",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🐏",
+          "word": "БАРАН",
+          "replace": [
+            [
+              "Р",
+              "Н"
+            ]
+          ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "salat",
+      "answer": "САЛАТ",
+      "accept": [],
+      "level": 3,
+      "hint": "Его режут из огурцов и помидоров",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🎆",
+          "word": "САЛЮТ",
+          "replace": [
+            [
+              "Ю",
+              "А"
+            ]
+          ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "porog",
+      "answer": "ПОРОГ",
+      "accept": [],
+      "level": 3,
+      "hint": "Через него перешагивают у входной двери",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🥧",
+          "word": "ПИРОГ",
+          "replace": [
+            [
+              "И",
+              "О"
+            ]
+          ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "schuka",
+      "answer": "ЩУКА",
+      "accept": [],
+      "level": 3,
+      "hint": "Зубастая рыба, хозяйка речки",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🧅",
+          "word": "ЛУК",
+          "replace": [
+            [
+              "Л",
+              "Щ"
+            ]
+          ]
+        },
+        {
+          "type": "letters",
+          "text": "А"
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "rechka",
+      "answer": "РЕЧКА",
+      "accept": [],
+      "level": 3,
+      "hint": "Бежит, журчит, в ней плавают рыбки",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🖊️",
+          "word": "РУЧКА",
+          "replace": [
+            [
+              "У",
+              "Е"
+            ]
+          ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "kivi",
+      "answer": "КИВИ",
+      "accept": [],
+      "level": 3,
+      "hint": "Мохнатый коричневый фрукт, внутри зелёный",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🐳",
+          "word": "КИТ",
+          "replace": [
+            [
+              "Т",
+              "В"
+            ]
+          ]
+        },
+        {
+          "type": "letters",
+          "text": "И"
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "uley",
+      "answer": "УЛЕЙ",
+      "accept": [],
+      "level": 3,
+      "hint": "Домик для пчёл",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "У"
+        },
+        {
+          "type": "pic",
+          "emoji": "🦁",
+          "word": "ЛЕВ",
+          "replace": [
+            [
+              "В",
+              "Й"
+            ]
+          ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "enot",
+      "answer": "ЕНОТ",
+      "accept": [],
+      "level": 3,
+      "hint": "Полоскает еду в воде, у него на мордочке чёрная маска",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "Е"
+        },
+        {
+          "type": "pic",
+          "emoji": "🔪",
+          "word": "НОЖ",
+          "replace": [
+            [
+              "Ж",
+              "Т"
+            ]
+          ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "yazyk",
+      "answer": "ЯЗЫК",
+      "accept": [],
+      "level": 3,
+      "hint": "Им лижут мороженое",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "Я"
+        },
+        {
+          "type": "pic",
+          "emoji": "🐂",
+          "word": "БЫК",
+          "replace": [
+            [
+              "Б",
+              "З"
+            ]
+          ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "krysha",
+      "answer": "КРЫША",
+      "accept": [],
+      "level": 3,
+      "hint": "Она наверху у дома, по ней стучит дождь",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🐀",
+          "word": "КРЫСА",
+          "replace": [
+            [
+              "С",
+              "Ш"
+            ]
+          ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "rys",
+      "answer": "РЫСЬ",
+      "accept": [],
+      "level": 3,
+      "hint": "Лесная кошка с кисточками на ушах",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🧀",
+          "word": "СЫР",
+          "flip": true
+        },
+        {
+          "type": "letters",
+          "text": "Ь"
         }
       ],
       "source": "классика"
@@ -899,6 +2433,301 @@
         }
       ],
       "source": "https://infourok.ru/rebusy-zhivotnye-4724534.html"
+    },
+    {
+      "id": "sliva",
+      "answer": "СЛИВА",
+      "accept": [],
+      "level": 3,
+      "hint": "Синий фрукт с косточкой, из него варят компот",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "С"
+        },
+        {
+          "type": "pic",
+          "emoji": "🦊",
+          "word": "ЛИСА",
+          "replace": [
+            [
+              "С",
+              "В"
+            ]
+          ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "perets",
+      "answer": "ПЕРЕЦ",
+      "accept": [],
+      "level": 3,
+      "hint": "Бывает сладкий и жгучий, красный и зелёный",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🪶",
+          "word": "ПЕРО",
+          "replace": [
+            [
+              "О",
+              "Е"
+            ]
+          ]
+        },
+        {
+          "type": "letters",
+          "text": "Ц"
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "kniga",
+      "answer": "КНИГА",
+      "accept": [],
+      "level": 3,
+      "hint": "Её читают, в ней страницы и картинки",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "К"
+        },
+        {
+          "type": "pic",
+          "emoji": "🦵",
+          "word": "НОГА",
+          "replace": [
+            [
+              "О",
+              "И"
+            ]
+          ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "pirat",
+      "answer": "ПИРАТ",
+      "accept": [],
+      "level": 3,
+      "hint": "Плавает под чёрным флагом и ищет клад",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🪚",
+          "word": "ПИЛА",
+          "replace": [
+            [
+              "Л",
+              "Р"
+            ]
+          ]
+        },
+        {
+          "type": "letters",
+          "text": "Т"
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "povar",
+      "answer": "ПОВАР",
+      "accept": [],
+      "level": 3,
+      "hint": "Готовит еду, носит белый колпак",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🦉",
+          "word": "СОВА",
+          "replace": [
+            [
+              "С",
+              "П"
+            ]
+          ]
+        },
+        {
+          "type": "letters",
+          "text": "Р"
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "schenok",
+      "answer": "ЩЕНОК",
+      "accept": [],
+      "level": 3,
+      "hint": "Маленький, лает, потом вырастет в собаку",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "Щ"
+        },
+        {
+          "type": "pic",
+          "emoji": "🦝",
+          "word": "ЕНОТ",
+          "replace": [
+            [
+              "Т",
+              "К"
+            ]
+          ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "ozero",
+      "answer": "ОЗЕРО",
+      "accept": [],
+      "level": 3,
+      "hint": "Много воды посреди леса, там плавают утки",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "О"
+        },
+        {
+          "type": "pic",
+          "emoji": "🪶",
+          "word": "ПЕРО",
+          "replace": [
+            [
+              "П",
+              "З"
+            ]
+          ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "vagon",
+      "answer": "ВАГОН",
+      "accept": [],
+      "level": 3,
+      "hint": "Их цепляет паровоз",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "В"
+        },
+        {
+          "type": "pic",
+          "emoji": "🦵",
+          "word": "НОГА",
+          "flip": true
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "kashtan",
+      "answer": "КАШТАН",
+      "accept": [],
+      "level": 3,
+      "hint": "Блестящий коричневый орех в колючей кожуре",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🗺️",
+          "word": "КАРТА",
+          "replace": [
+            [
+              "Р",
+              "Ш"
+            ]
+          ]
+        },
+        {
+          "type": "letters",
+          "text": "Н"
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "kruzhka",
+      "answer": "КРУЖКА",
+      "accept": [],
+      "level": 3,
+      "hint": "Из неё пьют молоко",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "К"
+        },
+        {
+          "type": "pic",
+          "emoji": "🖊️",
+          "word": "РУЧКА",
+          "replace": [
+            [
+              "Ч",
+              "Ж"
+            ]
+          ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "koren",
+      "answer": "КОРЕНЬ",
+      "accept": [],
+      "level": 3,
+      "hint": "Держит дерево в земле",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "К"
+        },
+        {
+          "type": "pic",
+          "emoji": "🦌",
+          "word": "ОЛЕНЬ",
+          "replace": [
+            [
+              "Л",
+              "Р"
+            ]
+          ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "kogot",
+      "answer": "КОГОТЬ",
+      "accept": [],
+      "level": 3,
+      "hint": "Острый, есть на лапе у кошки",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "К"
+        },
+        {
+          "type": "pic",
+          "emoji": "🔥",
+          "word": "ОГОНЬ",
+          "replace": [
+            [
+              "Н",
+              "Т"
+            ]
+          ]
+        }
+      ],
+      "source": "классика"
     },
     {
       "id": "zabor",
@@ -926,26 +2755,63 @@
       "source": "классика"
     },
     {
-      "id": "soroka",
-      "answer": "СОРОКА",
+      "id": "skripka",
+      "answer": "СКРИПКА",
       "accept": [],
       "level": 3,
-      "hint": "Белобока, трещит и любит блестящее",
+      "hint": "На ней играют смычком",
       "parts": [
         {
           "type": "pic",
-          "emoji": "🧀",
-          "word": "СЫР",
+          "emoji": "📎",
+          "word": "СКРЕПКА",
           "replace": [
             [
-              "Ы",
-              "О"
+              "Е",
+              "И"
             ]
           ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "krot",
+      "answer": "КРОТ",
+      "accept": [],
+      "level": 3,
+      "hint": "Живёт под землёй, роет ходы и плохо видит",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "К"
+        },
+        {
+          "type": "pic",
+          "emoji": "🎂",
+          "word": "ТОРТ",
+          "flip": true,
+          "cutStart": 1
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "kulak",
+      "answer": "КУЛАК",
+      "accept": [],
+      "level": 3,
+      "hint": "Сожмёшь пальцы — получится он",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🧅",
+          "word": "ЛУК",
+          "flip": true
         },
         {
           "type": "letters",
-          "text": "ОКА"
+          "text": "АК"
         }
       ],
       "source": "классика"
@@ -976,21 +2842,76 @@
       "source": "классика"
     },
     {
-      "id": "kulak",
-      "answer": "КУЛАК",
+      "id": "karavay",
+      "answer": "КАРАВАЙ",
       "accept": [],
       "level": 3,
-      "hint": "Сожмёшь пальцы — получится он",
+      "hint": "Пышный хлеб, про него поют на дне рождения",
       "parts": [
         {
           "type": "pic",
-          "emoji": "🧅",
-          "word": "ЛУК",
-          "flip": true
+          "emoji": "🐄",
+          "word": "КОРОВА",
+          "replace": [
+            [
+              "О",
+              "А"
+            ]
+          ]
         },
         {
           "type": "letters",
-          "text": "АК"
+          "text": "Й"
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "kalitka",
+      "answer": "КАЛИТКА",
+      "accept": [],
+      "level": 3,
+      "hint": "Маленькая дверца в заборе",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "К"
+        },
+        {
+          "type": "pic",
+          "emoji": "🐌",
+          "word": "УЛИТКА",
+          "replace": [
+            [
+              "У",
+              "А"
+            ]
+          ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "molotok",
+      "answer": "МОЛОТОК",
+      "accept": [],
+      "level": 3,
+      "hint": "Им забивают гвозди",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🥛",
+          "word": "МОЛОКО",
+          "replace": [
+            [
+              "К",
+              "Т"
+            ]
+          ]
+        },
+        {
+          "type": "letters",
+          "text": "К"
         }
       ],
       "source": "классика"
@@ -1021,45 +2942,130 @@
       "source": "классика"
     },
     {
-      "id": "krysa",
-      "answer": "КРЫСА",
+      "id": "komar",
+      "answer": "КОМАР",
       "accept": [],
       "level": 3,
-      "hint": "Похожа на мышь, только больше и с длинным хвостом",
+      "hint": "Пищит и кусается летом",
       "parts": [
         {
-          "type": "letters",
-          "text": "К"
+          "type": "pic",
+          "emoji": "🔒",
+          "word": "ЗАМОК",
+          "flip": true,
+          "cutEnd": 1
         },
+        {
+          "type": "letters",
+          "text": "Р"
+        }
+      ],
+      "source": "https://infourok.ru/rebusy-zhivotnye-4724534.html"
+    },
+    {
+      "id": "soroka",
+      "answer": "СОРОКА",
+      "accept": [],
+      "level": 3,
+      "hint": "Белобока, трещит и любит блестящее",
+      "parts": [
         {
           "type": "pic",
           "emoji": "🧀",
           "word": "СЫР",
-          "flip": true
+          "replace": [
+            [
+              "Ы",
+              "О"
+            ]
+          ]
         },
         {
           "type": "letters",
-          "text": "А"
+          "text": "О"
+        },
+        {
+          "type": "pic",
+          "emoji": "🗺️",
+          "word": "КАРТА",
+          "cutEnd": 3
         }
       ],
       "source": "классика"
     },
     {
-      "id": "lastik",
-      "answer": "ЛАСТИК",
+      "id": "trava",
+      "answer": "ТРАВА",
       "accept": [],
       "level": 3,
-      "hint": "Им стирают карандаш",
+      "hint": "Зелёная, растёт на лугу, её щиплет коза",
       "parts": [
         {
-          "type": "letters",
-          "text": "ЛАС"
+          "type": "pic",
+          "emoji": "🎺",
+          "word": "ТРУБА",
+          "replace": [
+            [
+              "У",
+              "А"
+            ],
+            [
+              "Б",
+              "В"
+            ]
+          ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "koshka",
+      "answer": "КОШКА",
+      "accept": [],
+      "level": 3,
+      "hint": "Мурлычет и умывается лапкой",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🥄",
+          "word": "ЛОЖКА",
+          "replace": [
+            [
+              "Л",
+              "К"
+            ],
+            [
+              "Ж",
+              "Ш"
+            ]
+          ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "doktor",
+      "answer": "ДОКТОР",
+      "accept": [],
+      "level": 3,
+      "hint": "Лечит детей и слушает, как бьётся сердце",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🏠",
+          "word": "ДОМ",
+          "replace": [
+            [
+              "М",
+              "К"
+            ]
+          ]
         },
         {
           "type": "pic",
-          "emoji": "🐳",
-          "word": "КИТ",
-          "flip": true
+          "emoji": "🎂",
+          "word": "ТОРТ",
+          "cutEnd": 1
         }
       ],
       "source": "классика"
@@ -1090,25 +3096,78 @@
       "source": "классика"
     },
     {
-      "id": "komar",
-      "answer": "КОМАР",
+      "id": "krapiva",
+      "answer": "КРАПИВА",
       "accept": [],
       "level": 3,
-      "hint": "Пищит и кусается летом",
+      "hint": "Жжётся, растёт у забора",
       "parts": [
         {
           "type": "pic",
-          "emoji": "🔒",
-          "word": "ЗАМОК",
+          "emoji": "🦀",
+          "word": "КРАБ",
+          "cutEnd": 1
+        },
+        {
+          "type": "pic",
+          "emoji": "🥧",
+          "word": "ПИРОГ",
+          "cutEnd": 3
+        },
+        {
+          "type": "pic",
+          "emoji": "🎃",
+          "word": "ТЫКВА",
+          "cutStart": 3
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "arbuz",
+      "answer": "АРБУЗ",
+      "accept": [],
+      "level": 3,
+      "hint": "Большая полосатая ягода, внутри красная",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🧣",
+          "word": "ШАРФ",
+          "cutStart": 1,
+          "cutEnd": 1
+        },
+        {
+          "type": "pic",
+          "emoji": "🦷",
+          "word": "ЗУБ",
+          "flip": true
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "veslo",
+      "answer": "ВЕСЛО",
+      "accept": [],
+      "level": 3,
+      "hint": "Им гребут в лодке",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🦁",
+          "word": "ЛЕВ",
           "flip": true,
           "cutEnd": 1
         },
         {
-          "type": "letters",
-          "text": "Р"
+          "type": "pic",
+          "emoji": "🐘",
+          "word": "СЛОН",
+          "cutEnd": 1
         }
       ],
-      "source": "https://infourok.ru/rebusy-zhivotnye-4724534.html"
+      "source": "классика"
     }
   ]
 }
