@@ -295,6 +295,19 @@ h1[tabindex="-1"]:focus { outline: none; }
   .tile { font-size: 38px; border-radius: 26px; }
 }
 .home-foot { text-align: center; margin-top: 36px; }
+.about-card {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 8px 24px 20px;
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  font-size: 18px;
+  line-height: 1.5;
+}
+.about-card h2 { margin: 20px 0 6px; font-size: 22px; font-weight: 900; }
+.about-card p { margin: 0 0 10px; }
+.about-card a { color: var(--sky-ink); font-weight: 800; }
 .lic-link { display: inline-block; margin-top: 18px; padding: 8px; font-size: 13px; color: var(--ink-soft); }
 .hold { display: flex; flex-direction: column; align-items: center; gap: 6px; }
 .reset {

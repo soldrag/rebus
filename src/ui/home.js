@@ -62,8 +62,8 @@ export function renderHome(app, data, signal) {
   }, signal);
   const all = el('a', 'all-link', 'Все ребусы по номерам');
   all.href = '#/all';
-  const lic = el('a', 'lic-link', 'Лицензии');
-  lic.href = 'licenses.txt';
+  const lic = el('a', 'lic-link', 'О приложении');
+  lic.href = '#/about';
   add(app, add(el('footer', 'home-foot'), installBlock(signal), all, reset, lic));
 }
 
