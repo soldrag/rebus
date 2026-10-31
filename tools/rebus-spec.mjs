@@ -11,7 +11,7 @@
 //      (когда его нет) ведёт себя как раньше.
 //   3. Каждый новый вид — с образцом в tools/spec-fixtures.json.
 //   4. Неизвестный вид узла не роняет проверку: замысел помечается «нужен обработчик».
-import { normalize, keepYo } from '../src/rebus-core.js';
+import { normalize, keepYo, partLetters, innerPart } from '../src/rebus-core.js';
 
 export const SCHEMA_VERSION = 1;
 
@@ -225,7 +225,7 @@ export function setTricks(r) {
       if (sig) out.push(`${p.type}:${normalize(p.word)}[${sig}]`);
     }
     if (p.type === 'initials') out.push('initials:' + (p.items || []).map((it) => normalize(it.word)).join('+'));
-    if (p.type === 'position') out.push(`rel:${normalize(p.prep)}(${normalize(p.inner)}|${normalize(p.outer)})`);
+    if (p.type === 'position') out.push(`rel:${normalize(p.prep)}(${innerPart(p) ? partLetters(innerPart(p)) : normalize(p.inner)}|${normalize(p.outer)})`);
   }
   return out;
 }

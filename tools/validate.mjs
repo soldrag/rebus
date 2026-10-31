@@ -3,6 +3,7 @@
 import fs from 'node:fs';
 import { confusables } from './spelling.mjs';
 import { diversity, spread } from './diversity.mjs';
+import { picKey } from '../src/rebus-core.js';
 import { chunkStages, formatProblems, LEGEND_PICTURES, LEGEND_WORDS, normalize, pictures, rebusList, techniques } from '../src/rebus-core.js';
 
 
@@ -52,7 +53,7 @@ for (const r of rebuses) {
 
   if (r.parts.some((p) => p && p.type === 'position' && normalize(p.inner).length > 3)) should(r, 'positionInner', 'внутренних букв в позиции обычно не больше трёх — мелкие не читаются');
   for (const p of pictures(r)) {
-    const key = `${p.emoji} ${normalize(p.word)}`;
+    const key = picKey(p);
     pics.set(key, (pics.get(key) || 0) + 1);
   }
   // Другие слова, похожие на ответ на слух, не должны считаться ошибкой в ответе (tools/spelling.mjs).
@@ -74,15 +75,13 @@ for (const p of JSON.parse(fs.readFileSync(registryFile, 'utf8')).pictures) {
   }
 }
 const registry = new Map(
-  JSON.parse(fs.readFileSync(registryFile, 'utf8')).pictures.map((p) => [`${p.emoji} ${normalize(p.word)}`, p]),
+  JSON.parse(fs.readFileSync(registryFile, 'utf8')).pictures.map((p) => [picKey(p), p]),
 );
 for (const r of rebuses) {
-  for (const part of (r && r.parts) || []) {
-    if (!part) continue;
-    const uses = part.type === 'pic' ? [{ ...part, asInitial: false }]
-      : part.type === 'initials' ? (part.items || []).map((it) => ({ ...it, asInitial: true })) : [];
+  {
+    const uses = pictures(r).map((u) => ({ ...u, asInitial: !!u.inInitials }));
     for (const u of uses) {
-      const key = `${u.emoji} ${normalize(u.word)}`;
+      const key = picKey(u);
       const reg = registry.get(key);
       if (!reg) { problems.push(`${r.id}: картинки ${key} нет в реестре data/pictures.json`); continue; }
       if (reg.banned) { problems.push(`${r.id}: картинка ${key} запрещена — ${reg.note || 'см. реестр'}`); continue; }
@@ -118,12 +117,12 @@ for (const r of rebuses) {
 
 // Одна операция на картинку (переворот с запятыми — только на уровне 3).
 for (const r of rebuses) {
-  for (const p of (r && r.parts) || []) {
-    if (!p || p.type !== 'pic') continue;
+  for (const p of pictures(r)) {
+    if (p.inInitials) continue;
     const ops = ['flip', 'replace', 'replaceAt', 'remove', 'pick'].filter((k) => p[k] && (p[k] === true || p[k].length));
     if (p.cutStart || p.cutEnd) ops.push('cut');
     const flipCut = ops.length === 2 && ops.includes('flip') && ops.includes('cut') && r.level === 3;
-    if (ops.length > 1 && !flipCut) warnings.push(`${r.id}: на картинке ${p.emoji} несколько операций (${ops.join(', ')})`);
+    if (ops.length > 1 && !flipCut) warnings.push(`${r.id}: на картинке ${p.emoji || p.image} несколько операций (${ops.join(', ')})`);
   }
 }
 

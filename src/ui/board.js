@@ -1,5 +1,5 @@
 // Картинка ребуса, раскладка под размер экрана, разбор решения.
-import { partLetters, normalize, keepYo, POSITIONS } from '../rebus-core.js';
+import { partLetters, normalize, keepYo, POSITIONS, innerPart } from '../rebus-core.js';
 export { techniques } from '../rebus-core.js';
 import { el, add, plural } from './dom.js';
 
@@ -37,9 +37,19 @@ function commas(n, side) {
   return box;
 }
 
-export function picEmoji(emoji, flip) {
+// Картинка: эмодзи или своя иллюстрация (src — путь в public/, docs/ILLUSTRATIONS.md).
+export function picEmoji(emoji, flip, image) {
   const wrap = el('span', 'emoji-wrap');
-  const em = el('span', 'emoji' + (flip ? ' flip' : ''), emoji);
+  let em;
+  if (image) {
+    em = el('img', 'emoji emoji-img' + (flip ? ' flip' : ''));
+    em.src = './' + image;
+    em.alt = '';
+    em.decoding = 'async';
+    em.draggable = false;
+  } else {
+    em = el('span', 'emoji' + (flip ? ' flip' : ''), emoji);
+  }
   em.setAttribute('role', 'img');
   em.setAttribute('aria-label', 'картинка' + (flip ? ' вверх ногами' : ''));
   add(wrap, em);
@@ -86,7 +96,7 @@ function renderPic(p) {
     num.setAttribute('aria-label', 'число ' + p.value);
     add(row, num);
   } else {
-    add(row, picEmoji(p.emoji, p.flip));
+    add(row, picEmoji(p.emoji, p.flip, p.image));
   }
   if (p.cutEnd) add(row, commas(p.cutEnd, 'r'));
   const bottom = el('div', 'part-bottom');
@@ -113,7 +123,7 @@ function renderInitials(p) {
   mark.setAttribute('aria-label', 'по первым буквам');
   add(top, mark);
   const row = el('div', 'pic-row initials-row');
-  for (const it of p.items) add(row, picEmoji(it.emoji, false));
+  for (const it of p.items) add(row, picEmoji(it.emoji, false, it.image));
   return add(box, top, row, el('div', 'part-bottom'));
 }
 
@@ -125,9 +135,13 @@ function renderPosition(p, seed) {
   const box = el('div', 'part text position ' + prep.tech);
   const color = () => 'c' + (seed.n++ % LETTER_COLORS);
   const outer = el('span', 'pos-outer ' + color(), show(p.outer));
-  const inner = el('span', 'pos-inner ' + color(), show(p.inner));
+  // Внутри может быть не только буквы, но и картинка (🧀 в Е) или первые буквы.
+  const part = innerPart(p);
+  const inner = part ? renderPart(part, seed) : el('span', 'pos-inner ' + color(), show(p.inner));
+  if (part) inner.classList.add('pos-inner', 'pos-part');
   const stack = el('span', 'pos-stack');
-  stack.setAttribute('aria-label', show(p.inner) + ' ' + prep.inside + ' ' + show(p.outer));
+  stack.setAttribute('aria-label', (part ? 'картинка' : show(p.inner)) + ' ' + prep.inside + ' ' + show(p.outer));
+  if (part) box.classList.add('with-pic');
   if (INNER_FIRST.includes(prep.tech)) add(stack, inner, outer);
   else add(stack, outer, inner);
   return add(box, el('div', 'part-top'), add(el('div', 'letters-row'), stack), el('div', 'part-bottom'));
@@ -217,7 +231,8 @@ export function renderBoard(rebus, signal) {
   const board = el('div', 'board');
   const inner = el('div', 'board-inner');
   const hasTop = rebus.parts.some((p) => (p.replace && p.replace.length) || (p.replaceAt && p.replaceAt.length) || p.pick || p.type === 'initials');
-  const hasBottom = rebus.parts.some((p) => p.remove && p.remove.length);
+  // Зачёркнутая буква у картинки под буквой («🐝 под Н») тоже нуждается в месте снизу.
+  const hasBottom = rebus.parts.some((p) => (p.remove && p.remove.length) || (p.type === 'position' && innerPart(p) && (innerPart(p).remove || []).length && normalize(p.prep) !== 'В'));
   if (!hasTop) inner.classList.add('no-top');
   if (!hasBottom) inner.classList.add('no-bottom');
   const parts = rebus.parts.map((p) => renderPart(p, seed));
@@ -257,6 +272,18 @@ function without(n, where) {
   return 'без ' + n + ' ' + plural(n, 'буквы', 'букв', 'букв') + ' ' + where;
 }
 
+// Что даёт картинка внутри позиции: «СЫР без Р → СЫ».
+function partNote(p) {
+  if (p.type === 'initials') return p.items.map((it) => show(it.word)).join(', ') + ' — первые буквы';
+  const ops = [];
+  for (const [from, to] of p.replace || []) ops.push(show(from) + ' = ' + show(to));
+  for (const [n, to] of p.replaceAt || []) ops.push(n + '-ю букву на ' + show(to));
+  for (const ch of p.remove || []) ops.push('без ' + show(ch));
+  if (p.cutStart) ops.push(without(p.cutStart, 'в начале'));
+  if (p.cutEnd) ops.push(without(p.cutEnd, 'в конце'));
+  return show(p.word) + (ops.length ? ' ' + ops.join(', ') : '') + ' → ' + partLetters(p, keepYo);
+}
+
 function explainPart(p) {
   const li = el('li', 'step');
   const what = el('span', 'step-what');
@@ -271,11 +298,17 @@ function explainPart(p) {
   } else if (p.type === 'position') {
     const prep = normalize(p.prep);
     const info = POSITIONS[prep] || POSITIONS['В'];
+    const part = innerPart(p);
     pic = el('span', 'step-pic step-chip', prep);
-    add(what, el('b', 'step-word', show(p.inner) + ' ' + info.say + ' ' + show(p.outer)),
-      el('span', 'step-notes', p.prepFirst ? 'слово «' + prep + '» ставим в начало' : 'между буквами слово «' + prep + '»'));
+    // Картинка внутри: «СЫ (СЫР без Р) в Е».
+    const innerText = part ? partLetters(part, keepYo) : show(p.inner);
+    const notes = [p.prepFirst ? 'слово «' + prep + '» ставим в начало' : 'между буквами слово «' + prep + '»'];
+    if (part) notes.unshift(partNote(part));
+    add(what, el('b', 'step-word', innerText + ' ' + info.say + ' ' + show(p.outer)),
+      el('span', 'step-notes', notes.join('; ')));
   } else {
-    pic = el('span', 'step-pic' + (p.flip ? ' flip' : '') + (p.type === 'number' ? ' step-num' : ''), p.type === 'number' ? String(p.value) : p.emoji);
+    pic = el('span', 'step-pic' + (p.flip ? ' flip' : '') + (p.type === 'number' ? ' step-num' : ''), p.type === 'number' ? String(p.value) : (p.emoji || ''));
+    if (p.image) { const img = el('img', 'step-img'); img.src = './' + p.image; img.alt = ''; add(pic, img); }
     add(what, el('b', 'step-word', show(p.word)));
     const notes = [];
     if (p.flip) notes.push('читаем наоборот');

@@ -57,13 +57,23 @@ export function chunkStages(items) {
   return out;
 }
 
-// Все картинки ребуса (в том числе внутри «первых букв»): [{ emoji, word }].
+// Внутренняя часть позиции: строка — это буквы, объект — часть ребуса (картинка, первые буквы).
+// «🧀 без Р в Е» = В-Е-СЫ: { type: 'position', prep: 'В', outer: 'Е', inner: { type: 'pic', … }, prepFirst: true }.
+export const innerPart = (part) => (part && part.inner && typeof part.inner === 'object' ? part.inner : null);
+
+// Картинка: эмодзи или своя иллюстрация (image — путь в public/, одобряет дизайнер).
+export const picKey = (p) => `${p.emoji || p.image} ${normalize(p.word)}`;
+
+// Все картинки ребуса (в том числе в «первых буквах» и внутри позиции): [{ emoji, image, word, … }].
 export function pictures(rebus) {
   const out = [];
-  for (const p of rebus.parts || []) {
-    if (p && p.type === 'pic') out.push({ emoji: p.emoji, word: p.word });
-    if (p && p.type === 'initials') (p.items || []).forEach((it) => out.push({ emoji: it.emoji, word: it.word }));
-  }
+  const visit = (p) => {
+    if (!p) return;
+    if (p.type === 'pic') out.push(p);
+    if (p.type === 'initials') (p.items || []).forEach((it) => out.push({ ...it, inInitials: true }));
+    if (p.type === 'position') visit(innerPart(p));
+  };
+  (rebus.parts || []).forEach(visit);
   return out;
 }
 
@@ -77,7 +87,8 @@ export function partLetters(part, norm = normalize) {
     case 'initials': // первые буквы картинок
       return (part.items || []).map((it) => norm(it.word).charAt(0)).join('');
     case 'position': { // «ДА в О» = В-О-ДА, «СО в А» = СО-В-А, «ПА на МА» = ПА-НА-МА, «К у Б» = К-У-Б, «ОВА под К» = ПОД-К-ОВА
-      const prep = norm(part.prep), outer = norm(part.outer), inner = norm(part.inner);
+      const prep = norm(part.prep), outer = norm(part.outer);
+      const inner = innerPart(part) ? partLetters(innerPart(part), norm) : norm(part.inner);
       return part.prepFirst ? prep + outer + inner : inner + prep + outer;
     }
     default:
@@ -210,14 +221,20 @@ function partProblems(part) {
       break;
     case 'initials':
       if (!Array.isArray(part.items) || part.items.length < 2) p.push('нужно хотя бы 2 картинки в items');
-      else if (part.items.some((it) => !it || !it.emoji || !normalize(it.word))) p.push('у картинки в items нет emoji или word');
+      else if (part.items.some((it) => !it || !(it.emoji || it.image) || !normalize(it.word))) p.push('у картинки в items нет emoji/image или word');
       break;
-    case 'position':
+    case 'position': {
       if (!PREPOSITIONS.includes(normalize(part.prep))) p.push('prep должен быть ' + PREPOSITIONS.join(', '));
-      if (!normalize(part.outer) || !normalize(part.inner)) p.push('нет outer или inner');
+      const inner = innerPart(part);
+      if (inner) {
+        if (!['pic', 'initials'].includes(inner.type)) p.push('inner — буквы, картинка или первые буквы');
+        else partProblems(inner).forEach((x) => p.push('inner: ' + x));
+      }
+      if (!normalize(part.outer) || (!inner && !normalize(part.inner))) p.push('нет outer или inner');
       if (['ПОД', 'ЗА'].includes(normalize(part.prep)) && !part.prepFirst) p.push('«' + normalize(part.prep) + '» читается в начале слова: нужен prepFirst');
       if (normalize(part.prep) === 'У' && part.prepFirst) p.push('«У» читается между буквами: prepFirst не нужен');
       break;
+    }
     case 'number':
       if (!/^\d+$/.test(String(part.value || ''))) p.push('value должно быть числом');
       if (readsAsLetters(part.value)) {
@@ -229,7 +246,7 @@ function partProblems(part) {
       if (part.flip || part.pick || part.replace || part.replaceAt || part.remove) p.push('у числа можно только запятые');
       break;
     default: // pic
-      if (!part.emoji || !len) p.push('нет emoji или word');
+      if (!(part.emoji || part.image) || !len) p.push('нет emoji/image или word');
       if (part.pick) {
         if (part.cutStart || part.cutEnd) p.push('pick нельзя вместе с запятыми');
         if (!Array.isArray(part.pick) || !part.pick.length || part.pick.some((n) => !Number.isInteger(n) || n < 1 || n > len)) p.push('pick — номера букв слова');
@@ -270,7 +287,9 @@ export function formatProblems(r) {
 // Приёмы записи в ребусе — для легенды, чередования и статистики.
 export function techniques(rebus) {
   const t = new Set();
-  for (const p of rebus.parts || []) {
+  const parts = [];
+  (rebus.parts || []).forEach((p) => { parts.push(p); if (p.type === 'position' && innerPart(p)) parts.push(innerPart(p)); });
+  for (const p of parts) {
     if (p.type === 'initials') t.add('initials');
     else if (p.type === 'position') t.add((POSITIONS[normalize(p.prep)] || POSITIONS['В']).tech);
     else if (p.type === 'number') { t.add('number'); if (p.cutStart || p.cutEnd) t.add('comma'); }

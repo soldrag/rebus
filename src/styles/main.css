@@ -691,6 +691,28 @@ h1[tabindex="-1"]:focus { outline: none; }
   margin-left: calc(var(--el) * -.2);
   transform: translateY(calc(var(--el) * -.1));
 }
+/* Своя иллюстрация вместо эмодзи: тот же размер и та же тень (docs/ILLUSTRATIONS.md). */
+.emoji-img { width: var(--e); height: calc(var(--e) * 1.12); object-fit: contain; font-size: inherit; }
+.step-img { width: 44px; height: 44px; object-fit: contain; vertical-align: middle; }
+
+/* Картинка в позиции («🧀 в Е», «🎪 у ЛЬ», «🐝 под Н»): своя часть ребуса уменьшенного размера. */
+.position.with-pic .pos-part { --e: calc(var(--el) * .45); display: inline-flex; flex-direction: column; align-items: center; line-height: 1; }
+.position.with-pic .pos-part .pic-row { height: auto; }
+.position.with-pic .pos-part .part-top:empty, .position.with-pic .pos-part .part-bottom:empty { display: none; }
+/* «В»: большая буква, маленькая картинка в её просвете — буква должна остаться узнаваемой. */
+.position.in.with-pic .pos-outer { font-size: calc(var(--el) * 1.7); }
+.position.in.with-pic .pos-part {
+  --e: calc(var(--el) * .32);
+  position: absolute; left: 50%; top: 52%; transform: translate(-50%, -50%);
+  padding: calc(var(--el) * .015);
+  background: rgba(255, 255, 255, .85);
+  border-radius: calc(var(--el) * .08);
+}
+.position.in.with-pic .pos-part .struck { font-size: calc(var(--e) * .5); }
+.position.near.with-pic .pos-part { --e: calc(var(--el) * .55); }
+.position.under.with-pic .pos-part, .position.on.with-pic .pos-part { --e: calc(var(--el) * .42); }
+.position.behind.with-pic .pos-outer { font-size: calc(var(--el) * 1.05); }
+.position.behind.with-pic .pos-part { --e: calc(var(--el) * .55); margin-left: calc(var(--el) * -.18); transform: translateY(calc(var(--el) * -.15)); }
 .step-num { font-size: 24px; font-weight: 900; color: var(--sky-ink); font-family: var(--font); }
 .step-multi { font-size: 20px; word-break: break-all; }
 .step-word.step-wrap { white-space: normal; }
