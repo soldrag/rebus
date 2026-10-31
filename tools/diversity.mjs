@@ -6,7 +6,7 @@
 //   node tools/diversity.mjs --strict [--only=set|proposals]   — код выхода 1 при превышении (для хука)
 import fs from 'node:fs';
 import { techniques } from '../src/rebus-core.js';
-import { specTechniques } from './rebus-spec.mjs';
+import { specTechniques, solveSpec } from './rebus-spec.mjs';
 
 export const SHARE_FACTOR = 2;
 export const MIN_ITEMS = 10; // на меньших уровнях проценты ничего не значат

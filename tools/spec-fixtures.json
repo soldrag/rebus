@@ -1,0 +1,17 @@
+{
+  "about": "Образцы схемы замыслов: каждый обязан решаться в свой ответ при любом расширении схемы (npm run proposals). Добавляя вид узла, операцию или отношение — добавьте образец. Существующие не менять.",
+  "fixtures": [
+    { "answer": "КИТЫ", "techniques": ["plain"], "parts": [{ "pic": "КИТ", "look": "кит" }, { "letters": "Ы" }] },
+    { "answer": "КЛЮ", "techniques": ["comma"], "parts": [{ "pic": "КЛЮЧ", "look": "ключ", "cutEnd": 1 }] },
+    { "answer": "ТРОТ", "techniques": ["flip"], "parts": [{ "pic": "ТОРТ", "look": "торт", "flip": true }] },
+    { "answer": "СЫН", "techniques": ["replace"], "parts": [{ "pic": "СЫР", "look": "сыр", "replace": [["Р", "Н"]] }] },
+    { "answer": "СОР", "techniques": ["replaceAt"], "parts": [{ "pic": "СЫР", "look": "сыр", "replaceAt": [[2, "О"]] }] },
+    { "answer": "ТОТ", "techniques": ["remove"], "parts": [{ "pic": "ТОРТ", "look": "торт", "remove": ["Р"] }] },
+    { "answer": "ЛИС", "techniques": ["pick"], "parts": [{ "pic": "ЛИСА", "look": "лиса", "pick": [1, 2, 3] }] },
+    { "answer": "СТОЛБ", "techniques": ["number"], "parts": [{ "number": "100", "word": "СТО" }, { "letters": "ЛБ" }] },
+    { "answer": "КУБ", "techniques": ["initials"], "parts": [{ "initials": [{ "pic": "КЕНГУРУ", "look": "к" }, { "pic": "УТКА", "look": "у" }, { "pic": "БЕГЕМОТ", "look": "б" }] }] },
+    { "answer": "ВОРОТА", "techniques": ["pic-in-rel", "rel:В"], "parts": [{ "rel": "В", "a": { "pic": "РОТ", "look": "рот" }, "b": { "letters": "О" }, "read": ["rel", "b", "a"] }, { "letters": "А" }] },
+    { "answer": "ЗУБ", "techniques": ["rel:У"], "parts": [{ "rel": "У", "a": { "letters": "З" }, "b": { "letters": "Б" }, "read": ["a", "rel", "b"] }] },
+    { "answer": "ВОДАКИТ", "techniques": ["rel:В"], "parts": [{ "seq": [{ "rel": "В", "a": { "letters": "ДА" }, "b": { "letters": "О" }, "read": ["rel", "b", "a"] }, { "letters": "КИТ" }] }] }
+  ]
+}
