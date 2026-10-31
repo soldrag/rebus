@@ -68,12 +68,13 @@ function readSet(ref) {
   } catch { return null; }
 }
 
-function readProposals() {
+function readProposals(setIds = new Set()) {
   const dir = new URL('../data/proposals/', import.meta.url);
   if (!fs.existsSync(dir)) return [];
   return fs.readdirSync(dir).filter((f) => f.endsWith('.json'))
     .flatMap((f) => { try { return JSON.parse(fs.readFileSync(new URL(f, dir), 'utf8')).proposals || []; } catch { return []; } })
-    .filter((r) => r && solveSpec(r) !== null); // ждущие обработчика не считаем
+    .filter((r) => r && solveSpec(r) !== null) // ждущие обработчика не считаем
+    .filter((r) => !setIds.has(r.id)); // уже перенесённые в набор — считаются в наборе
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
@@ -81,7 +82,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   // --only=set | --only=proposals — что проверять (хук проверяет только то, что правили).
   const only = (process.argv.find((a) => a.startsWith('--only=')) || '').slice(7);
   const set = readSet();
-  const proposals = readProposals();
+  const proposals = readProposals(new Set(set.map((r) => r.id)));
   const out = [];
   let bad = 0;
   for (const l of [1, 2, 3]) {

@@ -11,13 +11,14 @@ const list = files.length ? files : fs.readdirSync(dir).filter((f) => f.endsWith
 const existing = JSON.parse(fs.readFileSync(new URL('../public/data/rebuses.json', import.meta.url), 'utf8')).rebuses;
 // Частотность слов-ответов (набор + замыслы выше по списку): одно слово можно загадать
 // разными ребусами, лишь бы не было пиков (tools/diversity.mjs, spread).
+const existingIds = new Set(existing.map((r) => r.id));
 const words = existing.map((r) => normalize(r.answer));
 // Ходы набора и уже записанных замыслов: повтор хода — повтор идеи (ошибка).
 const tricks = new Map();
 existing.forEach((r) => setTricks(r).forEach((t) => tricks.set(t, `набор: ${r.id}`)));
 const skeletons = new Map();
 
-let problems = 0, total = 0, pending = 0;
+let problems = 0, total = 0, pending = 0, transferred = 0;
 // Образцы схемы: расширение схемы не должно ломать то, что уже решалось.
 const fixtures = JSON.parse(fs.readFileSync(new URL('./spec-fixtures.json', import.meta.url), 'utf8')).fixtures;
 for (const f of fixtures) {
@@ -71,6 +72,8 @@ function contentProblems(r, a) {
 for (const f of list) {
   const json = JSON.parse(fs.readFileSync(f, 'utf8'));
   for (const r of json.proposals || []) {
+    // Уже перенесён в набор (tools/transfer.mjs) — это не замысел, а ребус набора.
+    if (r && existingIds.has(r.id)) { transferred++; continue; }
     total++;
     let p = specProblems(r, { legend: LEGEND_WORDS });
     // Новый вид узла, которого схема ещё не знает, — не ошибка: замысел ждёт обработчика.
@@ -103,7 +106,7 @@ for (const f of list) {
 // Разнообразие: набор расширяем, а не переделываем — приёмы, перекошенные в будущем наборе
 // (текущий + замыслы), на паузе; замысел с таким приёмом — ошибка (tools/diversity.mjs).
 const all = list.flatMap((f) => JSON.parse(fs.readFileSync(f, 'utf8')).proposals || [])
-  .filter((r) => r && solveSpec(r) !== null);
+  .filter((r) => r && !existingIds.has(r.id) && solveSpec(r) !== null);
 for (const l of [1, 2, 3]) {
   const pr = all.filter((r) => r.level === l);
   if (!pr.length) continue;
@@ -120,7 +123,7 @@ for (const l of [1, 2, 3]) {
   if (fresh.length) console.log(`новые слова: ${fresh.length - rep}, повторы слов набора: ${rep} — ориентир на новые слова`); }
 { const sp = spread(words); if (sp.peaks.length) console.log('пики частотности слов:', sp.peaks.map(([w, n]) => `${w} ×${n}`).join(', ')); }
 accepted.forEach((x) => console.log('~ исключение:', x));
-console.log(`замыслов: ${total}, проблем: ${problems}${warns ? `, предупреждений: ${warns}` : ''}${pending ? `, ждут обработчика: ${pending}` : ''}`);
+console.log(`замыслов: ${total}${transferred ? ` (ещё ${transferred} уже в наборе)` : ''}, проблем: ${problems}${warns ? `, предупреждений: ${warns}` : ''}${pending ? `, ждут обработчика: ${pending}` : ''}`);
 if (process.argv.includes('--stats')) {
   console.log('приёмы:', Object.entries(tech).sort().map(([k, n]) => `${k} ×${n}`).join(', '));
   console.log('картинки для дизайнера:', [...pics].map(([w, l]) => `${w} (${l})`).join('; '));
