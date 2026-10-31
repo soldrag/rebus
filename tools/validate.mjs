@@ -14,6 +14,15 @@ const MAX_PIC_USES = Math.max(4, Math.ceil(rebuses.length / 40));
 
 const problems = [];
 const warnings = [];
+// Правила трёх видов (docs/REBUSES.md, «Как устроены правила»):
+//   «нельзя» — problems; «обычно» — should(): нарушение — ошибка, если в ребусе нет
+//   exceptions: { <правило>: "почему здесь можно" }; статистика — warnings.
+const accepted = [];
+function should(r, rule, msg) {
+  const why = r && r.exceptions && typeof r.exceptions[rule] === 'string' && r.exceptions[rule].trim();
+  if (why) accepted.push(`${r.id}: ${rule} — ${why}`);
+  else problems.push(`${(r && r.id) || '?'}: ${msg} [правило ${rule}; можно отступить через exceptions.${rule} с причиной]`);
+}
 if (!rebuses.length) problems.push('в файле нет ни одного ребуса');
 const ids = new Set();
 const answers = new Map(); // слово → сколько раз загадано
@@ -39,8 +48,9 @@ for (const r of rebuses) {
   const written = r.parts.filter((p) => p && p.type === 'letters').reduce((n, p) => n + normalize(p.text).length, 0);
   if (a && written / a.length > 0.5) warnings.push(`${name}: буквами написано ${written} из ${a.length}`);
   // В коротком слове (3–5 букв) — одна написанная буква, на уровне 1 можно две.
-  if (a && a.length <= 5 && written > (r.level === 1 ? 2 : 1)) problems.push(`${name}: в слове из ${a.length} букв написано ${written} — для уровня ${r.level} много`);
+  if (a && a.length <= 5 && written > (r.level === 1 ? 2 : 1)) should(r, 'shortLetters', `в слове из ${a.length} букв написано ${written} — для уровня ${r.level} много`);
 
+  if (r.parts.some((p) => p && p.type === 'position' && normalize(p.inner).length > 3)) should(r, 'positionInner', 'внутренних букв в позиции обычно не больше трёх — мелкие не читаются');
   for (const p of pictures(r)) {
     const key = `${p.emoji} ${normalize(p.word)}`;
     pics.set(key, (pics.get(key) || 0) + 1);
@@ -76,7 +86,7 @@ for (const r of rebuses) {
       const reg = registry.get(key);
       if (!reg) { problems.push(`${r.id}: картинки ${key} нет в реестре data/pictures.json`); continue; }
       if (reg.banned) { problems.push(`${r.id}: картинка ${key} запрещена — ${reg.note || 'см. реестр'}`); continue; }
-      if (r.level < (reg.minLevel || 1)) problems.push(`${r.id}: картинка ${key} — только с уровня ${reg.minLevel}`);
+      if (r.level < (reg.minLevel || 1)) should(r, 'pictureLevel', `картинка ${key} — обычно с уровня ${reg.minLevel}`);
       if (u.asInitial && reg.initials === false) problems.push(`${r.id}: картинку ${key} нельзя в первые буквы — ${reg.note || ''}`);
       if (!u.asInitial && reg.picture === false) problems.push(`${r.id}: картинку ${key} можно только в первые буквы — ${reg.note || ''}`);
       if (!u.asInitial && u.flip && !reg.flip) problems.push(`${r.id}: картинку ${key} нельзя переворачивать — ${reg.note || ''}`);
@@ -102,7 +112,7 @@ for (const p of LEGEND_PICTURES) {
 // Уровень 1: число только целиком — без запятых (иначе это две операции для пятилетки).
 for (const r of rebuses) {
   if (r && r.level === 1 && (r.parts || []).some((p) => p && p.type === 'number' && (p.cutStart || p.cutEnd))) {
-    problems.push(`${r.id}: на уровне 1 число берём целиком, без запятых`);
+    should(r, 'level1NumberComma', 'на уровне 1 число обычно берём целиком, без запятых');
   }
 }
 
@@ -180,6 +190,7 @@ for (const [key, n] of pics) {
   if (n > MAX_PIC_USES) problems.push(`картинка ${key} используется ${n} раз (максимум ${MAX_PIC_USES})`);
 }
 
+accepted.forEach((x) => console.log('~ исключение:', x));
 warnings.forEach((w) => console.log('!', w));
 problems.forEach((p) => console.log('✗', p));
 console.log(`${rebuses.length} ребусов, проблем: ${problems.length}, предупреждений: ${warnings.length}`);

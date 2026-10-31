@@ -29,6 +29,15 @@ const pics = new Map();
 const tech = {};
 let warns = 0;
 
+// «Обычно»-правила: нарушение — ошибка, если в замысле нет exceptions.<правило> с причиной
+// (docs/REBUSES.md, «Как устроены правила»).
+const accepted = [];
+function should(r, p, rule, msg) {
+  const why = r.exceptions && typeof r.exceptions[rule] === 'string' && r.exceptions[rule].trim();
+  if (why) accepted.push(`${r.id}: ${rule} — ${why}`);
+  else p.push(`${msg} [правило ${rule}; можно отступить через exceptions.${rule} с причиной]`);
+}
+
 // Содержательные правила, которые можно проверить механически (выводы редактора, data/proposals/REVIEW.md).
 const allAnswers = () => new Set(words);
 function contentProblems(r, a) {
@@ -36,7 +45,7 @@ function contentProblems(r, a) {
   const others = [...allAnswers()].filter((w) => w !== a && w.length >= 3);
   // Ответ встраивает другой ответ набора или замыслов (КОСА ← ОСА).
   const inside = others.filter((w) => a.includes(w));
-  if (inside.length) p.push(`ответ встраивает другой ответ: ${inside.join(', ')}`);
+  if (inside.length) should(r, p, 'embedded', `ответ встраивает другой ответ: ${inside.join(', ')}`);
   const walkPics = [];
   const visit = (n) => {
     if (!n || typeof n !== 'object') return;
@@ -52,7 +61,7 @@ function contentProblems(r, a) {
     // скорее всего однокоренное. Буква спереди (Ч + ЁЛКА, Г + РОЗА) даёт другое слово — это можно.
     if (!pic.inInitials && plain && a.startsWith(w) && a.length > w.length) { console.log(`! ${r.id}: ответ начинается со слова картинки ${w} — не однокоренное ли? (решает редактор)`); warns++; }
     // В описании картинки — только предмет: операции, буквы и цифры рисует приложение (docs/ILLUSTRATIONS.md).
-    if (/зач[её]рк|вверх ногами|перев[её]рн|перевернут|цифр|букв|[=↺]/i.test(pic.look || '')) p.push(`look картинки ${w}: описывайте только предмет — операции, буквы и цифры рисует приложение`);
+    if (/зач[её]рк|вверх ногами|перев[её]рн|перевернут|цифр|букв|[=↺]/i.test(pic.look || '')) { console.log(`! ${r.id}: look картинки ${w} — описывайте только предмет: операции, буквы и цифры рисует приложение`); warns++; }
     // Зеркальная пара: картинкой стоит ответ набора или замыслов — предупреждение (развести по этапам).
     if (others.includes(w)) { console.log(`! ${r.id}: картинка ${w} — это ответ другого ребуса (зеркальная пара, развести по этапам)`); warns++; }
     if (/на фоне|\bфон|на воде|рядом с/i.test(pic.look || '')) { console.log(`! ${r.id}: look картинки ${w} — один предмет без фона и соседей`); warns++; }
@@ -110,6 +119,7 @@ for (const l of [1, 2, 3]) {
   const rep = fresh.filter((w) => known.has(w)).length;
   if (fresh.length) console.log(`новые слова: ${fresh.length - rep}, повторы слов набора: ${rep} — ориентир на новые слова`); }
 { const sp = spread(words); if (sp.peaks.length) console.log('пики частотности слов:', sp.peaks.map(([w, n]) => `${w} ×${n}`).join(', ')); }
+accepted.forEach((x) => console.log('~ исключение:', x));
 console.log(`замыслов: ${total}, проблем: ${problems}${warns ? `, предупреждений: ${warns}` : ''}${pending ? `, ждут обработчика: ${pending}` : ''}`);
 if (process.argv.includes('--stats')) {
   console.log('приёмы:', Object.entries(tech).sort().map(([k, n]) => `${k} ×${n}`).join(', '));

@@ -215,7 +215,6 @@ function partProblems(part) {
     case 'position':
       if (!PREPOSITIONS.includes(normalize(part.prep))) p.push('prep должен быть ' + PREPOSITIONS.join(', '));
       if (!normalize(part.outer) || !normalize(part.inner)) p.push('нет outer или inner');
-      else if (normalize(part.inner).length > 3) p.push('внутренних букв не больше трёх');
       if (['ПОД', 'ЗА'].includes(normalize(part.prep)) && !part.prepFirst) p.push('«' + normalize(part.prep) + '» читается в начале слова: нужен prepFirst');
       if (normalize(part.prep) === 'У' && part.prepFirst) p.push('«У» читается между буквами: prepFirst не нужен');
       break;
