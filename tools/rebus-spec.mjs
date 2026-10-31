@@ -189,6 +189,9 @@ export function specProblems(r, { legend = [] } = {}) {
   if (got !== a) p.push(`ответ ${r.answer}, а по замыслу выходит ${got}`);
   else if (solveSpec(r, keepYo) !== keepYo(r.answer)) p.push(`Ё/Е: ответ ${keepYo(r.answer)}, а выходит ${solveSpec(r, keepYo)}`);
   if (legend.includes(a)) p.push(`ответ ${a} есть в примерах легенды`);
+  // Ребус — это превращение: ответ не может быть просто названием одной картинки.
+  const pics = specPictures(r).map((x) => normalize(x.word));
+  if (pics.includes(a)) p.push(`ответ ${a} — это просто картинка: тут нечего разгадывать`);
   if (String(r.hint).split(/\s+/).map(normalize).some((w) => w.includes(a))) p.push('подсказка содержит ответ');
   const marked = Array.isArray(r.techniques) ? [...r.techniques].sort().join(', ') : '';
   if (marked !== specTechniques(r).join(', ')) p.push(`techniques: в разметке [${marked}], а по частям [${specTechniques(r).join(', ')}]`);

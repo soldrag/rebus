@@ -11,9 +11,22 @@ import { specTechniques, solveSpec } from './rebus-spec.mjs';
 
 export const SHARE_FACTOR = 2;
 export const MIN_ITEMS = 10;
-// Одно слово можно загадать разными ребусами, но не больше двух раз,
-// и ребусов с повторным словом — не больше 10 % набора.
-export const SAME_ANSWER = { max: 2, share: 0.1 }; // на меньших уровнях проценты ничего не значат
+// Частотность: сколько раз встречается каждое значение (слово-ответ и т.п.).
+// Пик — больше двух средних (SHARE_FACTOR × среднее), провал — меньше половины среднего.
+// Жёстких лимитов нет: всё считается от текущей статистики.
+export function spread(values) {
+  const count = new Map();
+  values.forEach((v) => count.set(v, (count.get(v) || 0) + 1));
+  const mean = count.size ? values.length / count.size : 0;
+  const peaks = [...count].filter(([, n]) => n > 1 && n > SHARE_FACTOR * mean);
+  const troughs = [...count].filter(([, n]) => n < mean / SHARE_FACTOR);
+  return { count, mean, peaks, troughs };
+}
+// Новое значение не должно создать пик: n + 1 не больше двух средних после добавления.
+export function wouldPeak(values, v) {
+  const after = spread(values.concat(v));
+  return after.peaks.some(([x]) => x === v);
+} // на меньших уровнях проценты ничего не значат
 
 // items — список списков приёмов (по одному на ребус).
 export function diversity(items) {
