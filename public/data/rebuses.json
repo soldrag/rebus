@@ -142,6 +142,49 @@
       ]
     },
     {
+      "id": "schuka",
+      "answer": "ЩУКА",
+      "accept": [],
+      "level": 1,
+      "theme": "вода",
+      "techniques": [
+        "near"
+      ],
+      "hint": "Зубастая рыба: живёт в реке и в озере, прячется в камышах и ловит мелких рыбёшек",
+      "parts": [
+        {
+          "type": "position",
+          "prep": "У",
+          "outer": "КА",
+          "inner": "Щ"
+        }
+      ],
+      "source": "замысел author-kindergarten-2"
+    },
+    {
+      "id": "groza",
+      "answer": "ГРОЗА",
+      "accept": [],
+      "level": 1,
+      "theme": "природа",
+      "techniques": [
+        "plain"
+      ],
+      "hint": "Небо чёрное, сверкает молния, всё вокруг грохочет и льёт ливень",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "Г"
+        },
+        {
+          "type": "pic",
+          "emoji": "🌹",
+          "word": "РОЗА"
+        }
+      ],
+      "source": "замысел author-kindergarten-2"
+    },
+    {
       "id": "les",
       "answer": "ЛЕС",
       "accept": [],
@@ -280,6 +323,29 @@
       ]
     },
     {
+      "id": "dvor",
+      "answer": "ДВОР",
+      "accept": [],
+      "level": 1,
+      "theme": "дом",
+      "techniques": [
+        "in"
+      ],
+      "hint": "Место рядом с домом, где гуляют, играют в мяч и катаются на самокате",
+      "parts": [
+        {
+          "type": "position",
+          "prep": "В",
+          "outer": "ОР",
+          "inner": "Д"
+        }
+      ],
+      "source": "замысел author-kindergarten-2",
+      "notMisspelled": [
+        "ТВАРЬ"
+      ]
+    },
+    {
       "id": "usy",
       "answer": "УСЫ",
       "accept": [],
@@ -383,6 +449,27 @@
         }
       ],
       "source": "классика"
+    },
+    {
+      "id": "volk",
+      "answer": "ВОЛК",
+      "accept": [],
+      "level": 1,
+      "theme": "звери",
+      "techniques": [
+        "in"
+      ],
+      "hint": "Серый зубастый зверь из леса, ночью воет, в сказке дует на домики поросят",
+      "parts": [
+        {
+          "type": "position",
+          "prep": "В",
+          "outer": "О",
+          "inner": "ЛК",
+          "prepFirst": true
+        }
+      ],
+      "source": "замысел author-kindergarten-2"
     },
     {
       "id": "puh",
@@ -663,6 +750,29 @@
       ]
     },
     {
+      "id": "busy",
+      "answer": "БУСЫ",
+      "accept": [],
+      "level": 1,
+      "theme": "одежда",
+      "techniques": [
+        "near"
+      ],
+      "hint": "Разноцветные шарики на нитке: их надевают на шею, как украшение",
+      "parts": [
+        {
+          "type": "position",
+          "prep": "У",
+          "outer": "СЫ",
+          "inner": "Б"
+        }
+      ],
+      "source": "замысел author-kindergarten-2",
+      "exceptions": {
+        "embedded": "УСЫ внутри БУСЫ — это только созвучие: отдельной частью ребуса слово УСЫ не складывается (нет картинки усов), ребёнок видит три знака «Б у СЫ» и читает их подряд. При раскладке — не в одном этапе с УСЫ (У + СЫР без Р), чтобы «у сы» не звучало повтором."
+      }
+    },
+    {
       "id": "shkaf",
       "answer": "ШКАФ",
       "accept": [],
@@ -787,6 +897,41 @@
         }
       ],
       "source": "классика"
+    },
+    {
+      "id": "pazl",
+      "answer": "ПАЗЛ",
+      "accept": [],
+      "level": 1,
+      "theme": "игрушки",
+      "techniques": [
+        "initials"
+      ],
+      "hint": "Игра из множества кусочков с узорами: их складывают рядом, и получается большая картина",
+      "parts": [
+        {
+          "type": "initials",
+          "items": [
+            {
+              "emoji": "🍕",
+              "word": "ПИЦЦА"
+            },
+            {
+              "emoji": "🍉",
+              "word": "АРБУЗ"
+            },
+            {
+              "emoji": "🦓",
+              "word": "ЗЕБРА"
+            },
+            {
+              "emoji": "🐸",
+              "word": "ЛЯГУШКА"
+            }
+          ]
+        }
+      ],
+      "source": "замысел author-speech-2"
     },
     {
       "id": "grom",
@@ -2932,6 +3077,26 @@
         }
       ],
       "source": "классика"
+    },
+    {
+      "id": "petuh",
+      "answer": "ПЕТУХ",
+      "accept": [],
+      "level": 2,
+      "theme": "птицы",
+      "techniques": [
+        "near"
+      ],
+      "hint": "Будит всю деревню криком «ку-ка-ре-ку»; на голове у него красный гребешок",
+      "parts": [
+        {
+          "type": "position",
+          "prep": "У",
+          "outer": "Х",
+          "inner": "ПЕТ"
+        }
+      ],
+      "source": "замысел author-speech-2"
     },
     {
       "id": "salat",

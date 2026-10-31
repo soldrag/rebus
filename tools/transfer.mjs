@@ -17,10 +17,15 @@ const regFile = new URL('../data/pictures.json', import.meta.url);
 const plan = new Map(JSON.parse(fs.readFileSync(new URL('../data/pictures-plan.json', import.meta.url), 'utf8')).map((x) => [normalize(x.word), x]));
 const only = process.argv.slice(2);
 
-function picture(node) {
+// Картинка: сначала план дизайнера, иначе уже одобренная запись реестра с тем же словом.
+const regPictures = JSON.parse(fs.readFileSync(new URL('../data/pictures.json', import.meta.url), 'utf8')).pictures;
+function picture(node, asInitial = false) {
   const x = plan.get(normalize(node.pic));
-  if (!x) throw new Error(`нет картинки ${node.pic} в data/pictures-plan.json`);
-  return x.image ? { image: x.image } : { emoji: x.emoji };
+  if (x) return x.image ? { image: x.image } : { emoji: x.emoji };
+  const r = regPictures.find((e) => normalize(e.word) === normalize(node.pic) && !e.banned
+    && (asInitial ? e.initials !== false : e.picture !== false) && (!e.image || e.designApproved));
+  if (!r) throw new Error(`нет картинки ${node.pic}: ни в data/pictures-plan.json, ни в реестре`);
+  return r.image ? { image: r.image } : { emoji: r.emoji };
 }
 const OPS = ['flip', 'replace', 'replaceAt', 'remove', 'pick', 'cutStart', 'cutEnd'];
 function convert(n) {
@@ -35,7 +40,7 @@ function convert(n) {
     OPS.forEach((k) => { if (n[k] !== undefined) out[k] = n[k]; });
     return out;
   }
-  if (n.initials) return { type: 'initials', items: n.initials.map((it) => ({ ...picture(it), word: it.pic })) };
+  if (n.initials) return { type: 'initials', items: n.initials.map((it) => ({ ...picture(it, true), word: it.pic })) };
   if (n.rel) {
     if (n.b.letters === undefined) throw new Error('в наборе b у отношения — только буквы');
     const inner = n.a.letters !== undefined ? n.a.letters : convert(n.a);
