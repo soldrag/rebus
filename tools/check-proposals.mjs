@@ -2,7 +2,7 @@
 // Без аргумента — все data/proposals/*.json. Схема — docs/REBUS-SPEC.md.
 import fs from 'node:fs';
 import { LEGEND_WORDS, normalize, techniques } from '../src/rebus-core.js';
-import { specProblems, specPictures, specTechniques, solveSpec } from './rebus-spec.mjs';
+import { specProblems, specPictures, specTechniques, solveSpec, specTricks, setTricks, specSkeleton } from './rebus-spec.mjs';
 import { paused, report, canon } from './diversity.mjs';
 
 const dir = new URL('../data/proposals/', import.meta.url);
@@ -10,6 +10,10 @@ const files = process.argv.slice(2).filter((a) => a.endsWith('.json'));
 const list = files.length ? files : fs.readdirSync(dir).filter((f) => f.endsWith('.json')).map((f) => new URL(f, dir).pathname);
 const existing = JSON.parse(fs.readFileSync(new URL('../public/data/rebuses.json', import.meta.url), 'utf8')).rebuses;
 const answers = new Set(existing.map((r) => normalize(r.answer)));
+// Ходы набора и уже записанных замыслов: повтор хода — повтор идеи (ошибка).
+const tricks = new Map();
+existing.forEach((r) => setTricks(r).forEach((t) => tricks.set(t, `набор: ${r.id}`)));
+const skeletons = new Map();
 
 let problems = 0, total = 0, pending = 0;
 // Образцы схемы: расширение схемы не должно ломать то, что уже решалось.
@@ -32,11 +36,20 @@ for (const f of list) {
       console.log(`… ${r.id}: ${p.join('; ')}`);
       pending++; continue;
     }
+    if (!p.length) {
+      const sk = specSkeleton(r);
+      if (skeletons.has(sk)) p.push(`тот же ребус, что ${skeletons.get(sk)}`);
+      for (const t of specTricks(r)) if (tricks.has(t)) p.push(`ход ${t} уже есть (${tricks.get(t)}) — придумайте другой`);
+    }
     const prev = seen.get(normalize(r.answer));
     if (prev) p.push(`повтор ответа в замыслах (${prev})`);
     else seen.set(normalize(r.answer), f.split('/').pop());
     p.forEach((x) => console.log(`✗ ${r.id || '?'}: ${x}`));
     problems += p.length;
+    if (!p.length) {
+      skeletons.set(specSkeleton(r), r.id);
+      specTricks(r).forEach((t) => tricks.set(t, `замысел ${r.id}`));
+    }
     if (!p.length) {
       const key = r.level + ': ' + specTechniques(r).join('+');
       tech[key] = (tech[key] || 0) + 1;

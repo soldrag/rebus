@@ -195,3 +195,40 @@ export function specProblems(r, { answers = new Set(), legend = [] } = {}) {
   if (marked !== specTechniques(r).join(', ')) p.push(`techniques: в разметке [${marked}], а по частям [${specTechniques(r).join(', ')}]`);
   return p;
 }
+
+// --- Дубли. Схема детерминированная, поэтому дубли видно по устройству, а не по словам.
+// «Ход» — один приём над конкретным материалом: «КОРОНА 1=В», «РОТ в О», «ДА в О».
+// Одинаковый ход в двух ребусах — повтор идеи, даже если ответы разные.
+const opsSig = (n) => OPS.filter((op) => n[op.key] !== undefined).map((op) => `${op.key}=${JSON.stringify(n[op.key])}`).join(';');
+
+export function specTricks(r) {
+  const out = [];
+  (r.parts || []).forEach((n) => walk(n, (node, kind) => {
+    if (kind === 'pic' || kind === 'number') {
+      const sig = opsSig(node);
+      if (sig) out.push(`${kind}:${normalize(node.pic || node.word)}[${sig}]`);
+    }
+    if (kind === 'initials') out.push('initials:' + node.initials.map((it) => normalize(it.pic)).join('+'));
+    if (kind === 'rel') out.push(`rel:${normalize(node.rel)}(${letters(node.a)}|${letters(node.b)})`);
+  }));
+  return out;
+}
+
+// То же для ребусов набора (формат public/data/rebuses.json).
+export function setTricks(r) {
+  const out = [];
+  for (const p of r.parts || []) {
+    if (p.type === 'pic' || p.type === 'number') {
+      const sig = opsSig(p);
+      if (sig) out.push(`${p.type}:${normalize(p.word)}[${sig}]`);
+    }
+    if (p.type === 'initials') out.push('initials:' + (p.items || []).map((it) => normalize(it.word)).join('+'));
+    if (p.type === 'position') out.push(`rel:${normalize(p.prep)}(${normalize(p.inner)}|${normalize(p.outer)})`);
+  }
+  return out;
+}
+
+// Полный «скелет» замысла без описаний картинок: совпал — это тот же ребус.
+export function specSkeleton(r) {
+  return JSON.stringify(r.parts, (k, v) => (k === 'look' ? undefined : v));
+}
