@@ -2,107 +2,95 @@
 // Примеры не должны совпадать с ответами набора, а картинки должны быть разрешены реестром:
 // слова и картинки перечислены в LEGEND_WORDS и LEGEND_PICTURES (rebus-core.js), валидатор это проверяет.
 import { el, add } from './dom.js';
-import { commaSvg, picEmoji, struckLetter, pickNumbers, numberSwap } from './board.js';
+import { renderPart, fitRelations } from './board.js';
 
-const stack = (...nodes) => add(el('div', 'legend-stack'), ...nodes);
-const top = (...nodes) => add(el('div', 'part-top'), ...nodes);
-const bigLetters = (text, cls = 'c0') => add(el('span', 'letters-row'), ...text.split('').map((ch) => el('span', 'big-letter ' + cls, ch)));
-
-// Буквы в позиции для карточки легенды: порядок в стопке тот же, что на доске.
-const pos = (kind, outer, inner, oc, ic) => {
-  const o = el('span', 'pos-outer ' + oc, outer);
-  const i = el('span', 'pos-inner ' + ic, inner);
-  const stackEl = add(el('span', 'pos-stack'), ...(kind === 'near' ? [i, o] : [o, i]));
-  return add(el('span', 'position ' + kind), stackEl);
-};
+// Карточка легенды собирается из тех же заготовок, что и доска ребуса (board.js → renderPart):
+// пример — это узлы ребуса, поэтому значок в легенде выглядит ровно как в ребусе.
+const pic = (emoji, word, ops = {}) => ({ type: 'pic', emoji, word, ...ops });
+const letters = (text) => ({ type: 'letters', text });
+const rel = (prep, inner, outer) => ({ type: 'position', prep, inner, outer });
 
 const CARDS = {
   plain: {
     title: 'Назови картинки и прочитай всё подряд, слева направо',
     words: 'КИТ + Ы → КИТЫ',
-    sample() { return add(el('div', 'pic-row'), picEmoji('🐳'), bigLetters('Ы')); },
+    parts: [pic('🐳', 'КИТ'), letters('Ы')],
   },
   comma: {
     title: 'Запятая — убери букву с этого края',
     words: 'КЛЮЧ → КЛЮ',
-    sample() {
-      const row = el('div', 'pic-row');
-      const c = el('span', 'commas commas-r');
-      add(c, commaSvg());
-      return add(row, picEmoji('🔑', false), c);
-    },
+    parts: [pic('🔑', 'КЛЮЧ', { cutEnd: 1 })],
   },
   remove: {
     title: 'Зачёркнутая буква — убери её',
     words: 'ТОРТ → ТОТ',
-    sample() {
-      return stack(picEmoji('🎂', false), add(el('div', 'part-bottom'), struckLetter('Р')));
-    },
+    parts: [pic('🎂', 'ТОРТ', { remove: ['Р'] })],
   },
   replace: {
     title: 'Р = Н — замени букву',
     words: 'СЫР → СЫН',
-    sample() {
-      return stack(top(el('span', 'swap', 'Р = Н')), picEmoji('🧀', false));
-    },
+    parts: [pic('🧀', 'СЫР', { replace: [['Р', 'Н']] })],
   },
   flip: {
     title: 'Вверх ногами — читай задом наперёд',
     words: 'ТОРТ → ТРОТ',
-    sample() { return picEmoji('🎂', true); },
+    parts: [pic('🎂', 'ТОРТ', { flip: true })],
   },
   initials: {
     title: 'А… — возьми первые буквы картинок',
     words: 'КЕНГУРУ, УТКА, БЕГЕМОТ → КУБ',
-    sample() {
-      return stack(top(el('span', 'initials-mark', 'А…')), add(el('div', 'pic-row initials-row'), picEmoji('🦘'), picEmoji('🦆'), picEmoji('🦛')));
-    },
+    parts: [{ type: 'initials', items: [pic('🦘', 'КЕНГУРУ'), pic('🦆', 'УТКА'), pic('🦛', 'БЕГЕМОТ')] }],
   },
   number: {
     title: 'Цифру читай словом',
     words: '100 + ЛБ → СТОЛБ',
-    sample() { return add(el('div', 'pic-row'), el('span', 'num-digits', '100'), bigLetters('ЛБ')); },
+    parts: [{ type: 'number', value: 100, word: 'СТО' }, letters('ЛБ')],
   },
   pick: {
     title: 'Цифры сверху — возьми буквы с этими номерами, по порядку цифр',
     words: 'ЛИСА, 1 2 3 → ЛИС',
-    sample() { return stack(top(pickNumbers([1, 2, 3])), picEmoji('🦊')); },
+    parts: [pic('🦊', 'ЛИСА', { pick: [1, 2, 3] })],
   },
   replaceAt: {
     title: '2 = О — поменяй вторую букву',
     words: 'СЫР → СОР',
-    sample() { return stack(top(numberSwap(2, 'О')), picEmoji('🧀')); },
+    parts: [pic('🧀', 'СЫР', { replaceAt: [[2, 'О']] })],
   },
+  // Отношения: рисунок показывает только, ГДЕ части стоят (docs/VISUAL-LANGUAGE.md);
+  // подпись — фраза с предлогом, как ребёнок называет увиденное, и ответ.
   in: {
-    title: 'Буквы внутри буквы — добавь «В», чтобы вышло слово',
-    words: 'СО в А → СОВА, РОТА в О → ВОРОТА',
-    sample() {
-      return add(el('span', 'position in'), add(el('span', 'pos-stack'), el('span', 'pos-outer c1', 'А'), el('span', 'pos-inner c0', 'СО')));
-    },
+    title: 'Внутри: маленькое лежит в большой букве-контуре',
+    words: 'СО в А → СОВА',
+    parts: [rel('В', 'СО', 'А')],
   },
   on: {
-    title: 'Буквы над буквами — читай со словом «НА»',
+    title: 'Сверху: стоит на другом вплотную',
     words: 'КА на ВА → КАНАВА',
-    sample() {
-      return add(el('span', 'position on'), add(el('span', 'pos-stack'), el('span', 'pos-inner c0', 'КА'), el('span', 'pos-outer c1', 'ВА')));
-    },
-  },
-  near: {
-    title: 'Маленькая буква стоит рядом с большой — читай со словом «У»',
-    words: 'К у Б → КУБ',
-    sample() { return pos('near', 'Б', 'К', 'c1', 'c0'); },
+    parts: [rel('НА', 'КА', 'ВА')],
   },
   under: {
-    title: 'Буквы под буквой — слово «ПОД» ставь в начало',
-    words: 'ОВА под К → ПОДКОВА',
-    sample() { return pos('under', 'К', 'ОВА', 'c1', 'c0'); },
+    title: 'Снизу: стоит под другим вплотную',
+    words: 'под К — ОВА → ПОДКОВА',
+    parts: [rel('ПОД', 'ОВА', 'К')],
+  },
+  near: {
+    title: 'Рядом: маленькое вплотную слева от большого',
+    words: 'К у Б → КУБ',
+    parts: [rel('У', 'К', 'Б')],
   },
   behind: {
-    title: 'Буква спряталась за другой — слово «ЗА» ставь в начало',
-    words: 'АТ за К → ЗАКАТ',
-    sample() { return pos('behind', 'К', 'АТ', 'c1', 'c0'); },
+    title: 'Сзади: заднее — контуром, переднее закрывает его угол',
+    words: 'за К — АТ → ЗАКАТ',
+    parts: [rel('ЗА', 'АТ', 'К')],
   },
 };
+
+const sample = (parts) => {
+  const seed = { n: 0 };
+  return add(el('div', 'legend-sample'), ...parts.map((p) => renderPart(p, seed)));
+};
+// Отношения (предлоги) — для общего правила чтения над карточками.
+const RELATION_KINDS = ['in', 'on', 'under', 'near', 'behind'];
 // Приёмы с карточками; «plain» — только для ребусов без особых значков, сам не показывается.
 export const ALL_KINDS = Object.keys(CARDS).filter((k) => k !== 'plain');
 
@@ -113,18 +101,22 @@ export function openLegend(kinds, { fresh = false, onClose } = {}) {
   const title = el('h2', 'legend-title', fresh ? 'Новый значок! 👀' : 'Как читать ребус');
   title.id = 'legend-title';
   const list = el('div', 'legend-cards' + (kinds.length === 1 ? ' single' : ''));
+  // Общее правило чтения предлогов — один раз, если в легенде есть хоть одно отношение.
+  const rule = kinds.some((k) => RELATION_KINDS.includes(k))
+    ? el('p', 'legend-rule', 'Назови, что видишь, со словом-предлогом. Читай как книгу: сверху вниз, слева направо. Контур — то, что вмещает или стоит сзади.')
+    : null;
   for (const k of kinds) {
     const c = CARDS[k];
     if (!c) continue;
     const card = el('div', 'legend-card');
-    const pic = add(el('div', 'legend-pic'), c.sample());
-    pic.setAttribute('aria-hidden', 'true');
-    add(card, pic, add(el('div', 'legend-text'), el('p', 'legend-card-title', c.title), el('p', 'legend-words', c.words)));
+    const box = add(el('div', 'legend-pic'), sample(c.parts));
+    box.setAttribute('aria-hidden', 'true');
+    add(card, box, add(el('div', 'legend-text'), el('p', 'legend-card-title', c.title), el('p', 'legend-words', c.words)));
     add(list, card);
   }
   const ok = el('button', 'btn btn-next legend-ok', 'Понятно!');
   ok.type = 'button';
-  add(dlg, title, list, ok);
+  add(dlg, title, rule, list, ok);
   document.body.appendChild(dlg);
 
   const close = () => {
@@ -141,6 +133,7 @@ export function openLegend(kinds, { fresh = false, onClose } = {}) {
 
   if (typeof dlg.showModal === 'function') dlg.showModal();
   else { dlg.setAttribute('open', ''); dlg.classList.add('no-modal'); }
+  fitRelations(dlg);
   ok.focus({ preventScroll: true });
   return close;
 }

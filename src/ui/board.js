@@ -1,5 +1,5 @@
 // Картинка ребуса, раскладка под размер экрана, разбор решения.
-import { partLetters, normalize, keepYo, POSITIONS, innerPart } from '../rebus-core.js';
+import { partLetters, normalize, keepYo, POSITIONS, POSITIONS_NEXT, innerPart } from '../rebus-core.js';
 export { techniques } from '../rebus-core.js';
 import { el, add, plural } from './dom.js';
 
@@ -82,6 +82,12 @@ export function numberSwap(n, to) {
   return add(box, el('span', 'pick-n', String(n)), document.createTextNode(' = ' + show(to)));
 }
 
+// ---------- Язык ребуса: заготовки (docs/VISUAL-LANGUAGE.md) ----------
+// Каждая заготовка знает только свой узел и свои слоты: сверху — значки операций,
+// снизу — зачёркнутые буквы. Размеры — от единиц --e (картинка) и --el (буквы);
+// внутри отношения слот задаёт их заново (--e = --R × доля слота), поэтому любая
+// заготовка вкладывается в любую, рекурсивно, без особых случаев.
+
 // Картинка или число (у числа вместо эмодзи — крупные цифры).
 function renderPic(p) {
   const box = el('div', 'part pic' + (p.type === 'number' ? ' number' : ''));
@@ -101,23 +107,30 @@ function renderPic(p) {
   if (p.cutEnd) add(row, commas(p.cutEnd, 'r'));
   const bottom = el('div', 'part-bottom');
   for (const ch of p.remove || []) add(bottom, struckLetter(ch));
+  if (top.childElementCount) box.classList.add('has-top');
+  if (bottom.childElementCount) box.classList.add('has-bottom');
   return add(box, top, row, bottom);
 }
 
-function renderLetters(p, seed) {
+// Следующий цвет букв; красная «Х» похожа на крестик «нельзя» — её красим другим цветом.
+function nextColor(seed, ch) {
+  if (ch === 'Х' && seed.n % LETTER_COLORS === 0) seed.n++;
+  return seed.n++ % LETTER_COLORS;
+}
+
+// Буквы. В слоте отношения буквы — один предмет, поэтому одного цвета.
+function renderLetters(p, seed, ctx = {}) {
   const box = el('div', 'part text');
   const row = el('div', 'letters-row');
-  show(p.text).split('').forEach((ch) => {
-    // Красная «Х» похожа на крестик «нельзя» — красим её другим цветом.
-    if (ch === 'Х' && seed.n % LETTER_COLORS === 0) seed.n++;
-    add(row, el('span', 'big-letter c' + (seed.n++ % LETTER_COLORS), ch));
-  });
+  const letters = show(p.text).split('');
+  const mono = ctx.slot ? nextColor(seed, letters.includes('Х') ? 'Х' : '') : null;
+  for (const ch of letters) add(row, el('span', 'big-letter c' + (mono ?? nextColor(seed, ch)), ch));
   return add(box, el('div', 'part-top'), row, el('div', 'part-bottom'));
 }
 
 // Первые буквы: несколько картинок в рамке, над ней — значок «А…».
 function renderInitials(p) {
-  const box = el('div', 'part pic initials');
+  const box = el('div', 'part pic initials has-top');
   const top = el('div', 'part-top');
   const mark = el('span', 'initials-mark', 'А…');
   mark.setAttribute('aria-label', 'по первым буквам');
@@ -127,39 +140,95 @@ function renderInitials(p) {
   return add(box, top, row, el('div', 'part-bottom'));
 }
 
-// Буквы в позиции: внутри («В»), сверху («НА»), снизу («ПОД»), рядом («У»), позади («ЗА»).
-// Порядок в стопке: у «НА» и «У» меньшие буквы идут первыми (сверху / слева), у остальных — большая.
-const INNER_FIRST = ['on', 'near'];
-function renderPosition(p, seed) {
-  const prep = POSITIONS[normalize(p.prep)] || POSITIONS['В'];
-  // Внутри может быть не только буквы, но и картинка (🧀 в Е) или первые буквы.
-  const part = innerPart(p);
-  // С картинкой вся позиция считается от --e, как картинка (без класса text — см. measure).
-  const box = el('div', 'part position ' + prep.tech + (part ? ' pic with-pic' : ' text'));
-  const color = () => 'c' + (seed.n++ % LETTER_COLORS);
-  const outer = el('span', 'pos-outer ' + color(), show(p.outer));
-  const inner = part ? renderPart(part, seed) : el('span', 'pos-inner ' + color(), show(p.inner));
-  if (part) {
-    inner.classList.add('pos-inner', 'pos-part');
-    box.classList.add('with-pic');
-    // Что есть у внутренней картинки: зачёркнутые буквы снизу, «А…» / замены сверху.
-    if ((part.remove || []).length) box.classList.add('pp-bottom');
-    if (part.type === 'initials') box.classList.add('pp-initials');
-  }
-  const stack = el('span', 'pos-stack');
-  stack.setAttribute('aria-label', (part ? 'картинка' : show(p.inner)) + ' ' + prep.inside + ' ' + show(p.outer));
-  if (INNER_FIRST.includes(prep.tech)) add(stack, inner, outer);
-  else add(stack, outer, inner);
-  return add(box, el('div', 'part-top'), add(el('div', 'letters-row'), stack), el('div', 'part-bottom'));
+// ---------- Отношения: композиция двух слотов ----------
+// a — что ставим, b — относительно чего (REBUS-SPEC.md, узел rel). Рисунок показывает только,
+// ГДЕ части стоят (docs/VISUAL-LANGUAGE.md): КОНТУР — то, что вмещает или стоит сзади,
+// СПЛОШНОЕ — содержимое или переднее; у сплошного поверх контура — кремовая кромка.
+// Правило композиции одно на отношение и не зависит от содержимого слотов: роли слотов — здесь,
+// размеры и расположение — в CSS-классе rb-<код> (доли --ka/--kb, касание/зазор/перекрытие).
+//   order — порядок слотов на экране (= порядок чтения: сверху вниз, слева направо; цвета идут так же);
+//   outline — какой слот рисуется контуром; front — сплошной слот поверх контура (с кромкой);
+//   fit — a ужимается, чтобы поместиться в b; fill — b заполнен узором из a («ИЗ», «ПО»).
+export const RELATIONS = {
+  in: { order: ['b', 'a'], outline: 'b', front: 'a', fit: true },
+  on: { order: ['a', 'b'] },
+  over: { order: ['a', 'b'] },
+  under: { order: ['b', 'a'] },
+  near: { order: ['a', 'b'] },
+  behind: { order: ['b', 'a'], outline: 'a', front: 'b' },
+  before: { order: ['b', 'a'], outline: 'b', front: 'a' },
+  from: { order: ['b'], fill: true },
+  along: { order: ['b'], fill: true },
+};
+// Доля внутреннего слота «В» от ширины и высоты контура.
+const FIT_W = 0.62;
+const FIT_H = 0.62;
+
+const LETTER_HEX = ['#E8604C', '#2C88C9', '#27996C', '#B87400', '#8A5FD1'];
+
+// Слоты отношения из данных: в наборе — outer/inner (буквы-строка или узел), в схеме замыслов — b/a.
+const asNode = (v) => (v && typeof v === 'object' ? v : { type: 'letters', text: v });
+export const relSlots = (p) => ({ a: asNode(p.a ?? p.inner), b: asNode(p.b ?? p.outer) });
+const relInfo = (p) => {
+  const k = normalize(p.prep || p.rel);
+  return POSITIONS[k] || POSITIONS_NEXT[k] || POSITIONS['В'];
+};
+const hasPic = (n) => n.type === 'position' ? hasPic(relSlots(n).a) || hasPic(relSlots(n).b) : n.type !== 'letters';
+const label = (n) => n.type === 'letters' ? show(n.text) : n.type === 'position' ? 'отношение' : 'картинка';
+
+// Узор для «ИЗ» и «ПО»: плитка с маленьким a (буквы или картинка без операций).
+function fillTile(a, color) {
+  if (a.type === 'pic' && a.image) return `url("${new URL(a.image, document.baseURI).href}")`;
+  const text = a.type === 'letters' ? show(a.text) : a.type === 'pic' ? a.emoji : '?';
+  const size = text.length > 1 && a.type === 'letters' ? 100 / (text.length * 0.8) : 72;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text x="50" y="52" font-family="Nunito, Arial Black, sans-serif" font-weight="900" font-size="${size.toFixed(0)}" text-anchor="middle" dominant-baseline="central" fill="${color}">${text}</text></svg>`;
+  return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
 }
 
-function renderPart(p, seed) {
-  switch (p.type) {
-    case 'letters': return renderLetters(p, seed);
-    case 'initials': return renderInitials(p);
-    case 'position': return renderPosition(p, seed);
-    default: return renderPic(p);
+function renderRelation(p, seed) {
+  const info = relInfo(p);
+  const rel = RELATIONS[info.tech] || RELATIONS.in;
+  const nodes = relSlots(p);
+  // С картинкой вся композиция считается от --e, как картинка (без класса text — см. measure).
+  const box = el('div', 'part rel rel-' + info.tech + (hasPic(p) ? ' pic' : ' text'));
+  const stack = el('span', 'rel-box rb-' + info.tech);
+  // Слоты рисуются в порядке чтения — поэтому и цвета идут по порядку: верх/лево — первый цвет.
+  const slots = {};
+  for (const k of rel.order) {
+    const s = el('span', 'slot slot-' + k + (rel.outline === k ? ' is-outline' : '') + (rel.front === k ? ' is-front' : ''));
+    slots[k] = add(s, renderPart(nodes[k], seed, { slot: k }));
   }
+  if (rel.fill) slots.b.style.setProperty('--fill', fillTile(nodes.a, LETTER_HEX[nextColor(seed)]));
+  if (rel.fit) stack.dataset.fit = '';
+  stack.setAttribute('aria-label', label(nodes.a) + ' ' + info.inside + ' ' + label(nodes.b));
+  add(stack, ...rel.order.map((k) => slots[k]));
+  return add(box, el('div', 'part-top'), add(el('div', 'rel-row'), stack), el('div', 'part-bottom'));
+}
+
+// «В»: внутренний слот ужимается так, чтобы целиком лечь в контур. Меряется один раз
+// (доли не зависят от размера), сначала самые вложенные.
+export function fitRelations(root) {
+  for (const box of [...root.querySelectorAll('.rel-box[data-fit]')].reverse()) {
+    box.style.setProperty('--fit', '1');
+    const a = box.querySelector(':scope > .slot-a').getBoundingClientRect();
+    const b = box.querySelector(':scope > .slot-b').getBoundingClientRect();
+    if (!a.width || !b.width) continue;
+    const f = Math.min(1, (FIT_W * b.width) / a.width, (FIT_H * b.height) / a.height);
+    box.style.setProperty('--fit', f.toFixed(3));
+  }
+}
+
+// Реестр заготовок по виду узла. Новый вид — новая запись (и блок CSS), старые не трогаются.
+const NODES = {
+  letters: renderLetters,
+  pic: renderPic,
+  number: renderPic,
+  initials: renderInitials,
+  position: renderRelation,
+};
+
+export function renderPart(p, seed = { n: 0 }, ctx = {}) {
+  return (NODES[p.type] || renderPic)(p, seed, ctx);
 }
 
 // ---------- Раскладка ----------
@@ -173,6 +242,7 @@ function measure(inner, parts, rows) {
   inner.classList.add('measuring');
   inner.style.setProperty('--e', '100px');
   inner.style.setProperty('--el', '100px');
+  fitRelations(inner);
   const items = parts.map((node) => ({
     w: node.getBoundingClientRect().width / 100,
     letters: node.classList.contains('text'),
@@ -237,7 +307,7 @@ export function renderBoard(rebus, signal) {
   const board = el('div', 'board');
   const inner = el('div', 'board-inner');
   const hasTop = rebus.parts.some((p) => (p.replace && p.replace.length) || (p.replaceAt && p.replaceAt.length) || p.pick || p.type === 'initials');
-  // У картинки внутри позиции («🐝 под Н») зачёркнутая буква стоит в самой позиции, место снизу ей не нужно.
+  // У картинки в отношении («🐝 под Н») зачёркнутая буква стоит в самом отношении, место снизу ей не нужно.
   const hasBottom = rebus.parts.some((p) => p.remove && p.remove.length);
   if (!hasTop) inner.classList.add('no-top');
   if (!hasBottom) inner.classList.add('no-bottom');

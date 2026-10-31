@@ -17,6 +17,10 @@
    Copyright 2013-2017 Google Inc. (https://github.com/googlefonts/noto-emoji)
    Шрифт — SIL Open Font License 1.1, изображения эмодзи — Apache License 2.0.
 
+4. Свои иллюстрации (pictures/oblako.svg, osa.svg, utka.svg, vetka.svg, mysh.svg, bashnya.svg,
+   gorokh.svg, pelikan.svg, shapka.svg, apelsin.svg) нарисованы для этого проекта
+   и распространяются по той же лицензии MIT, что и код приложения.
+
 Эмодзи в ребусах сайт не содержит: их рисует шрифт устройства (Apple, Google, Microsoft).
 
 

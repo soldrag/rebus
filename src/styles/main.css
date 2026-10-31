@@ -452,6 +452,8 @@ h1[tabindex="-1"]:focus { outline: none; }
 .board-inner {
   --e: clamp(48px, 20vw, 150px); /* до первого расчёта */
   --el: var(--e);
+  --edge: #FFFDF8; /* цвет фона доски — кромка у сплошного поверх контура */
+  --E: var(--e); /* единица всего ребуса: значки операций во вложенных слотах не мельче её доли */
   --top: calc(var(--e) * .42);
   --bottom: calc(var(--e) * .58);
   width: 100%;
@@ -487,6 +489,7 @@ h1[tabindex="-1"]:focus { outline: none; }
   justify-content: center;
   min-height: 0;
 }
+.part-bottom { align-items: flex-start; align-self: start; margin-top: calc(var(--o, var(--e)) * .04); }
 
 .pic-row {
   display: flex;
@@ -550,18 +553,18 @@ h1[tabindex="-1"]:focus { outline: none; }
   padding: 0 calc(var(--el) * .01);
   text-shadow: 0 calc(var(--el) * .04) 0 rgba(0,0,0,.08);
 }
-.c0 { color: #E8604C; }
-.c1 { color: #2C88C9; }
-.c2 { color: #27996C; }
-.c3 { color: #B87400; }
-.c4 { color: #8A5FD1; }
+.c0 { --ink-c: #E8604C; --pale-c: #FADAD3; color: var(--ink-c); }
+.c1 { --ink-c: #2C88C9; --pale-c: #D3E8F7; color: var(--ink-c); }
+.c2 { --ink-c: #27996C; --pale-c: #D0ECDF; color: var(--ink-c); }
+.c3 { --ink-c: #B87400; --pale-c: #F3E3C4; color: var(--ink-c); }
+.c4 { --ink-c: #8A5FD1; --pale-c: #E5DAF6; color: var(--ink-c); }
 
 .swap {
-  font-size: calc(var(--e) * .34);
+  font-size: calc(var(--o, var(--e)) * .34);
   font-weight: 900;
   line-height: 1;
   white-space: nowrap;
-  padding: calc(var(--e) * .03) calc(var(--e) * .1);
+  padding: calc(var(--o, var(--e)) * .03) calc(var(--o, var(--e)) * .1);
   background: var(--sky);
   color: #164C78;
   border-radius: 999px;
@@ -572,11 +575,12 @@ h1[tabindex="-1"]:focus { outline: none; }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(var(--e) * .44);
+  font-size: calc(var(--o, var(--e)) * .44);
   font-weight: 900;
   line-height: 1;
-  width: calc(var(--e) * .5);
-  height: calc(var(--e) * .5);
+  width: calc(var(--o, var(--e)) * .5);
+  /* Высота — по букве, а не квадратом: зачёркнутая стоит вплотную под картинкой. */
+  height: calc(var(--o, var(--e)) * .4);
   color: var(--ink);
 }
 .struck::after {
@@ -585,32 +589,32 @@ h1[tabindex="-1"]:focus { outline: none; }
   left: -8%;
   right: -8%;
   top: 50%;
-  height: max(4px, calc(var(--e) * .055));
+  height: max(4px, calc(var(--o, var(--e)) * .055));
   background: var(--strike);
   border-radius: 99px;
-  box-shadow: 0 0 0 max(1px, calc(var(--e) * .012)) #FFF;
+  box-shadow: 0 0 0 max(1px, calc(var(--o, var(--e)) * .012)) #FFF;
   /* Сверху-слева вниз-направо: так линия пересекает диагонали И и А, а не ложится вдоль них. */
   transform: translateY(-50%) rotate(45deg);
 }
 
 
 /* Цифры над картинкой и замена по номеру */
-.pick { display: flex; gap: calc(var(--e) * .06); }
+.pick { display: flex; gap: calc(var(--o, var(--e)) * .06); }
 .pick-n {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: calc(var(--e) * .36);
-  height: calc(var(--e) * .36);
-  font-size: calc(var(--e) * .26);
+  width: calc(var(--o, var(--e)) * .36);
+  height: calc(var(--o, var(--e)) * .36);
+  font-size: calc(var(--o, var(--e)) * .26);
   font-weight: 900;
   line-height: 1;
   color: var(--ink);
   background: var(--sun);
   border-radius: 50%;
 }
-.swap-n { display: inline-flex; align-items: center; gap: calc(var(--e) * .06); background: var(--sun); color: var(--ink); }
-.swap-n .pick-n { background: #FFF; width: calc(var(--e) * .32); height: calc(var(--e) * .32); font-size: calc(var(--e) * .22); }
+.swap-n { display: inline-flex; align-items: center; gap: calc(var(--o, var(--e)) * .06); background: var(--sun); color: var(--ink); }
+.swap-n .pick-n { background: #FFF; width: calc(var(--o, var(--e)) * .32); height: calc(var(--o, var(--e)) * .32); font-size: calc(var(--o, var(--e)) * .22); }
 
 /* Число */
 /* Число — в рамке, как на кубике: так цифру не спутать с буквой. */
@@ -643,149 +647,124 @@ h1[tabindex="-1"]:focus { outline: none; }
 }
 .initials-row .emoji { font-size: calc(var(--e) * .8); line-height: 1.3; }
 .initials-mark {
-  font-size: calc(var(--e) * .3);
+  font-size: calc(var(--o, var(--e)) * .3);
   font-weight: 900;
   line-height: 1;
-  padding: calc(var(--e) * .04) calc(var(--e) * .12);
+  padding: calc(var(--o, var(--e)) * .04) calc(var(--o, var(--e)) * .12);
   background: var(--sun);
   color: var(--ink);
   border-radius: 999px;
 }
 
-/* Буквы в букве и над буквами */
-.pos-stack { position: relative; display: inline-flex; align-items: center; justify-content: center; font-weight: 900; line-height: 1; }
-.position.in .pos-outer { font-size: calc(var(--el) * 1.15); }
-.position.in .pos-inner {
-  position: absolute;
-  left: 50%;
-  top: 52%;
-  transform: translate(-50%, -50%);
-  font-size: calc(var(--el) * .3);
-  padding: 0 calc(var(--el) * .03);
-  background: rgba(255, 255, 255, .9);
-  border-radius: calc(var(--el) * .06);
+/* ---------- Отношения: в, на, над, под, у, за, перед, из, по ----------
+   Визуальный язык — docs/VISUAL-LANGUAGE.md. Отношение — композиция двух слотов:
+   a — что ставим, b — относительно чего. В слот кладётся любая заготовка (буквы, картинка
+   с операциями, первые буквы, другое отношение). Рисунок показывает только, ГДЕ части стоят:
+     КОНТУР (.is-outline) — то, что вмещает или стоит сзади: буквы только обводкой, без заливки;
+     СПЛОШНОЕ — содержимое или переднее; поверх контура (.is-front) — с кремовой кромкой цвета фона.
+   Цвет только разделяет формы (буквы красятся по порядку чтения), про порядок он ничего не говорит.
+   Токены:
+     --R  — единица отношения: --el (только буквы) или --e (есть картинка);
+     --ka, --kb — доли слотов от --R: в слоте --e = --el = --R × доля (вложенность уменьшает сама);
+     --o  — единица значков операций (зачёркнутая, «А…», «2 = О»): не мельче 0.75 единицы ребуса --E;
+     --stroke — толщина контура, 0.06 --R; --rim — кромка, 0.1 --R (видна половина, снаружи);
+     касание — зазор 0 по «чернилам» (у букв срезаны поля шрифта), зазор «НАД» — 0.24 --R. */
+.rel {
+  --R: var(--el);
+  --stroke: max(1.5px, calc(var(--R) * .06));
+  --rim: max(3px, calc(var(--R) * .1));
 }
-.position.on .pos-stack { flex-direction: column; gap: calc(var(--el) * .02); }
-.position.on .pos-inner { font-size: calc(var(--el) * .46); }
-.position.on .pos-outer { font-size: calc(var(--el) * .62); }
-.position.under .pos-stack { flex-direction: column; gap: calc(var(--el) * .02); }
-.position.under .pos-inner { font-size: calc(var(--el) * .46); }
-.position.under .pos-outer { font-size: calc(var(--el) * .62); }
-/* «У»: маленькие буквы стоят вплотную к большой, на одной линии низа. */
-.position.near .pos-stack { align-items: flex-end; gap: calc(var(--el) * .02); }
-.position.near .pos-inner { font-size: calc(var(--el) * .46); }
-.position.near .pos-outer { font-size: calc(var(--el) * .92); }
-/* «ЗА»: задняя буква выглядывает из-за большой, у большой — светлая обводка. */
-.position.behind .pos-stack { align-items: center; }
-.position.behind .pos-outer {
+.rel.pic { --R: var(--e); }
+.rel-row { display: flex; align-items: center; justify-content: center; min-height: calc(var(--R) * 1.12); }
+.rel-box { position: relative; display: inline-flex; align-items: center; justify-content: center; }
+.slot {
+  --k: 1;
+  --e: calc(var(--R) * var(--k));
+  --el: var(--e);
   position: relative;
-  z-index: 2;
-  font-size: calc(var(--el) * .95);
-  text-shadow: 0 0 calc(var(--el) * .025) #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.position.behind .pos-inner {
-  position: relative;
-  z-index: 1;
-  font-size: calc(var(--el) * .78);
-  margin-left: calc(var(--el) * -.2);
-  transform: translateY(calc(var(--el) * -.1));
+.slot-a { --k: var(--ka, .5); }
+.slot-b { --k: var(--kb, 1); }
+/* Заготовка в слоте: пустые строки значков схлопываются, значки — вплотную к своей картинке. */
+.slot > .part {
+  --o: max(var(--e), calc(var(--E) * .75));
+  grid-template-rows: auto auto auto;
+  row-gap: calc(var(--o) * .03);
+  line-height: 1;
 }
+.slot > .part > .part-top:empty, .slot > .part > .part-bottom:empty { display: none; }
+.slot .letters-row, .slot .pic-row { height: auto; }
+.slot > .part > .rel-row { min-height: 0; }
+/* Буквы в слоте — по «чернилам»: поля шрифта Nunito сверху и снизу срезаны, иначе «касание» было бы зазором. */
+.slot .big-letter { margin: -.12em 0 -.17em; padding: 0; }
+.slot .emoji { line-height: 1; }
+.slot .emoji-img { height: var(--e); }
+.slot .part-bottom { gap: calc(var(--o) * .06); }
+
+/* Контур: буквы слота — только обводка своего цвета. Картинку контуром не нарисовать — она остаётся как есть. */
+.is-outline > .part > .letters-row > .big-letter {
+  color: transparent;
+  -webkit-text-stroke: var(--stroke) var(--ink-c);
+  text-shadow: none;
+}
+/* Сплошное поверх контура — с кремовой кромкой цвета фона: формы не сливаются. */
+.is-front .big-letter, .is-front .struck {
+  -webkit-text-stroke: var(--rim) var(--edge, #FFFDF8);
+  paint-order: stroke fill;
+  text-shadow: none;
+}
+.is-front :is(.emoji, .emoji-img, .initials-row) {
+  filter: drop-shadow(0 0 calc(var(--R) * .025) var(--edge, #FFFDF8)) drop-shadow(0 0 calc(var(--R) * .025) var(--edge, #FFFDF8)) drop-shadow(0 calc(var(--e) * .015) calc(var(--e) * .03) rgba(90, 60, 30, .35));
+}
+
+/* В — a внутри b. b — крупный контур (одна буква, несколько букв рядом); a — сплошное с кромкой,
+   по центру, ужато до 62 % ширины и высоты контура. Ни плашек, ни овалов. Зачёркнутая буква
+   картинки — тут же, под картинкой внутри контура. */
+.rb-in { --kb: 1.5; --ka: calc(.42 * var(--fit, 1)); }
+.rb-in > .slot-a { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 1; }
+
+/* НА, НАД, ПОД — столбик: верхнее над нижним, маленькое 0.46 против 0.78. НА и ПОД — вплотную, НАД — зазор. */
+.rb-on, .rb-over, .rb-under { flex-direction: column; --ka: .46; --kb: .78; gap: calc(var(--R) * .02); }
+.rb-over { gap: calc(var(--R) * .24); }
+/* В столбике значки снизу у картинки — справа от неё: не встают между верхним и нижним. */
+:is(.rb-on, .rb-over, .rb-under) > .slot > .part.has-bottom { grid-template-rows: auto; grid-auto-flow: column; column-gap: calc(var(--o) * .04); }
+
+/* У — маленькое (0.5) вплотную слева от большого, на одной линии низа (по базовой линии). */
+.rb-near { align-items: baseline; --ka: .5; --kb: 1; gap: calc(var(--R) * .04); }
+
+/* ЗА — заднее (a, 0.75) контуром, выше на 0.32 и правее, видно целиком; переднее (b, 0.95) сплошное
+   с кромкой и закрывает только угол заднего (перекрытие 0.18 --R). Картинку сзади контуром не рисуем:
+   она просто позади, переднее с кромкой закрывает её край. ПЕРЕД — зеркально: впереди a, сзади b. */
+.rb-behind, .rb-before { align-items: flex-end; } /* по нижнему краю: у рамки первых букв базовая линия глубоко внутри */
+.rb-behind { --kb: .95; --ka: .75; }
+.rb-before { --kb: .75; --ka: .95; }
+.rb-behind > .slot-a, .rb-before > .slot-a { margin-left: calc(var(--R) * -.18); }
+.rb-behind > .is-outline, .rb-before > .is-outline { z-index: 1; margin-bottom: calc(var(--R) * .32); } /* подъём — полем, а не сдвигом: раскладка доски его учитывает */
+.rb-behind > .is-front, .rb-before > .is-front { z-index: 2; }
+
+/* ИЗ — b сложено из маленьких a (только узор). ПО — a мелко написано по всей b (узор поверх буквы). */
+.rb-from, .rb-along { --kb: 1.8; }
+:is(.rb-from, .rb-along) > .slot-b .big-letter {
+  color: transparent;
+  text-shadow: none;
+  background: var(--fill) 0 0 / .13em .13em;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.rb-along > .slot-b .big-letter {
+  background: var(--fill) 0 0 / .12em .12em, var(--pale-c);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-stroke: var(--stroke) var(--ink-c);
+}
+
 /* Своя иллюстрация вместо эмодзи: тот же размер и та же тень (docs/ILLUSTRATIONS.md). */
 .emoji-img { width: var(--e); height: calc(var(--e) * 1.12); object-fit: contain; font-size: inherit; }
 .step-img { width: 44px; height: 44px; object-fit: contain; vertical-align: middle; }
 
-/* Картинка в позиции («🧀 в Е», «🎪 у ЛЬ», «🐝 под Н», «☁️🏠 за В»). Правила — docs/ILLUSTRATIONS.md, п. 5.
-   Вся позиция считается от --E (размер картинки ребуса), а не от букв: board.js меряет её как картинку.
-   Внутренняя картинка — обычная часть ребуса, только меньше (своё --e): зачёркнутая буква
-   стоит вплотную под ней, «А…» — над рамкой, ничего не уезжает в общие строки доски. */
-.position.with-pic { --E: var(--e); }
-.position.with-pic .letters-row { height: auto; min-height: calc(var(--E) * 1.12); }
-.position.with-pic .pos-outer { font-size: calc(var(--E) * .9); text-shadow: 0 calc(var(--E) * .04) 0 rgba(0, 0, 0, .08); }
-.position.with-pic .pos-part {
-  --e: calc(var(--E) * .62);
-  grid-template-rows: auto auto auto;
-  row-gap: calc(var(--E) * .03);
-  line-height: 1;
-}
-.position.with-pic .pos-part .part-top:empty, .position.with-pic .pos-part .part-bottom:empty { display: none; }
-.position.with-pic .pos-part .pic-row { height: auto; }
-.position.with-pic .pos-part .emoji { line-height: 1.05; }
-.position.with-pic .pos-part .emoji-img { height: calc(var(--e) * 1.05); }
-/* Зачёркнутая буква — от размера всего ребуса, а не от уменьшенной картинки: её надо прочитать. */
-.position.with-pic .pos-part .struck {
-  font-size: calc(var(--E) * .34);
-  width: calc(var(--E) * .4);
-  height: calc(var(--E) * .4);
-}
-.position.with-pic .pos-part .struck::after { height: max(4px, calc(var(--E) * .045)); }
-.position.with-pic .pos-part .part-bottom { gap: calc(var(--E) * .06); margin-top: calc(var(--e) * -.06); }
-
-/* «В»: буква-контейнер. Крупная полая буква (бледная заливка, контур цвета буквы),
-   картинка целиком внутри, без белой плашки — буква читается по контуру. */
-.position.in.with-pic .pos-outer {
-  font-size: calc(var(--E) * 1.55);
-  -webkit-text-stroke: calc(var(--E) * .06) currentColor;
-  text-shadow: none;
-}
-.position.in.with-pic .pos-outer.c0 { color: #FADAD3; -webkit-text-stroke-color: #E8604C; }
-.position.in.with-pic .pos-outer.c1 { color: #D3E8F7; -webkit-text-stroke-color: #2C88C9; }
-.position.in.with-pic .pos-outer.c2 { color: #D0ECDF; -webkit-text-stroke-color: #27996C; }
-.position.in.with-pic .pos-outer.c3 { color: #F3E3C4; -webkit-text-stroke-color: #B87400; }
-.position.in.with-pic .pos-outer.c4 { color: #E5DAF6; -webkit-text-stroke-color: #8A5FD1; }
-.position.in.with-pic .pos-part {
-  --e: calc(var(--E) * .52);
-  position: absolute; left: 50%; top: 53%; transform: translate(-50%, -50%);
-  padding: 0; background: none; border-radius: 0;
-}
-.position.in.with-pic.pp-bottom .pos-part { --e: calc(var(--E) * .44); top: 50%; }
-.position.in.with-pic.pp-initials .pos-part { --e: calc(var(--E) * .36); }
-.position.in.with-pic .pos-part .emoji,
-.position.in.with-pic .pos-part .emoji-img {
-  filter: drop-shadow(0 0 calc(var(--E) * .015) #FFFDF8) drop-shadow(0 calc(var(--e) * .015) calc(var(--e) * .03) rgba(90, 60, 30, .35));
-}
-/* Зачёркнутая буква внутри буквы — на светлом кружке, чтобы не сливалась с контуром. */
-.position.in.with-pic .pos-part .struck {
-  font-size: calc(var(--E) * .26); width: calc(var(--E) * .34); height: calc(var(--E) * .34);
-  background: #FFFDF8; border-radius: 50%;
-  box-shadow: 0 0 0 max(2px, calc(var(--E) * .02)) #FFFDF8, 0 calc(var(--E) * .01) calc(var(--E) * .03) rgba(90, 60, 30, .25);
-}
-.position.in.with-pic .pos-part .struck::after { left: 6%; right: 6%; }
-.position.in.with-pic .pos-part .part-bottom { margin-top: calc(var(--E) * -.04); }
-
-/* «НА» и «ПОД»: картинка вплотную к букве по вертикали (у шрифта сверху и снизу пустые поля — съедаем их). */
-.position.on.with-pic .pos-stack, .position.under.with-pic .pos-stack { flex-direction: column; gap: 0; }
-.position.on.with-pic .pos-part { margin-bottom: calc(var(--E) * -.08); }
-/* В «НА» и «ПОД» зачёркнутая буква — справа от картинки: не встаёт между картинкой и буквой
-   и не делает стопку выше (иначе на телефоне всё мельчает). */
-.position.on.with-pic.pp-bottom .pos-part, .position.under.with-pic.pp-bottom .pos-part { grid-template-rows: auto; grid-auto-flow: column; align-items: center; column-gap: calc(var(--E) * .04); }
-.position.on.with-pic .pos-part, .position.under.with-pic .pos-part { --e: calc(var(--E) * .7); }
-.position.under.with-pic .pos-part { margin-top: calc(var(--E) * -.1); }
-.position.under.with-pic.pp-initials .pos-part { margin-top: calc(var(--E) * -.04); }
-
-/* «У»: маленькая картинка стоит на линии букв (низ картинки = низ букв), зачёркнутая буква — под линией. */
-.position.near.with-pic .pos-stack { align-items: flex-end; gap: calc(var(--E) * .03); }
-.position.near.with-pic .pos-outer { font-size: calc(var(--E) * 1.05); margin-bottom: calc(var(--E) * -.18); }
-.position.near.with-pic .pos-part { --e: calc(var(--E) * .58); }
-.position.near.with-pic.pp-bottom .pos-outer { margin-bottom: calc(var(--E) * .25); }
-
-/* «ЗА»: картинка выглядывает из-за буквы — сдвинута вверх, буква с белым ореолом перекрывает её край. */
-.position.behind.with-pic .pos-stack { align-items: center; }
-.position.behind.with-pic .pos-outer {
-  position: relative; z-index: 2;
-  font-size: calc(var(--E) * 1.1);
-  -webkit-text-stroke: calc(var(--E) * .07) #FFFDF8;
-  paint-order: stroke fill;
-  text-shadow: none;
-  filter: drop-shadow(0 calc(var(--E) * .02) calc(var(--E) * .02) rgba(90, 60, 30, .18));
-}
-.position.behind.with-pic .pos-part {
-  --e: calc(var(--E) * .7);
-  position: relative; z-index: 1;
-  margin-left: calc(var(--E) * -.26);
-  transform: translateY(calc(var(--E) * -.16));
-}
-/* Первые буквы за буквой: прячется только край рамки — каждая картинка должна быть видна целиком. */
-.position.behind.with-pic.pp-initials .pos-part { --e: calc(var(--E) * .62); margin-left: calc(var(--E) * -.12); transform: translateY(calc(var(--E) * -.06)); }
 .step-num { font-size: 24px; font-weight: 900; color: var(--sky-ink); font-family: var(--font); }
 .step-multi { font-size: 20px; word-break: break-all; }
 .step-word.step-wrap { white-space: normal; }
@@ -1428,6 +1407,7 @@ html.lay-land-phone .step-res { font-size: 20px; }
 .legend {
   --e: 76px;
   --el: 76px;
+  --E: var(--e);
   --top: auto;
   --bottom: auto;
   width: min(640px, calc(100vw - 24px));
@@ -1444,6 +1424,7 @@ html.lay-land-phone .step-res { font-size: 20px; }
 .legend::backdrop { background: rgba(58, 46, 40, .45); }
 .legend.no-modal { position: fixed; inset: 12px; margin: auto; z-index: 100; height: fit-content; }
 .legend-title { margin: 0 0 12px; text-align: center; font-size: 26px; font-weight: 900; }
+.legend-rule { margin: -4px 0 12px; text-align: center; font-size: 17px; font-weight: 800; line-height: 1.3; color: #6E5E54; }
 .legend-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 .legend-cards.single { grid-template-columns: 1fr; }
 .legend-card {
@@ -1452,7 +1433,8 @@ html.lay-land-phone .step-res { font-size: 20px; }
   align-items: center;
   gap: 6px;
   padding: 12px 10px;
-  background: #FFFAF2;
+  --edge: #FFFAF2; /* кромка сплошного поверх контура — цвет фона карточки */
+  background: var(--edge);
   border: 2px solid var(--line);
   border-radius: 20px;
   text-align: center;
@@ -1463,7 +1445,12 @@ html.lay-land-phone .step-res { font-size: 20px; }
   justify-content: center;
   min-height: 96px;
 }
-.legend-stack { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.legend-sample { display: flex; align-items: flex-start; justify-content: center; column-gap: calc(var(--e) * .2); }
+.legend .part { row-gap: 4px; }
+/* В легенде внутреннее «В» должно читаться на 48 px: контур крупнее остальных примеров. */
+.legend .rel-in { --R: calc(var(--el) * 1.3); }
+.legend .rel-in.pic { --R: calc(var(--e) * 1.3); }
+.legend .part-top:empty, .legend .part-bottom:empty { display: none; }
 .legend .pic-row { height: auto; }
 .legend .emoji { line-height: 1.1; }
 .legend-text p { margin: 0; }

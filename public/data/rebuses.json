@@ -338,6 +338,29 @@
       ]
     },
     {
+      "id": "chyolka",
+      "answer": "ЧЁЛКА",
+      "accept": [],
+      "level": 1,
+      "theme": "люди",
+      "techniques": [
+        "plain"
+      ],
+      "hint": "Прядка волос, которая лежит на лбу",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "Ч"
+        },
+        {
+          "type": "pic",
+          "emoji": "🌲",
+          "word": "ЁЛКА"
+        }
+      ],
+      "source": "замысел author-kindergarten"
+    },
+    {
       "id": "shishka",
       "answer": "ШИШКА",
       "accept": [],
@@ -673,6 +696,26 @@
         }
       ],
       "source": "классика"
+    },
+    {
+      "id": "guba",
+      "answer": "ГУБА",
+      "accept": [],
+      "level": 1,
+      "theme": "люди",
+      "techniques": [
+        "near"
+      ],
+      "hint": "Их у рта две, верхняя и нижняя, ими улыбаются",
+      "parts": [
+        {
+          "type": "position",
+          "prep": "У",
+          "outer": "БА",
+          "inner": "Г"
+        }
+      ],
+      "source": "замысел author-speech"
     },
     {
       "id": "list",
@@ -1306,6 +1349,41 @@
       ]
     },
     {
+      "id": "lift",
+      "answer": "ЛИФТ",
+      "accept": [],
+      "level": 2,
+      "theme": "дом",
+      "techniques": [
+        "initials"
+      ],
+      "hint": "В многоэтажном доме он поднимает на нужный этаж",
+      "parts": [
+        {
+          "type": "initials",
+          "items": [
+            {
+              "emoji": "🛶",
+              "word": "ЛОДКА"
+            },
+            {
+              "emoji": "🪡",
+              "word": "ИГОЛКА"
+            },
+            {
+              "emoji": "🔦",
+              "word": "ФОНАРИК"
+            },
+            {
+              "emoji": "🎃",
+              "word": "ТЫКВА"
+            }
+          ]
+        }
+      ],
+      "source": "замысел author-1"
+    },
+    {
       "id": "voda",
       "answer": "ВОДА",
       "accept": [],
@@ -1590,6 +1668,29 @@
       "source": "классика"
     },
     {
+      "id": "hlev",
+      "answer": "ХЛЕВ",
+      "accept": [],
+      "level": 2,
+      "theme": "дом",
+      "techniques": [
+        "plain"
+      ],
+      "hint": "Низкий сарайчик на ферме, где зимуют корова и коза",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "Х"
+        },
+        {
+          "type": "pic",
+          "emoji": "🦁",
+          "word": "ЛЕВ"
+        }
+      ],
+      "source": "замысел author-kindergarten"
+    },
+    {
       "id": "kran",
       "answer": "КРАН",
       "accept": [],
@@ -1870,6 +1971,36 @@
         }
       ],
       "source": "классика"
+    },
+    {
+      "id": "rozetka",
+      "answer": "РОЗЕТКА",
+      "accept": [],
+      "level": 2,
+      "theme": "дом",
+      "techniques": [
+        "remove"
+      ],
+      "hint": "Дырочки в стене: туда включают шнур от лампы или зарядки",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🌹",
+          "word": "РОЗА",
+          "remove": [
+            "А"
+          ]
+        },
+        {
+          "type": "pic",
+          "image": "pictures/vetka.svg",
+          "word": "ВЕТКА",
+          "remove": [
+            "В"
+          ]
+        }
+      ],
+      "source": "замысел author-puzzler"
     },
     {
       "id": "lapa",
@@ -2161,6 +2292,41 @@
       ]
     },
     {
+      "id": "mama",
+      "answer": "МАМА",
+      "accept": [],
+      "level": 2,
+      "theme": "люди",
+      "techniques": [
+        "initials"
+      ],
+      "hint": "Самый родной человек: обнимает, укачивает и поёт колыбельную",
+      "parts": [
+        {
+          "type": "initials",
+          "items": [
+            {
+              "image": "pictures/mysh.svg",
+              "word": "МЫШЬ"
+            },
+            {
+              "emoji": "🍉",
+              "word": "АРБУЗ"
+            },
+            {
+              "emoji": "🥕",
+              "word": "МОРКОВЬ"
+            },
+            {
+              "emoji": "🍍",
+              "word": "АНАНАС"
+            }
+          ]
+        }
+      ],
+      "source": "замысел author-teacher"
+    },
+    {
       "id": "pen",
       "answer": "ПЕНЬ",
       "accept": [],
@@ -2407,6 +2573,31 @@
         }
       ],
       "source": "классика"
+    },
+    {
+      "id": "dochka",
+      "answer": "ДОЧКА",
+      "accept": [],
+      "level": 2,
+      "theme": "люди",
+      "techniques": [
+        "remove"
+      ],
+      "hint": "Так мама и папа зовут свою девочку",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🎣",
+          "word": "УДОЧКА",
+          "remove": [
+            "У"
+          ]
+        }
+      ],
+      "source": "замысел author-teacher",
+      "notMisspelled": [
+        "ДАЧКА"
+      ]
     },
     {
       "id": "pesok",
@@ -2694,6 +2885,28 @@
         }
       ],
       "source": "классика"
+    },
+    {
+      "id": "banya",
+      "answer": "БАНЯ",
+      "accept": [],
+      "level": 2,
+      "theme": "дом",
+      "techniques": [
+        "remove"
+      ],
+      "hint": "Деревянный домик с печкой, там парятся веником и поддают пар",
+      "parts": [
+        {
+          "type": "pic",
+          "image": "pictures/bashnya.svg",
+          "word": "БАШНЯ",
+          "remove": [
+            "Ш"
+          ]
+        }
+      ],
+      "source": "замысел author-teacher"
     },
     {
       "id": "bulka",
@@ -2992,6 +3205,44 @@
       "source": "классика",
       "notMisspelled": [
         "ВЕЯЛКА"
+      ]
+    },
+    {
+      "id": "papa",
+      "answer": "ПАПА",
+      "accept": [],
+      "level": 2,
+      "theme": "люди",
+      "techniques": [
+        "initials"
+      ],
+      "hint": "Он сильный, чинит игрушки и катает на плечах",
+      "parts": [
+        {
+          "type": "initials",
+          "items": [
+            {
+              "emoji": "🐧",
+              "word": "ПИНГВИН"
+            },
+            {
+              "emoji": "🚌",
+              "word": "АВТОБУС"
+            },
+            {
+              "emoji": "🦜",
+              "word": "ПОПУГАЙ"
+            },
+            {
+              "emoji": "🍍",
+              "word": "АНАНАС"
+            }
+          ]
+        }
+      ],
+      "source": "замысел author-teacher",
+      "notMisspelled": [
+        "ПОПА"
       ]
     },
     {
@@ -3443,6 +3694,40 @@
       ]
     },
     {
+      "id": "podval",
+      "answer": "ПОДВАЛ",
+      "accept": [],
+      "level": 3,
+      "theme": "дом",
+      "techniques": [
+        "initials",
+        "under"
+      ],
+      "hint": "Тёмная комната внизу, ниже первого этажа: там хранят картошку и банки с вареньем",
+      "parts": [
+        {
+          "type": "position",
+          "prep": "ПОД",
+          "outer": "В",
+          "inner": {
+            "type": "initials",
+            "items": [
+              {
+                "emoji": "🍉",
+                "word": "АРБУЗ"
+              },
+              {
+                "emoji": "🍋",
+                "word": "ЛИМОН"
+              }
+            ]
+          },
+          "prepFirst": true
+        }
+      ],
+      "source": "замысел author-1"
+    },
+    {
       "id": "doska",
       "answer": "ДОСКА",
       "accept": [],
@@ -3586,6 +3871,35 @@
       "notMisspelled": [
         "ЗОНД"
       ]
+    },
+    {
+      "id": "vesy",
+      "answer": "ВЕСЫ",
+      "accept": [],
+      "level": 3,
+      "theme": "дом",
+      "techniques": [
+        "in",
+        "remove"
+      ],
+      "hint": "Две чашки: что тяжелее, та и ниже",
+      "parts": [
+        {
+          "type": "position",
+          "prep": "В",
+          "outer": "Е",
+          "inner": {
+            "type": "pic",
+            "emoji": "🧀",
+            "word": "СЫР",
+            "remove": [
+              "Р"
+            ]
+          },
+          "prepFirst": true
+        }
+      ],
+      "source": "замысел author-1"
     },
     {
       "id": "baraban",
@@ -3759,6 +4073,30 @@
       "source": "классика"
     },
     {
+      "id": "cirkul",
+      "answer": "ЦИРКУЛЬ",
+      "accept": [],
+      "level": 3,
+      "theme": "дом",
+      "techniques": [
+        "near"
+      ],
+      "hint": "Ножки у него острые, а рисует он ровные круги",
+      "parts": [
+        {
+          "type": "position",
+          "prep": "У",
+          "outer": "ЛЬ",
+          "inner": {
+            "type": "pic",
+            "emoji": "🎪",
+            "word": "ЦИРК"
+          }
+        }
+      ],
+      "source": "замысел author-1"
+    },
+    {
       "id": "homyak",
       "answer": "ХОМЯК",
       "accept": [],
@@ -3907,6 +4245,43 @@
       "source": "классика",
       "notMisspelled": [
         "ОЗЕРА"
+      ]
+    },
+    {
+      "id": "zavod",
+      "answer": "ЗАВОД",
+      "accept": [],
+      "level": 3,
+      "theme": "дом",
+      "techniques": [
+        "behind",
+        "initials"
+      ],
+      "hint": "Огромное здание с трубами, где делают машины и игрушки",
+      "parts": [
+        {
+          "type": "position",
+          "prep": "ЗА",
+          "outer": "В",
+          "inner": {
+            "type": "initials",
+            "items": [
+              {
+                "image": "pictures/oblako.svg",
+                "word": "ОБЛАКО"
+              },
+              {
+                "emoji": "🏠",
+                "word": "ДОМ"
+              }
+            ]
+          },
+          "prepFirst": true
+        }
+      ],
+      "source": "замысел author-1",
+      "notMisspelled": [
+        "ЗАВОДЬ"
       ]
     },
     {
@@ -4085,6 +4460,35 @@
       ]
     },
     {
+      "id": "podnos",
+      "answer": "ПОДНОС",
+      "accept": [],
+      "level": 3,
+      "theme": "дом",
+      "techniques": [
+        "remove",
+        "under"
+      ],
+      "hint": "На нём официант несёт чашки",
+      "parts": [
+        {
+          "type": "position",
+          "prep": "ПОД",
+          "outer": "Н",
+          "inner": {
+            "type": "pic",
+            "image": "pictures/osa.svg",
+            "word": "ОСА",
+            "remove": [
+              "А"
+            ]
+          },
+          "prepFirst": true
+        }
+      ],
+      "source": "замысел author-illustrator"
+    },
+    {
       "id": "perets",
       "answer": "ПЕРЕЦ",
       "accept": [],
@@ -4229,6 +4633,43 @@
         }
       ],
       "source": "классика"
+    },
+    {
+      "id": "vodolaz",
+      "answer": "ВОДОЛАЗ",
+      "accept": [],
+      "level": 3,
+      "theme": "люди",
+      "techniques": [
+        "in",
+        "remove"
+      ],
+      "hint": "Ныряет на дно моря в тяжёлом костюме и шлеме",
+      "parts": [
+        {
+          "type": "position",
+          "prep": "В",
+          "outer": "О",
+          "inner": {
+            "type": "pic",
+            "emoji": "🏠",
+            "word": "ДОМ",
+            "remove": [
+              "М"
+            ]
+          },
+          "prepFirst": true
+        },
+        {
+          "type": "pic",
+          "emoji": "👁️",
+          "word": "ГЛАЗ",
+          "remove": [
+            "Г"
+          ]
+        }
+      ],
+      "source": "замысел author-puzzler"
     },
     {
       "id": "shashki",
@@ -4415,6 +4856,40 @@
       ]
     },
     {
+      "id": "lopatka",
+      "answer": "ЛОПАТКА",
+      "accept": [],
+      "level": 3,
+      "theme": "игрушки",
+      "techniques": [
+        "remove",
+        "replaceAt"
+      ],
+      "hint": "Ею копают песок в песочнице",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🔍",
+          "word": "ЛУПА",
+          "replaceAt": [
+            [
+              2,
+              "О"
+            ]
+          ]
+        },
+        {
+          "type": "pic",
+          "image": "pictures/utka.svg",
+          "word": "УТКА",
+          "remove": [
+            "У"
+          ]
+        }
+      ],
+      "source": "замысел author-puzzler"
+    },
+    {
       "id": "tarelka",
       "answer": "ТАРЕЛКА",
       "accept": [],
@@ -4553,6 +5028,31 @@
         }
       ],
       "source": "классика"
+    },
+    {
+      "id": "gorod",
+      "answer": "ГОРОД",
+      "accept": [],
+      "level": 3,
+      "theme": "дом",
+      "techniques": [
+        "replaceAt"
+      ],
+      "hint": "Там много домов, улиц и машин",
+      "parts": [
+        {
+          "type": "pic",
+          "image": "pictures/gorokh.svg",
+          "word": "ГОРОХ",
+          "replaceAt": [
+            [
+              5,
+              "Д"
+            ]
+          ]
+        }
+      ],
+      "source": "замысел author-teacher"
     },
     {
       "id": "lapsha",
@@ -4722,6 +5222,31 @@
       "source": "классика"
     },
     {
+      "id": "velikan",
+      "answer": "ВЕЛИКАН",
+      "accept": [],
+      "level": 3,
+      "theme": "сказки",
+      "techniques": [
+        "replaceAt"
+      ],
+      "hint": "В сказках он огромный, шагает через леса и еле влезает в дверь",
+      "parts": [
+        {
+          "type": "pic",
+          "image": "pictures/pelikan.svg",
+          "word": "ПЕЛИКАН",
+          "replaceAt": [
+            [
+              1,
+              "В"
+            ]
+          ]
+        }
+      ],
+      "source": "замысел author-teacher"
+    },
+    {
       "id": "sobaka",
       "answer": "СОБАКА",
       "accept": [],
@@ -4864,6 +5389,34 @@
         }
       ],
       "source": "классика"
+    },
+    {
+      "id": "papka",
+      "answer": "ПАПКА",
+      "accept": [],
+      "level": 3,
+      "theme": "дом",
+      "techniques": [
+        "replaceAt"
+      ],
+      "hint": "В ней школьник носит тетради и листы, она завязывается на тесёмки",
+      "parts": [
+        {
+          "type": "pic",
+          "image": "pictures/shapka.svg",
+          "word": "ШАПКА",
+          "replaceAt": [
+            [
+              1,
+              "П"
+            ]
+          ]
+        }
+      ],
+      "source": "замысел author-teacher",
+      "notMisspelled": [
+        "ПОПКА"
+      ]
     },
     {
       "id": "kometa",
