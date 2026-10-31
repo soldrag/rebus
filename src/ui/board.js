@@ -1,5 +1,5 @@
 // Картинка ребуса, раскладка под размер экрана, разбор решения.
-import { partLetters, normalize, keepYo } from '../rebus-core.js';
+import { partLetters, normalize, keepYo, POSITIONS } from '../rebus-core.js';
 export { techniques } from '../rebus-core.js';
 import { el, add, plural } from './dom.js';
 
@@ -117,16 +117,18 @@ function renderInitials(p) {
   return add(box, top, row, el('div', 'part-bottom'));
 }
 
-// Буквы в букве («В») или над буквами («НА»).
+// Буквы в позиции: внутри («В»), сверху («НА»), снизу («ПОД»), рядом («У»), позади («ЗА»).
+// Порядок в стопке: у «НА» и «У» меньшие буквы идут первыми (сверху / слева), у остальных — большая.
+const INNER_FIRST = ['on', 'near'];
 function renderPosition(p, seed) {
-  const on = normalize(p.prep) === 'НА';
-  const box = el('div', 'part text position ' + (on ? 'on' : 'in'));
+  const prep = POSITIONS[normalize(p.prep)] || POSITIONS['В'];
+  const box = el('div', 'part text position ' + prep.tech);
   const color = () => 'c' + (seed.n++ % LETTER_COLORS);
   const outer = el('span', 'pos-outer ' + color(), show(p.outer));
   const inner = el('span', 'pos-inner ' + color(), show(p.inner));
   const stack = el('span', 'pos-stack');
-  stack.setAttribute('aria-label', show(p.inner) + (on ? ' над ' : ' внутри ') + show(p.outer));
-  if (on) add(stack, inner, outer);
+  stack.setAttribute('aria-label', show(p.inner) + ' ' + prep.inside + ' ' + show(p.outer));
+  if (INNER_FIRST.includes(prep.tech)) add(stack, inner, outer);
   else add(stack, outer, inner);
   return add(box, el('div', 'part-top'), add(el('div', 'letters-row'), stack), el('div', 'part-bottom'));
 }
@@ -267,10 +269,11 @@ function explainPart(p) {
     add(what, el('b', 'step-word step-wrap', p.items.map((it) => show(it.word)).join(', ')),
       el('span', 'step-notes', 'берём первые буквы'));
   } else if (p.type === 'position') {
-    const on = normalize(p.prep) === 'НА';
-    pic = el('span', 'step-pic step-chip', on ? 'НА' : 'В');
-    add(what, el('b', 'step-word', show(p.inner) + (on ? ' на ' : ' в ') + show(p.outer)),
-      el('span', 'step-notes', 'читаем со словом «' + (on ? 'НА' : 'В') + '»'));
+    const prep = normalize(p.prep);
+    const info = POSITIONS[prep] || POSITIONS['В'];
+    pic = el('span', 'step-pic step-chip', prep);
+    add(what, el('b', 'step-word', show(p.inner) + ' ' + info.say + ' ' + show(p.outer)),
+      el('span', 'step-notes', p.prepFirst ? 'слово «' + prep + '» ставим в начало' : 'между буквами слово «' + prep + '»'));
   } else {
     pic = el('span', 'step-pic' + (p.flip ? ' flip' : '') + (p.type === 'number' ? ' step-num' : ''), p.type === 'number' ? String(p.value) : p.emoji);
     add(what, el('b', 'step-word', show(p.word)));

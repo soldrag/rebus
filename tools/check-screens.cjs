@@ -16,7 +16,7 @@ const DEVICES = [
   ['iPhone 13 ландшафт', 844, 390], ['iPhone Pro Max ландшафт', 932, 430], ['Android ландшафт', 740, 360],
   ['iPad mini', 768, 1024], ['iPad Air', 820, 1180], ['iPad ландшафт', 1024, 768], ['Ноутбук', 1280, 800],
 ];
-const SEEN = '["initials","number","pick","replaceAt","in","on","flip","replace","remove"]';
+const SEEN = '["initials","number","pick","replaceAt","in","on","near","under","behind","flip","replace","remove"]';
 
 let chromium;
 try { ({ chromium } = require('playwright')); } catch {

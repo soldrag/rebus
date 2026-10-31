@@ -13,7 +13,17 @@ export function keepYo(s) {
   return String(s || '').toUpperCase().replace(/[^А-ЯЁA-Z0-9]/g, '');
 }
 
-export const PREPOSITIONS = ['В', 'НА'];
+// Предлоги «букв в позиции»: как расположены буквы → приём (код в techniques()) и как читать.
+//   В — внутри, НА — сверху, ПОД — снизу, У — рядом, ЗА — спрятана позади.
+//   «ПОД» и «ЗА» ставим только в начало слова (prepFirst), «У» — только между буквами.
+export const POSITIONS = {
+  'В': { tech: 'in', say: 'в', inside: 'внутри' },
+  'НА': { tech: 'on', say: 'на', inside: 'над' },
+  'ПОД': { tech: 'under', say: 'под', inside: 'под' },
+  'У': { tech: 'near', say: 'у', inside: 'рядом с' },
+  'ЗА': { tech: 'behind', say: 'за', inside: 'за' },
+};
+export const PREPOSITIONS = Object.keys(POSITIONS);
 
 // Цифры, которые в нашем шрифте выглядят как буквы. Пополняется по итогам
 // визуальной проверки: если цифру на экране путают с буквой — добавить сюда.
@@ -29,7 +39,7 @@ export function readsAsLetters(value) {
 // Слова из примеров легенды (src/ui/legend.js): ответы набора не должны с ними совпадать,
 // иначе легенда подскажет ответ.
 export const LEGEND_WORDS = ['КИТЫ', 'КЛЮЧ', 'ТОРТ', 'ТОТ', 'ТРОТ', 'СЫР', 'СЫН', 'СОР', 'КУБ',
-  'СТО', 'СТОЛБ', 'ЛИСА', 'СОВА', 'ВОРОТА', 'КАНАВА'];
+  'СТО', 'СТОЛБ', 'ЛИСА', 'СОВА', 'ВОРОТА', 'КАНАВА', 'ПОДКОВА', 'ЗАКАТ'];
 // Картинки легенды: как они там используются (flip — перевёрнута, initials — в первых буквах).
 export const LEGEND_PICTURES = [
   { emoji: '🐳', word: 'КИТ' }, { emoji: '🔑', word: 'КЛЮЧ' }, { emoji: '🎂', word: 'ТОРТ' },
@@ -66,7 +76,7 @@ export function partLetters(part, norm = normalize) {
       return norm(part.text);
     case 'initials': // первые буквы картинок
       return (part.items || []).map((it) => norm(it.word).charAt(0)).join('');
-    case 'position': { // «ДА в О» = В-О-ДА, «СО в А» = СО-В-А, «ПА на МА» = ПА-НА-МА
+    case 'position': { // «ДА в О» = В-О-ДА, «СО в А» = СО-В-А, «ПА на МА» = ПА-НА-МА, «К у Б» = К-У-Б, «ОВА под К» = ПОД-К-ОВА
       const prep = norm(part.prep), outer = norm(part.outer), inner = norm(part.inner);
       return part.prepFirst ? prep + outer + inner : inner + prep + outer;
     }
@@ -203,8 +213,11 @@ function partProblems(part) {
       else if (part.items.some((it) => !it || !it.emoji || !normalize(it.word))) p.push('у картинки в items нет emoji или word');
       break;
     case 'position':
-      if (!PREPOSITIONS.includes(normalize(part.prep))) p.push('prep должен быть ' + PREPOSITIONS.join(' или '));
+      if (!PREPOSITIONS.includes(normalize(part.prep))) p.push('prep должен быть ' + PREPOSITIONS.join(', '));
       if (!normalize(part.outer) || !normalize(part.inner)) p.push('нет outer или inner');
+      else if (normalize(part.inner).length > 3) p.push('внутренних букв не больше трёх');
+      if (['ПОД', 'ЗА'].includes(normalize(part.prep)) && !part.prepFirst) p.push('«' + normalize(part.prep) + '» читается в начале слова: нужен prepFirst');
+      if (normalize(part.prep) === 'У' && part.prepFirst) p.push('«У» читается между буквами: prepFirst не нужен');
       break;
     case 'number':
       if (!/^\d+$/.test(String(part.value || ''))) p.push('value должно быть числом');
@@ -260,7 +273,7 @@ export function techniques(rebus) {
   const t = new Set();
   for (const p of rebus.parts || []) {
     if (p.type === 'initials') t.add('initials');
-    else if (p.type === 'position') t.add(normalize(p.prep) === 'НА' ? 'on' : 'in');
+    else if (p.type === 'position') t.add((POSITIONS[normalize(p.prep)] || POSITIONS['В']).tech);
     else if (p.type === 'number') { t.add('number'); if (p.cutStart || p.cutEnd) t.add('comma'); }
     else if (p.type === 'pic') {
       if (p.cutStart || p.cutEnd) t.add('comma');

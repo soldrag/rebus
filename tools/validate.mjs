@@ -136,6 +136,22 @@ for (const level of [1, 2, 3]) {
   }
 }
 
+// Буквы в позиции (в, на, у, под, за) — ребусы из одних букв: их не должно быть слишком много.
+// Не больше трёх на этап (15 % длинного этапа), не больше двух подряд, на уровне 3 — только вместе с картинкой.
+const isPosition = (r) => (r.parts || []).some((p) => p && p.type === 'position');
+for (const level of [1, 2, 3]) {
+  const items = rebuses.filter((r) => r && r.level === level && Array.isArray(r.parts));
+  chunkStages(items).forEach((stage, i) => {
+    const n = stage.filter(isPosition).length;
+    const max = Math.max(3, Math.ceil(stage.length * 0.15));
+    if (n > max) warnings.push(`уровень ${level}, этап ${i + 1}: ${n} ребусов с буквами в позиции из ${stage.length} — не больше ${max}`);
+  });
+  items.forEach((r, i) => {
+    if (isPosition(r) && i && isPosition(items[i - 1])) warnings.push(`${r.id}: два ребуса с буквами в позиции подряд`);
+    if (level === 3 && isPosition(r) && !r.parts.some((p) => p.type === 'pic')) warnings.push(`${r.id}: на уровне 3 буквы в позиции — только вместе с картинкой`);
+  });
+}
+
 // Зеркальные пары: ответ одного ребуса — картинка другого. «Узел» (картинкой в 2+ ребусах)
 // и пара внутри одного этапа мешают ребёнку.
 const stageOfId = new Map();

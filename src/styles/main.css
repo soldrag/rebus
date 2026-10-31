@@ -669,6 +669,28 @@ h1[tabindex="-1"]:focus { outline: none; }
 .position.on .pos-stack { flex-direction: column; gap: calc(var(--el) * .02); }
 .position.on .pos-inner { font-size: calc(var(--el) * .46); }
 .position.on .pos-outer { font-size: calc(var(--el) * .62); }
+.position.under .pos-stack { flex-direction: column; gap: calc(var(--el) * .02); }
+.position.under .pos-inner { font-size: calc(var(--el) * .46); }
+.position.under .pos-outer { font-size: calc(var(--el) * .62); }
+/* «У»: маленькие буквы стоят вплотную к большой, на одной линии низа. */
+.position.near .pos-stack { align-items: flex-end; gap: calc(var(--el) * .02); }
+.position.near .pos-inner { font-size: calc(var(--el) * .46); }
+.position.near .pos-outer { font-size: calc(var(--el) * .92); }
+/* «ЗА»: задняя буква выглядывает из-за большой, у большой — светлая обводка. */
+.position.behind .pos-stack { align-items: center; }
+.position.behind .pos-outer {
+  position: relative;
+  z-index: 2;
+  font-size: calc(var(--el) * .95);
+  text-shadow: 0 0 calc(var(--el) * .025) #fff;
+}
+.position.behind .pos-inner {
+  position: relative;
+  z-index: 1;
+  font-size: calc(var(--el) * .78);
+  margin-left: calc(var(--el) * -.2);
+  transform: translateY(calc(var(--el) * -.1));
+}
 .step-num { font-size: 24px; font-weight: 900; color: var(--sky-ink); font-family: var(--font); }
 .step-multi { font-size: 20px; word-break: break-all; }
 .step-word.step-wrap { white-space: normal; }

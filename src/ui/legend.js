@@ -8,6 +8,14 @@ const stack = (...nodes) => add(el('div', 'legend-stack'), ...nodes);
 const top = (...nodes) => add(el('div', 'part-top'), ...nodes);
 const bigLetters = (text, cls = 'c0') => add(el('span', 'letters-row'), ...text.split('').map((ch) => el('span', 'big-letter ' + cls, ch)));
 
+// Буквы в позиции для карточки легенды: порядок в стопке тот же, что на доске.
+const pos = (kind, outer, inner, oc, ic) => {
+  const o = el('span', 'pos-outer ' + oc, outer);
+  const i = el('span', 'pos-inner ' + ic, inner);
+  const stackEl = add(el('span', 'pos-stack'), ...(kind === 'near' ? [i, o] : [o, i]));
+  return add(el('span', 'position ' + kind), stackEl);
+};
+
 const CARDS = {
   plain: {
     title: 'Назови картинки и прочитай всё подряд, слева направо',
@@ -78,6 +86,21 @@ const CARDS = {
     sample() {
       return add(el('span', 'position on'), add(el('span', 'pos-stack'), el('span', 'pos-inner c0', 'КА'), el('span', 'pos-outer c1', 'ВА')));
     },
+  },
+  near: {
+    title: 'Маленькая буква стоит рядом с большой — читай со словом «У»',
+    words: 'К у Б → КУБ',
+    sample() { return pos('near', 'Б', 'К', 'c1', 'c0'); },
+  },
+  under: {
+    title: 'Буквы под буквой — слово «ПОД» ставь в начало',
+    words: 'ОВА под К → ПОДКОВА',
+    sample() { return pos('under', 'К', 'ОВА', 'c1', 'c0'); },
+  },
+  behind: {
+    title: 'Буква спряталась за другой — слово «ЗА» ставь в начало',
+    words: 'АТ за К → ЗАКАТ',
+    sample() { return pos('behind', 'К', 'АТ', 'c1', 'c0'); },
   },
 };
 // Приёмы с карточками; «plain» — только для ребусов без особых значков, сам не показывается.

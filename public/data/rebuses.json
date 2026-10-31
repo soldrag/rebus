@@ -446,6 +446,27 @@
       "source": "классика"
     },
     {
+      "id": "vata",
+      "answer": "ВАТА",
+      "accept": [],
+      "level": 1,
+      "theme": "дом",
+      "techniques": [
+        "in"
+      ],
+      "hint": "Белый мягкий комок из аптечки",
+      "parts": [
+        {
+          "type": "position",
+          "prep": "В",
+          "outer": "А",
+          "inner": "ТА",
+          "prepFirst": true
+        }
+      ],
+      "source": "классика"
+    },
+    {
       "id": "semya",
       "answer": "СЕМЬЯ",
       "accept": [],
@@ -700,6 +721,26 @@
         {
           "type": "letters",
           "text": "ОК"
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "zub",
+      "answer": "ЗУБ",
+      "accept": [],
+      "level": 1,
+      "theme": "люди",
+      "techniques": [
+        "near"
+      ],
+      "hint": "Он во рту, им грызут сухарик",
+      "parts": [
+        {
+          "type": "position",
+          "prep": "У",
+          "outer": "Б",
+          "inner": "З"
         }
       ],
       "source": "классика"
@@ -1217,6 +1258,26 @@
       ]
     },
     {
+      "id": "bukva",
+      "answer": "БУКВА",
+      "accept": [],
+      "level": 2,
+      "theme": "дом",
+      "techniques": [
+        "near"
+      ],
+      "hint": "Из таких значков, стоящих в ряд, складывается слово",
+      "parts": [
+        {
+          "type": "position",
+          "prep": "У",
+          "outer": "КВА",
+          "inner": "Б"
+        }
+      ],
+      "source": "классика"
+    },
+    {
       "id": "seno",
       "answer": "СЕНО",
       "accept": [],
@@ -1459,6 +1520,29 @@
         }
       ],
       "source": "классика"
+    },
+    {
+      "id": "divan",
+      "answer": "ДИВАН",
+      "accept": [],
+      "level": 2,
+      "theme": "дом",
+      "techniques": [
+        "in"
+      ],
+      "hint": "Мягкая мебель: на ней сидят и смотрят мультики",
+      "parts": [
+        {
+          "type": "position",
+          "prep": "В",
+          "outer": "АН",
+          "inner": "ДИ"
+        }
+      ],
+      "source": "классика",
+      "notMisspelled": [
+        "ДЕВОН"
+      ]
     },
     {
       "id": "gorb",
@@ -1718,6 +1802,27 @@
       "source": "классика"
     },
     {
+      "id": "zayac",
+      "answer": "ЗАЯЦ",
+      "accept": [],
+      "level": 2,
+      "theme": "звери",
+      "techniques": [
+        "behind"
+      ],
+      "hint": "Длинные уши, короткий хвост, зимой белый",
+      "parts": [
+        {
+          "type": "position",
+          "prep": "ЗА",
+          "outer": "Я",
+          "inner": "Ц",
+          "prepFirst": true
+        }
+      ],
+      "source": "классика"
+    },
+    {
       "id": "osel",
       "answer": "ОСЁЛ",
       "accept": [],
@@ -1917,6 +2022,26 @@
         {
           "type": "letters",
           "text": "Щ"
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "kanat",
+      "answer": "КАНАТ",
+      "accept": [],
+      "level": 2,
+      "theme": "дом",
+      "techniques": [
+        "on"
+      ],
+      "hint": "Толстая верёвка: по ней лазают на физкультуре",
+      "parts": [
+        {
+          "type": "position",
+          "prep": "НА",
+          "outer": "Т",
+          "inner": "КА"
         }
       ],
       "source": "классика"
@@ -2236,6 +2361,26 @@
       "source": "классика"
     },
     {
+      "id": "kurtka",
+      "answer": "КУРТКА",
+      "accept": [],
+      "level": 2,
+      "theme": "одежда",
+      "techniques": [
+        "near"
+      ],
+      "hint": "Тёплая одежда на молнии для осени",
+      "parts": [
+        {
+          "type": "position",
+          "prep": "У",
+          "outer": "РТКА",
+          "inner": "К"
+        }
+      ],
+      "source": "классика"
+    },
+    {
       "id": "tron",
       "answer": "ТРОН",
       "accept": [],
@@ -2467,6 +2612,27 @@
               "Л"
             ]
           ]
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "podarok",
+      "answer": "ПОДАРОК",
+      "accept": [],
+      "level": 2,
+      "theme": "игрушки",
+      "techniques": [
+        "under"
+      ],
+      "hint": "Его дают в день рождения, он в коробке с бантом",
+      "parts": [
+        {
+          "type": "position",
+          "prep": "ПОД",
+          "outer": "А",
+          "inner": "РОК",
+          "prepFirst": true
         }
       ],
       "source": "классика"
@@ -2754,6 +2920,27 @@
       ]
     },
     {
+      "id": "zabor",
+      "answer": "ЗАБОР",
+      "accept": [],
+      "level": 2,
+      "theme": "дом",
+      "techniques": [
+        "behind"
+      ],
+      "hint": "Деревянная ограда вокруг двора",
+      "parts": [
+        {
+          "type": "position",
+          "prep": "ЗА",
+          "outer": "Б",
+          "inner": "ОР",
+          "prepFirst": true
+        }
+      ],
+      "source": "классика"
+    },
+    {
       "id": "malina",
       "answer": "МАЛИНА",
       "accept": [],
@@ -2891,6 +3078,27 @@
       ]
     },
     {
+      "id": "podushka",
+      "answer": "ПОДУШКА",
+      "accept": [],
+      "level": 2,
+      "theme": "дом",
+      "techniques": [
+        "under"
+      ],
+      "hint": "На ней лежит голова, когда спишь",
+      "parts": [
+        {
+          "type": "position",
+          "prep": "ПОД",
+          "outer": "У",
+          "inner": "ШКА",
+          "prepFirst": true
+        }
+      ],
+      "source": "классика"
+    },
+    {
       "id": "sol",
       "answer": "СОЛЬ",
       "accept": [],
@@ -2939,6 +3147,27 @@
           "emoji": "🏆",
           "word": "КУБОК",
           "cutStart": 1
+        }
+      ],
+      "source": "классика"
+    },
+    {
+      "id": "venik",
+      "answer": "ВЕНИК",
+      "accept": [],
+      "level": 2,
+      "theme": "дом",
+      "techniques": [
+        "in"
+      ],
+      "hint": "Им подметают пол, у него жёсткие прутики",
+      "parts": [
+        {
+          "type": "position",
+          "prep": "В",
+          "outer": "Е",
+          "inner": "НИК",
+          "prepFirst": true
         }
       ],
       "source": "классика"
