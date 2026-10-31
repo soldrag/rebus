@@ -20,6 +20,3 @@ export function plural(n, one, few, many) {
 
 export const reduceMotion = () =>
   !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-
-export const finePointer = () =>
-  !!(window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches);

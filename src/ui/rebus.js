@@ -1,20 +1,20 @@
 // Экран одного ребуса: картинка, ввод ответа, сердечки, итог.
 import { normalize, isCorrect, spellingFix, spellingMarks } from '../rebus-core.js';
-import { el, add, finePointer } from './dom.js';
+import { el, add } from './dom.js';
 import { getState, setState, MAX_TRIES, hasSeen, markSeen } from '../store.js';
 import { levelInfo, stageNext, stageOf, stageProgress } from '../levels.js';
 import { renderBoard, renderExplain, techniques, show } from './board.js';
 import { openLegend, ALL_KINDS } from './legend.js';
 import { celebrate } from './confetti.js';
+import { createKeyboard, letterOf } from './keyboard.js';
 
 const HINT_AFTER = 2;
 const CLOSE_PHRASES = ['Почти! Попробуй ещё 🙂', 'Совсем близко! Ещё разок 💪'];
 const FAR_PHRASES = ['Не то слово, попробуй ещё 🙂', 'Посмотри на картинку ещё раз 👀'];
-// Короткие подсказки прямо в поле: их видно и при открытой клавиатуре.
-const CLOSE_PLACEHOLDER = 'Почти! Ещё разок';
-const FAR_PLACEHOLDER = 'Попробуй ещё';
+const PLACEHOLDER = 'Что тут спрятано?';
+const MAX_LEN = 20;
 const FIX_MS = 1600; // столько видно «Пишется так», потом ребёнок пишет слово сам
-const SETTLE_MS = 600; // столько «Молодец!» видно, прежде чем клавиатура плавно уедет
+const KBD_OUT_MS = 350; // столько видно «Молодец!» над клавиатурой, прежде чем её сменит «Дальше»
 
 // Расстояние Левенштейна: насколько ответ похож на правильный.
 function distance(a, b) {
@@ -60,7 +60,7 @@ function updateHeartsLabel(h, tries) {
 }
 
 // После двух ошибок появляется кнопка; сама подсказка — только по нажатию.
-function renderHintButton(rebus) {
+function renderHintButton(rebus, slot) {
   const b = el('button', 'hint-btn', '💡 Подсказка');
   b.type = 'button';
   b.addEventListener('click', () => {
@@ -68,6 +68,7 @@ function renderHintButton(rebus) {
     box.setAttribute('role', 'status');
     add(box, el('span', 'hint-label', '💡 Подсказка'), el('span', 'hint-text', rebus.hint));
     b.replaceWith(box);
+    slot.classList.add('open');
   });
   return b;
 }
@@ -135,13 +136,33 @@ function explainBlock(rebus, animate) {
   return ex;
 }
 
+// Место клавиатуры внизу. Когда ответ готов, клавиатура плавно уходит, а на её месте —
+// «Дальше» (и разбор, если слово показали). Клавиатура остаётся в разметке невидимой:
+// по ней высота места та же, и экран не прыгает.
+function renderDock(kb) {
+  const dock = el('div', 'dock');
+  add(dock, kb.node);
+  return dock;
+}
+function dockDone(dock, next, explain) {
+  const layer = el('div', 'dock-done' + (explain ? ' with-explain' : ''));
+  add(layer, explain, next);
+  add(dock, layer);
+  return layer;
+}
+
 // Готовый ребус при повторном открытии.
 function renderDone(panel, rebus, data, st) {
   const kind = st.status === 'solved' ? 'ok' : 'reveal';
   const box = resultBox(kind, rebus, false, kind === 'ok' ? st.typo : undefined);
   box.classList.add('settled');
-  const answer = add(el('div', 'answer answer-done'), add(el('div', 'input-wrap'), box), nextButton(data, rebus));
-  panel.replaceChildren(renderHearts(st.tries), answer, el('p', 'msg'), explainBlock(rebus, false));
+  const answer = add(el('div', 'answer answer-done'), add(el('div', 'input-wrap'), box));
+  const kb = createKeyboard({ onLetter() {}, onErase() {}, onCheck() {} });
+  kb.close();
+  const dock = renderDock(kb);
+  dockDone(dock, nextButton(data, rebus), explainBlock(rebus, false)).classList.add('shown');
+  panel.replaceChildren(add(el('div', 'status-row'), renderHearts(st.tries)), answer, el('p', 'msg'));
+  panel.after(dock);
 }
 
 export function renderRebus(app, data, id, signal, backTo = '#/') {
@@ -191,81 +212,105 @@ export function renderRebus(app, data, id, signal, backTo = '#/') {
 
   if (st.status) { renderDone(panel, rebus, data, st); return; }
 
-  const form = el('form', 'answer');
-  form.setAttribute('autocomplete', 'off');
-  form.noValidate = true;
-  const input = el('input', 'answer-input');
-  Object.assign(input, { type: 'text', name: 'answer', placeholder: 'Что тут спрятано?', maxLength: 40 });
+  // Поле ответа — не <input>: его нельзя сфокусировать, поэтому системная клавиатура
+  // (и полоска ↑↓✓ над ней на iPhone) не появляется никогда. Буквы — со своей клавиатуры
+  // или с физической (keydown на документе). Для диктора это «текстовое поле», живая область.
+  const answer = el('div', 'answer');
+  const field = el('div', 'answer-input is-empty');
   for (const [k, v] of Object.entries({
-    autocapitalize: 'characters', autocomplete: 'off', autocorrect: 'off', spellcheck: 'false',
-    inputmode: 'text', lang: 'ru', enterkeyhint: 'go', 'aria-label': 'Твой ответ',
-  })) input.setAttribute(k, v);
-  const btn = el('button', 'btn btn-check', 'Проверить');
-  btn.type = 'submit';
-  const inputWrap = add(el('div', 'input-wrap'), input);
-  add(form, inputWrap, btn);
+    role: 'textbox', 'aria-label': 'Твой ответ', 'aria-placeholder': PLACEHOLDER,
+    'aria-live': 'polite', 'aria-atomic': 'true', lang: 'ru',
+  })) field.setAttribute(k, v);
+  const typed = el('span', 'typed');
+  const caret = el('span', 'caret');
+  const ph = el('span', 'ph', PLACEHOLDER);
+  caret.setAttribute('aria-hidden', 'true');
+  ph.setAttribute('aria-hidden', 'true');
+  add(field, typed, caret, ph);
+  const inputWrap = add(el('div', 'input-wrap'), field);
+  add(answer, inputWrap);
+
+  let value = '';
+  const paint = () => {
+    typed.textContent = value;
+    field.classList.toggle('is-empty', !value);
+    field.classList.remove('long');
+    // Длинное слово не влезает — показываем его конец, где курсор.
+    if (value && typed.offsetWidth > field.clientWidth - 24) field.classList.add('long');
+  };
 
   const hearts = renderHearts(st.tries);
   const msg = el('p', 'msg');
   msg.setAttribute('role', 'status');
   const hintSlot = el('div', 'hint-slot');
-  if (rebus.hint && st.tries >= HINT_AFTER) add(hintSlot, renderHintButton(rebus));
-  add(panel, hearts, form, msg, hintSlot);
+  if (rebus.hint && st.tries >= HINT_AFTER) add(hintSlot, renderHintButton(rebus, hintSlot));
+  add(panel, add(el('div', 'status-row'), hearts, hintSlot), answer, msg);
 
   let done = false;
   let copy = null; // слово угадано с ошибкой: ребёнок пишет его по образцу
-  input.addEventListener('input', () => {
+  const changed = () => {
+    paint();
     if (done) return;
     if (copy) {
-      const onTrack = copy.update(input.value);
+      const onTrack = copy.update(value);
       inputWrap.classList.toggle('off-track', !onTrack);
       msg.textContent = onTrack ? 'Напиши по буквам ✍️' : 'Посмотри на буквы 👀';
       msg.className = onTrack ? 'msg' : 'msg try';
-      if (isCorrect(rebus, input.value)) finish('ok');
+      if (isCorrect(rebus, value)) finish('ok');
       return;
     }
-    input.classList.remove('shake');
+    field.classList.remove('shake');
     if (msg.classList.contains('empty-note')) { msg.textContent = ''; msg.className = 'msg'; }
-  });
+  };
+  const typeLetter = (ch) => {
+    if (done || value.length >= MAX_LEN) return;
+    value += ch;
+    changed();
+  };
+  const erase = () => {
+    if (done || !value) return;
+    value = value.slice(0, -1);
+    changed();
+  };
 
-  // Ребёнок набрал слово и закрыл клавиатуру (галочка над клавиатурой iOS):
-  // проверяем сами, чтобы не нужно было ещё раз жать «Проверить».
-  // Пауза — чтобы нажатие на «Проверить» сразу после blur не проверило дважды.
-  let checking = false;
-  input.addEventListener('blur', () => {
-    const val = input.value;
-    if (!normalize(val) || copy) return;
-    setTimeout(() => {
-      if (done || checking || !input.isConnected || document.activeElement === input) return;
-      if (input.value !== val || closeLegend) return;
-      form.requestSubmit();
-    }, 300);
-  }, { signal });
+  const kb = createKeyboard({ onLetter: typeLetter, onErase: erase, onCheck: () => check() });
+  const dock = renderDock(kb);
+  panel.after(dock);
 
-  // Ответ готов: итог появляется поверх поля, «Дальше» — на месте «Проверить».
-  // Клавиатуру (если открыта) убираем не сразу, а через SETTLE_MS: ребёнок успевает
-  // увидеть «Молодец!», и ничего на экране не прыгает — размеры те же.
+  // Ответ готов: итог появляется поверх поля, клавиатура плавно уходит,
+  // на её месте — «Дальше». Размеры те же — ничего на экране не прыгает.
+  let next = null;
+  let viaPointer = false; // последнее нажатие — пальцем или мышью (а не клавиатурой)
+  document.addEventListener('pointerdown', (e) => {
+    viaPointer = true;
+    // Нажали экранную клавишу — фокус с прежней кнопки (например, «?») снимаем, чтобы Enter проверял.
+    const f = document.activeElement;
+    if (kb.node.contains(e.target) && f && f !== document.body && !kb.node.contains(f)) f.blur();
+  }, { capture: true, signal });
   const finish = (kind) => {
     done = true;
+    field.classList.add('done');
     if (copy) { copy.ghost.remove(); inputWrap.classList.remove('copy', 'off-track'); }
     const box = resultBox(kind, rebus, true);
     add(inputWrap, box);
-    const next = nextButton(data, rebus);
-    btn.replaceWith(next);
-    form.classList.add('answer-done');
     msg.textContent = '';
     msg.className = 'msg';
     if (hintSlot.querySelector('.hint-btn')) hintSlot.replaceChildren();
     if (kind === 'ok') celebrate();
-    const hadFocus = document.activeElement === input;
+    next = nextButton(data, rebus);
+    const layer = dockDone(dock, next, kind === 'reveal' ? explainBlock(rebus, false) : null);
     setTimeout(() => {
-      if (!input.isConnected) return;
-      input.blur();
-      input.remove();
-      box.classList.add('settled');
-      if (kind === 'reveal') add(panel, explainBlock(rebus, true));
-      next.focus({ preventScroll: true });
-    }, hadFocus ? SETTLE_MS : 0);
+      if (!field.isConnected) return;
+      kb.close();
+      layer.classList.add('shown');
+      setTimeout(() => {
+        if (!field.isConnected) return;
+        field.remove();
+        box.classList.add('settled');
+        // Фокус на «Дальше» — для клавиатуры и диктора; после касания пальцем рамка фокуса не нужна.
+        if (!viaPointer) next.focus({ preventScroll: true });
+      }, 300);
+    }, KBD_OUT_MS);
   };
 
   // Слово угадано, но написано с ошибкой: сердечко тратится, звезда есть (слово-то верное),
@@ -282,13 +327,14 @@ export function renderRebus(app, data, id, signal, backTo = '#/') {
     copy = renderGhost(rebus.answer, marks);
     const box = resultBox('fix', rebus, true, val);
     add(inputWrap, box);
-    input.value = '';
-    input.placeholder = '';
+    value = '';
+    paint();
+    field.setAttribute('aria-placeholder', 'Напиши по буквам');
     msg.textContent = 'Слово верное! 🙂';
     msg.className = 'msg good';
     hintSlot.replaceChildren();
     setTimeout(() => {
-      if (done || !input.isConnected) return;
+      if (done || !field.isConnected) return;
       inputWrap.classList.add('copy');
       inputWrap.prepend(copy.ghost);
       copy.pin();
@@ -296,20 +342,16 @@ export function renderRebus(app, data, id, signal, backTo = '#/') {
       setTimeout(() => box.remove(), 350);
       msg.textContent = 'Напиши по буквам ✍️';
       msg.className = 'msg';
-      copy.update(input.value);
+      copy.update(value);
     }, FIX_MS);
   };
 
-  form.addEventListener('submit', (ev) => {
-    ev.preventDefault();
+  const check = () => {
     if (done) return;
-    checking = true;
-    setTimeout(() => { checking = false; }, 400);
-    const val = input.value;
+    const val = value;
     if (!normalize(val)) {
       msg.textContent = 'Напиши слово 🙂';
       msg.className = 'msg empty-note';
-      input.focus();
       return;
     }
     if (isCorrect(rebus, val)) {
@@ -338,21 +380,49 @@ export function renderRebus(app, data, id, signal, backTo = '#/') {
     const lost = hearts.children[MAX_TRIES - st.tries];
     if (lost) lost.classList.add('off', 'losing');
     updateHeartsLabel(hearts, st.tries);
-    input.classList.remove('shake');
-    void input.offsetWidth; // перезапуск анимации
-    input.classList.add('shake');
-    const close = isClose(rebus, val);
-    const phrases = close ? CLOSE_PHRASES : FAR_PHRASES;
+    field.classList.remove('shake');
+    void field.offsetWidth; // перезапуск анимации
+    field.classList.add('shake');
+    const phrases = isClose(rebus, val) ? CLOSE_PHRASES : FAR_PHRASES;
     msg.textContent = phrases[(st.tries - 1) % phrases.length];
     msg.className = 'msg try';
-    if (rebus.hint && st.tries >= HINT_AFTER && !hintSlot.firstChild) add(hintSlot, renderHintButton(rebus));
-    // Поле очищаем, а не выделяем: выделение вызывает на телефоне меню «Копировать».
-    // Фокус не трогаем: если клавиатура была открыта, она так и остаётся.
-    input.value = '';
-    input.placeholder = close ? CLOSE_PLACEHOLDER : FAR_PLACEHOLDER;
-  });
+    if (rebus.hint && st.tries >= HINT_AFTER && !hintSlot.firstChild) add(hintSlot, renderHintButton(rebus, hintSlot));
+    value = '';
+    paint();
+  };
 
-  const focusInput = () => { if (finePointer()) input.focus({ preventScroll: true }); };
+  // Физическая клавиатура (ПК, планшет с клавиатурой): буквы, Ё, Backspace, Enter.
+  // Пока открыта легенда (или другой диалог) — не печатаем.
+  document.addEventListener('keydown', (e) => {
+    if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey || e.isComposing) return;
+    if (closeLegend || document.querySelector('dialog[open]')) return;
+    viaPointer = false;
+    const a = document.activeElement;
+    const onButton = a && a !== document.body && /^(BUTTON|A|INPUT|TEXTAREA|SELECT)$/.test(a.tagName);
+    if (e.key === 'Enter') {
+      if (onButton) return; // Enter на кнопке нажимает эту кнопку
+      e.preventDefault();
+      if (done) { if (next) next.click(); return; }
+      if (!e.repeat) { kb.flash('↵'); check(); }
+      return;
+    }
+    if (done) return;
+    const ch = e.key === ' ' ? null : letterOf(e);
+    if (!ch && e.key !== 'Backspace') return;
+    // Ребёнок печатает ответ — значит, следующий Enter проверяет, а не нажимает
+    // кнопку, на которой остался фокус (например, «?» после закрытия легенды).
+    if (onButton) a.blur();
+    if (e.key === 'Backspace') {
+      e.preventDefault();
+      kb.flash('⌫');
+      erase();
+      return;
+    }
+    e.preventDefault();
+    kb.flash(ch);
+    typeLetter(ch);
+  }, { signal });
+
   // Новый для ребёнка приём записи — один раз показываем легенду.
   // Запятые ребёнок знает — для них легенду сам не показываем.
   const fresh = techniques(rebus).filter((k) => ALL_KINDS.includes(k) && k !== 'comma' && !hasSeen(k));
@@ -360,9 +430,7 @@ export function renderRebus(app, data, id, signal, backTo = '#/') {
     setTimeout(() => {
       if (signal && signal.aborted) return;
       markSeen(fresh);
-      showLegend(fresh, true, focusInput);
+      showLegend(fresh, true);
     }, 250);
-  } else {
-    setTimeout(focusInput, 50);
   }
 }

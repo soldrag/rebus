@@ -89,53 +89,25 @@ async function start() {
   route();
 }
 
-// Высота экрана для раскладки (--app-h) и класс раскладки на <html>. Экранная клавиатура их НЕ меняет:
-// макет заранее оставляет под клавиатуру место, поэтому при её появлении ничего
-// не прыгает. Обновляем при повороте/смене ширины и при изменении окна, пока
-// не идёт ввод (на Android с resizes-content клавиатура уменьшает окно).
-let appW = 0;
+// Высота экрана для раскладки (--app-h) и класс раскладки на <html>.
+// Системная клавиатура на экране ребуса не открывается (там своя, см. ui/keyboard.js),
+// поэтому окно меняется только при повороте и изменении размера.
 function syncAppHeight() {
-  const typing = document.activeElement && /^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName);
-  const cw = document.documentElement.clientWidth;
-  if (typing && cw === appW) return;
-  appW = cw;
   const w = window.innerWidth, h = window.innerHeight;
   const root = document.documentElement;
   root.style.setProperty('--app-h', h + 'px');
-  // Раскладка экрана ребуса — классами, а не media-запросами по ориентации:
-  // на Android (resizes-content) клавиатура уменьшает окно, и планшет «становится»
-  // альбомным. Классы меняются только вместе с --app-h, то есть не во время ввода.
-  const coarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
   const portrait = h >= w;
-  const land = !portrait && (h <= 560 || coarse);
   root.classList.toggle('lay-portrait', portrait);
   root.classList.toggle('lay-portrait-wide', portrait && w >= 600);
-  root.classList.toggle('lay-land', land);
+  // Ландшафт: телефон (низкий экран) — клавиатура справа под полем;
+  // планшет и ПК — ребус и поле рядом, клавиатура под ними.
   root.classList.toggle('lay-land-phone', !portrait && h <= 560);
+  root.classList.toggle('lay-wide', !portrait && h > 560);
   root.classList.toggle('lay-short', h <= 820 && w >= 600);
 }
 syncAppHeight();
 window.addEventListener('resize', syncAppHeight);
 window.addEventListener('orientationchange', () => setTimeout(syncAppHeight, 300));
-
-// iOS при фокусе на поле сам прокручивает страницу вверх — даже если поле и так над
-// клавиатурой (макет заранее оставляет ей место). Из-за этого верх ребуса уезжает
-// за экран. Пока на телефоне в портрете идёт ввод, держим страницу на месте.
-function keepRebusInView() {
-  const typing = document.activeElement && document.activeElement.classList.contains('answer-input');
-  if (!typing || !document.documentElement.classList.contains('lay-portrait')) return;
-  const vv = window.visualViewport;
-  if (window.scrollY > 0 || (vv && vv.offsetTop > 0)) window.scrollTo(0, 0);
-}
-window.addEventListener('scroll', keepRebusInView, { passive: true });
-if (window.visualViewport) {
-  window.visualViewport.addEventListener('scroll', keepRebusInView);
-  window.visualViewport.addEventListener('resize', keepRebusInView);
-}
-document.addEventListener('focusin', () => {
-  // Клавиатура выезжает с анимацией — проверяем несколько раз, пока она не встанет.
-  for (const t of [0, 100, 300, 600]) setTimeout(keepRebusInView, t);
-});
 
 window.addEventListener('hashchange', () => route());
 
