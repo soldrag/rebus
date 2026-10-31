@@ -51,7 +51,7 @@ for (const r of rebuses) {
   // В коротком слове (3–5 букв) — одна написанная буква, на уровне 1 можно две.
   if (a && a.length <= 5 && written > (r.level === 1 ? 2 : 1)) should(r, 'shortLetters', `в слове из ${a.length} букв написано ${written} — для уровня ${r.level} много`);
 
-  if (r.parts.some((p) => p && p.type === 'position' && normalize(p.inner).length > 3)) should(r, 'positionInner', 'внутренних букв в позиции обычно не больше трёх — мелкие не читаются');
+  if (r.parts.some((p) => p && p.type === 'position' && typeof p.inner === 'string' && normalize(p.inner).length > 3)) should(r, 'positionInner', 'внутренних букв в позиции обычно не больше трёх — мелкие не читаются');
   for (const p of pictures(r)) {
     const key = picKey(p);
     pics.set(key, (pics.get(key) || 0) + 1);
@@ -157,7 +157,8 @@ for (const level of [1, 2, 3]) {
 
 // Буквы в позиции (в, на, у, под, за) — ребусы из одних букв: их не должно быть слишком много.
 // Не больше трёх на этап (15 % длинного этапа), не больше двух подряд, на уровне 3 — только вместе с картинкой.
-const isPosition = (r) => (r.parts || []).some((p) => p && p.type === 'position');
+// Ребус «из одних букв в позиции»: картинка внутри позиции (🧀 в Е) делает его обычным ребусом с картинкой.
+const isPosition = (r) => (r.parts || []).some((p) => p && p.type === 'position') && pictures(r).length === 0;
 for (const level of [1, 2, 3]) {
   const items = rebuses.filter((r) => r && r.level === level && Array.isArray(r.parts));
   chunkStages(items).forEach((stage, i) => {
