@@ -3,6 +3,7 @@
 import fs from 'node:fs';
 import { LEGEND_WORDS, normalize } from '../src/rebus-core.js';
 import { specProblems, specPictures, specTechniques } from './rebus-spec.mjs';
+import { diversity, report } from './diversity.mjs';
 
 const dir = new URL('../data/proposals/', import.meta.url);
 const files = process.argv.slice(2).filter((a) => a.endsWith('.json'));
@@ -29,6 +30,13 @@ for (const f of list) {
       for (const pic of specPictures(r)) pics.set(pic.word, pic.look);
     }
   }
+}
+// Разнообразие замыслов по уровням — ошибка, если приём больше двух честных долей.
+const all = list.flatMap((f) => JSON.parse(fs.readFileSync(f, 'utf8')).proposals || []);
+for (const l of [1, 2, 3]) {
+  const d = diversity(all.filter((r) => r && r.level === l && Array.isArray(r.parts)).map(specTechniques));
+  if (!d.total) continue;
+  if (d.over.length) { console.log('✗ ' + report(`уровень ${l}`, d)); problems += d.over.length; }
 }
 console.log(`замыслов: ${total}, проблем: ${problems}`);
 if (process.argv.includes('--stats')) {

@@ -12,7 +12,8 @@
     "stats": "node tools/validate.mjs --stats",
     "check:screens": "node tools/check-screens.cjs",
     "spelling": "node tools/spelling.mjs",
-    "proposals": "node tools/check-proposals.mjs --stats"
+    "proposals": "node tools/check-proposals.mjs --stats",
+    "diversity": "node tools/diversity.mjs"
   },
   "devDependencies": {
     "dictionary-ru": "^3.0.0",

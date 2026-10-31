@@ -2,6 +2,7 @@
 // Правила составления — в docs/REBUSES.md. Ошибки валят сборку, предупреждения — нет.
 import fs from 'node:fs';
 import { confusables } from './spelling.mjs';
+import { diversity } from './diversity.mjs';
 import { chunkStages, formatProblems, LEGEND_PICTURES, LEGEND_WORDS, normalize, pictures, rebusList, techniques } from '../src/rebus-core.js';
 
 
@@ -107,10 +108,8 @@ for (const r of rebuses) {
 }
 
 // Чередование: не больше двух ребусов подряд с одним набором приёмов,
-// и один набор приёмов — не больше 40 % уровня.
+// и ни один приём не больше двух честных долей уровня.
 const MAX_IN_ROW = 2;
-// Уровню 1 чуть больше допуска: подходящих пятилеткам приёмов меньше.
-const MAX_SHARE = { 1: 0.45, 2: 0.4, 3: 0.4 };
 const kindOf = (r) => techniques(r).sort().join('+');
 const shares = {};
 // Темы: не больше трёх ребусов одной темы подряд внутри уровня.
@@ -131,9 +130,10 @@ for (const level of [1, 2, 3]) {
   const count = {};
   items.forEach((r) => { count[kindOf(r)] = (count[kindOf(r)] || 0) + 1; });
   shares[level] = count;
-  for (const [k, n] of Object.entries(count)) {
-    if (items.length >= 10 && n / items.length > MAX_SHARE[level]) warnings.push(`уровень ${level}: «${k}» — ${n} из ${items.length} (больше ${MAX_SHARE[level] * 100} %)`);
-  }
+  // Ни один приём не больше двух честных долей уровня (tools/diversity.mjs).
+  // Пока набор не перебалансирован — предупреждение; станет ошибкой после переноса замыслов.
+  const d = diversity(items.map(techniques));
+  d.over.forEach((o) => warnings.push(`уровень ${level}: «${o.type}» — ${o.count} из ${d.total} (${Math.round(o.share * 100)} %), предел ${Math.round(d.limit * 100)} % при ${d.n} приёмах`));
 }
 
 // Буквы в позиции (в, на, у, под, за) — ребусы из одних букв: их не должно быть слишком много.
