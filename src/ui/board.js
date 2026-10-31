@@ -132,16 +132,22 @@ function renderInitials(p) {
 const INNER_FIRST = ['on', 'near'];
 function renderPosition(p, seed) {
   const prep = POSITIONS[normalize(p.prep)] || POSITIONS['В'];
-  const box = el('div', 'part text position ' + prep.tech);
-  const color = () => 'c' + (seed.n++ % LETTER_COLORS);
-  const outer = el('span', 'pos-outer ' + color(), show(p.outer));
   // Внутри может быть не только буквы, но и картинка (🧀 в Е) или первые буквы.
   const part = innerPart(p);
+  // С картинкой вся позиция считается от --e, как картинка (без класса text — см. measure).
+  const box = el('div', 'part position ' + prep.tech + (part ? ' pic with-pic' : ' text'));
+  const color = () => 'c' + (seed.n++ % LETTER_COLORS);
+  const outer = el('span', 'pos-outer ' + color(), show(p.outer));
   const inner = part ? renderPart(part, seed) : el('span', 'pos-inner ' + color(), show(p.inner));
-  if (part) inner.classList.add('pos-inner', 'pos-part');
+  if (part) {
+    inner.classList.add('pos-inner', 'pos-part');
+    box.classList.add('with-pic');
+    // Что есть у внутренней картинки: зачёркнутые буквы снизу, «А…» / замены сверху.
+    if ((part.remove || []).length) box.classList.add('pp-bottom');
+    if (part.type === 'initials') box.classList.add('pp-initials');
+  }
   const stack = el('span', 'pos-stack');
   stack.setAttribute('aria-label', (part ? 'картинка' : show(p.inner)) + ' ' + prep.inside + ' ' + show(p.outer));
-  if (part) box.classList.add('with-pic');
   if (INNER_FIRST.includes(prep.tech)) add(stack, inner, outer);
   else add(stack, outer, inner);
   return add(box, el('div', 'part-top'), add(el('div', 'letters-row'), stack), el('div', 'part-bottom'));
@@ -231,8 +237,8 @@ export function renderBoard(rebus, signal) {
   const board = el('div', 'board');
   const inner = el('div', 'board-inner');
   const hasTop = rebus.parts.some((p) => (p.replace && p.replace.length) || (p.replaceAt && p.replaceAt.length) || p.pick || p.type === 'initials');
-  // Зачёркнутая буква у картинки под буквой («🐝 под Н») тоже нуждается в месте снизу.
-  const hasBottom = rebus.parts.some((p) => (p.remove && p.remove.length) || (p.type === 'position' && innerPart(p) && (innerPart(p).remove || []).length && normalize(p.prep) !== 'В'));
+  // У картинки внутри позиции («🐝 под Н») зачёркнутая буква стоит в самой позиции, место снизу ей не нужно.
+  const hasBottom = rebus.parts.some((p) => p.remove && p.remove.length);
   if (!hasTop) inner.classList.add('no-top');
   if (!hasBottom) inner.classList.add('no-bottom');
   const parts = rebus.parts.map((p) => renderPart(p, seed));
