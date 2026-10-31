@@ -96,31 +96,37 @@ function markedWord(answer, typo, cls) {
 
 // Слово бледными буквами под полем: ребёнок пишет его сам, как по образцу.
 // Свои буквы поля не видны (прозрачные) — их видно в образце: совпавшие тёмные,
-// следующая подчёркнута, не та буква — жёлтая.
+// следующая подчёркнута, не та буква — жёлтая. У каждой клетки своя постоянная
+// ширина (по букве образца), поэтому слово не сдвигается, что бы ни набрал ребёнок.
 function renderGhost(answer, marks) {
   const word = show(answer);
+  const target = word.replace(/Ё/g, 'Е');
   const ghost = el('div', 'ghost');
   ghost.setAttribute('aria-hidden', 'true');
+  const cells = [...word].map((ch, i) => el('span', 'g' + (marks.has(i) ? ' fix' : ''), ch));
+  ghost.replaceChildren(...cells);
+  // Ширины клеток — по буквам образца, один раз, когда образец уже на экране.
+  const pin = () => {
+    for (const c of cells) c.style.width = '';
+    const w = cells.map((c) => c.getBoundingClientRect().width);
+    cells.forEach((c, i) => { c.style.width = w[i] + 'px'; });
+  };
   const update = (value) => {
     const typed = show(value).replace(/Ё/g, 'Е');
-    const target = word.replace(/Ё/g, 'Е');
-    const n = Math.max(word.length, typed.length);
-    const spans = [];
     let ok = true;
-    for (let i = 0; i < n; i++) {
+    cells.forEach((c, i) => {
       const t = typed[i];
-      let cls = 'g';
-      if (i < word.length && marks.has(i)) cls += ' fix';
+      let cls = 'g' + (marks.has(i) ? ' fix' : '');
       if (t === undefined) { if (ok && i === typed.length) cls += ' next'; }
       else if (ok && t === target[i]) cls += ' hit';
       else { cls += ' miss'; ok = false; }
-      spans.push(el('span', cls, t !== undefined && !cls.includes('hit') ? t : (word[i] || '')));
-    }
-    ghost.replaceChildren(...spans);
+      c.className = cls;
+      c.textContent = t !== undefined && cls.includes('miss') ? t : word[i];
+    });
+    // Лишние буквы в конце: клеток не добавляем (слово бы сдвинулось) — жёлтая рамка поля.
     return ok && typed.length <= word.length;
   };
-  update('');
-  return { ghost, update };
+  return { ghost, update, pin };
 }
 
 function explainBlock(rebus, animate) {
@@ -285,6 +291,7 @@ export function renderRebus(app, data, id, signal, backTo = '#/') {
       if (done || !input.isConnected) return;
       inputWrap.classList.add('copy');
       inputWrap.prepend(copy.ghost);
+      copy.pin();
       box.classList.add('gone');
       setTimeout(() => box.remove(), 350);
       msg.textContent = 'Напиши по буквам ✍️';

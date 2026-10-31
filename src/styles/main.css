@@ -810,17 +810,14 @@ h1[tabindex="-1"]:focus { outline: none; }
 .result-inline.fix.gone { opacity: 0; }
 .fix-letter {
   display: inline-block;
-  padding: 0 4px 3px;
-  margin: 0 2px;
-  border-radius: 8px;
-  background: var(--card);
   color: var(--mint-ink);
-  border-bottom: 3px solid var(--mint-ink);
-  line-height: .95;
+  text-decoration: underline 4px;
+  text-underline-offset: 5px;
   animation: fixhop .5s .2s 2 ease;
 }
-@keyframes fixhop { 40% { transform: translateY(-6px) scale(1.25); } }
-.fix-mark { color: var(--mint-ink); box-shadow: inset 0 -3px 0 var(--mint-ink); }
+/* Буква только подпрыгивает, строка остаётся ровной */
+@keyframes fixhop { 40% { transform: translateY(-6px); } }
+.fix-mark { color: var(--mint-ink); text-decoration: underline 3px; text-underline-offset: 4px; }
 
 .ghost {
   position: absolute;
@@ -838,12 +835,12 @@ h1[tabindex="-1"]:focus { outline: none; }
   overflow: hidden;
   pointer-events: none;
 }
-.ghost .g { color: #CDBFB2; }
-.ghost .g.fix { color: #8CC9AC; text-decoration: underline 3px; text-underline-offset: 4px; }
+.ghost .g { display: inline-block; text-align: center; color: #CDBFB2; }
+.ghost .g.fix { color: #8CC9AC; text-decoration: underline 4px; text-underline-offset: 4px; }
 .ghost .g.hit { color: var(--ink); text-decoration: none; }
-.ghost .g.next { box-shadow: inset 0 -4px 0 var(--sun-deep); animation: blink 1s steps(2) infinite; }
+.ghost .g.next { text-decoration: underline 4px var(--sun-deep); text-underline-offset: 4px; animation: blink 1s steps(2) infinite; }
 .ghost .g.miss { color: #C98A00; text-decoration: none; }
-@keyframes blink { 50% { box-shadow: none; } }
+@keyframes blink { 50% { text-decoration-color: transparent; } }
 /* Свои буквы поля прозрачны: их видно в образце, под полем */
 .input-wrap.copy .answer-input {
   position: relative;
