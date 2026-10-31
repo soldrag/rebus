@@ -54,6 +54,15 @@ for (const r of rebuses) {
 spread(rebuses.map((r) => normalize(r.answer))).peaks.forEach(([w, n]) => warnings.push(`слово ${w} загадано ${n} раз — пик частотности`));
 // Реестр картинок (data/pictures.json): какие эмодзи и слова можно, с какого уровня,
 // можно ли переворачивать и брать в «первые буквы». picture: false — только для первых букв.
+// Иллюстрации: в реестре — эмодзи или своя картинка (image). Своя картинка попадает в набор
+// только после одобрения дизайнера (designApproved) и в стиле приложения (docs/ILLUSTRATIONS.md).
+for (const p of JSON.parse(fs.readFileSync(registryFile, 'utf8')).pictures) {
+  if (!p.emoji && !p.image) problems.push(`реестр: у ${p.word} нет ни emoji, ни image`);
+  if (p.image) {
+    if (p.designApproved !== true) problems.push(`реестр: картинка ${p.image} (${p.word}) не одобрена дизайнером — нужен designApproved: true`);
+    if (!fs.existsSync(new URL('../public/' + p.image, import.meta.url))) problems.push(`реестр: нет файла public/${p.image}`);
+  }
+}
 const registry = new Map(
   JSON.parse(fs.readFileSync(registryFile, 'utf8')).pictures.map((p) => [`${p.emoji} ${normalize(p.word)}`, p]),
 );
