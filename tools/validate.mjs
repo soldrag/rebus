@@ -1,6 +1,7 @@
 // Проверка данных ребусов: npm run validate
 // Правила составления — в docs/REBUSES.md. Ошибки валят сборку, предупреждения — нет.
 import fs from 'node:fs';
+import { confusables } from './spelling.mjs';
 import { chunkStages, formatProblems, LEGEND_PICTURES, LEGEND_WORDS, normalize, pictures, rebusList, techniques } from '../src/rebus-core.js';
 
 
@@ -44,6 +45,9 @@ for (const r of rebuses) {
     const key = `${p.emoji} ${normalize(p.word)}`;
     pics.set(key, (pics.get(key) || 0) + 1);
   }
+  // Другие слова, похожие на ответ на слух, не должны считаться ошибкой в ответе (tools/spelling.mjs).
+  const miss = confusables(r, rebuses).filter((w) => !(r.notMisspelled || []).map(normalize).includes(w));
+  if (miss.length) problems.push(`${name}: в notMisspelled не хватает ${miss.join(', ')} — запустите npm run spelling`);
   if (a && LEGEND_WORDS.includes(a)) problems.push(`${name}: ответ ${r.answer} есть в примерах легенды — легенда его подскажет`);
 }
 // Реестр картинок (data/pictures.json): какие эмодзи и слова можно, с какого уровня,

@@ -136,7 +136,10 @@
           ]
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "СОТ"
+      ]
     },
     {
       "id": "les",
@@ -160,7 +163,12 @@
           "text": "С"
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "ЛЕЗЬ",
+        "ЛЕСС",
+        "ЛИС"
+      ]
     },
     {
       "id": "stol",
@@ -183,7 +191,11 @@
           "text": "Л"
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "СТАЛЬ",
+        "СТОЛЬ"
+      ]
     },
     {
       "id": "osa",
@@ -262,7 +274,10 @@
           "text": "Ж"
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "НАШ"
+      ]
     },
     {
       "id": "usy",
@@ -317,7 +332,10 @@
           ]
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "ТАСС"
+      ]
     },
     {
       "id": "shishka",
@@ -396,7 +414,12 @@
           ]
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "МАГ",
+        "МОГ",
+        "МОК"
+      ]
     },
     {
       "id": "koza",
@@ -443,7 +466,12 @@
           "text": "Я"
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "СЕМЕЙ",
+        "СЕМЯ",
+        "СИМИ"
+      ]
     },
     {
       "id": "muha",
@@ -584,7 +612,11 @@
           "cutStart": 1
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "ЛУГ",
+        "ЛЮК"
+      ]
     },
     {
       "id": "shkaf",
@@ -643,7 +675,11 @@
           "text": "Т"
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "ЛЕЗТЬ",
+        "ЛЕСТЬ"
+      ]
     },
     {
       "id": "nosok",
@@ -690,7 +726,10 @@
           "cutStart": 1
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "ГРАММ"
+      ]
     },
     {
       "id": "kust",
@@ -866,7 +905,10 @@
           "cutEnd": 2
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "МАСТЬ"
+      ]
     },
     {
       "id": "krug",
@@ -901,7 +943,10 @@
           ]
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "КРЮК"
+      ]
     },
     {
       "id": "flag",
@@ -956,7 +1001,11 @@
           "cutStart": 2
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "РАК",
+        "РОК"
+      ]
     },
     {
       "id": "dym",
@@ -1081,7 +1130,11 @@
           ]
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "ЛЕГКА",
+        "ЛЕГКО"
+      ]
     },
     {
       "id": "nitka",
@@ -1130,7 +1183,13 @@
           ]
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "ЛЕТ",
+        "ЛИТ",
+        "ЛИТЬ",
+        "ЛЯД"
+      ]
     },
     {
       "id": "rak",
@@ -1151,7 +1210,11 @@
           "cutEnd": 2
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "РОГ",
+        "РОК"
+      ]
     },
     {
       "id": "seno",
@@ -1175,7 +1238,11 @@
           "cutEnd": 1
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "СЕНА",
+        "СЕННА"
+      ]
     },
     {
       "id": "voda",
@@ -1222,7 +1289,11 @@
           ]
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "ПОЛКА",
+        "ПОЛЬКА"
+      ]
     },
     {
       "id": "mech",
@@ -1247,7 +1318,10 @@
           ]
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "МЯЧ"
+      ]
     },
     {
       "id": "pole",
@@ -1277,7 +1351,10 @@
           "cutEnd": 1
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "ПОЛЕЙ"
+      ]
     },
     {
       "id": "schit",
@@ -1302,7 +1379,12 @@
           ]
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "ШИИТ",
+        "ШИТЬ",
+        "ШЬЕТ"
+      ]
     },
     {
       "id": "ruka",
@@ -1474,7 +1556,11 @@
           ]
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "КЛАДЬ",
+        "КЛОД"
+      ]
     },
     {
       "id": "yula",
@@ -1542,7 +1628,11 @@
           "cutStart": 2
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "ФЕ",
+        "ФИ"
+      ]
     },
     {
       "id": "myaso",
@@ -1568,7 +1658,10 @@
           "cutEnd": 1
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "МЕССА"
+      ]
     },
     {
       "id": "drug",
@@ -1797,7 +1890,10 @@
           "cutStart": 2
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "КОН"
+      ]
     },
     {
       "id": "plasch",
@@ -1846,7 +1942,10 @@
           "text": "КА"
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "БОРОНКА"
+      ]
     },
     {
       "id": "moroz",
@@ -1876,7 +1975,10 @@
           "cutEnd": 1
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "МОРОСЬ"
+      ]
     },
     {
       "id": "soroka",
@@ -1928,7 +2030,10 @@
           "cutStart": 2
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "БАТАН"
+      ]
     },
     {
       "id": "pen",
@@ -1952,7 +2057,10 @@
           "cutStart": 2
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "ПЬЯН"
+      ]
     },
     {
       "id": "bint",
@@ -2203,7 +2311,11 @@
           ]
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "КАТ",
+        "КОД"
+      ]
     },
     {
       "id": "pedal",
@@ -2305,7 +2417,10 @@
           ]
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "МЯСКО"
+      ]
     },
     {
       "id": "drova",
@@ -2462,7 +2577,10 @@
           ]
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "СОЛОД"
+      ]
     },
     {
       "id": "polka",
@@ -2486,7 +2604,11 @@
           "cutStart": 2
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "ПАЛКА",
+        "ПОЛЬКА"
+      ]
     },
     {
       "id": "kolos",
@@ -2515,7 +2637,10 @@
           "text": "С"
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "КОЛОСС"
+      ]
     },
     {
       "id": "grad",
@@ -2539,7 +2664,10 @@
           "cutEnd": 3
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "ГРОТ"
+      ]
     },
     {
       "id": "panama",
@@ -2585,7 +2713,10 @@
           ]
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "ШКАЛА"
+      ]
     },
     {
       "id": "reka",
@@ -2615,7 +2746,12 @@
           "cutStart": 3
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "РЕЙКА",
+        "РИКА",
+        "РИКО"
+      ]
     },
     {
       "id": "malina",
@@ -2666,7 +2802,10 @@
           "cutStart": 1
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "ВЕЯЛКА"
+      ]
     },
     {
       "id": "garazh",
@@ -2746,7 +2885,10 @@
           "cutStart": 2
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "ПИЛАТ"
+      ]
     },
     {
       "id": "sol",
@@ -3065,7 +3207,11 @@
           ]
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "БРАТЬ",
+        "БРОД"
+      ]
     },
     {
       "id": "doska",
@@ -3146,7 +3292,14 @@
           ]
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "УЛЬЕ",
+        "УЛЬИ",
+        "УЛЬЯ",
+        "ЮЛИЙ",
+        "ЮЛИЯ"
+      ]
     },
     {
       "id": "stupa",
@@ -3200,7 +3353,10 @@
           ]
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "ЗОНД"
+      ]
     },
     {
       "id": "baraban",
@@ -3246,7 +3402,10 @@
           "flip": true
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "САН"
+      ]
     },
     {
       "id": "skripka",
@@ -3271,7 +3430,10 @@
           ]
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "СКРЕПКА"
+      ]
     },
     {
       "id": "sliva",
@@ -3300,7 +3462,10 @@
           ]
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "СЛЕВА"
+      ]
     },
     {
       "id": "los",
@@ -3328,7 +3493,12 @@
           "text": "Ь"
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "ЛАЗ",
+        "ЛАОС",
+        "ЛОС"
+      ]
     },
     {
       "id": "kniga",
@@ -3415,7 +3585,10 @@
           "text": "А"
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "ФОРА"
+      ]
     },
     {
       "id": "schenok",
@@ -3444,7 +3617,10 @@
           ]
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "ШИНОК"
+      ]
     },
     {
       "id": "kraski",
@@ -3499,7 +3675,10 @@
           ]
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "ОЗЕРА"
+      ]
     },
     {
       "id": "tsifra",
@@ -3528,7 +3707,10 @@
           ]
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "ЦИФРО"
+      ]
     },
     {
       "id": "povar",
@@ -3583,7 +3765,11 @@
           "cutEnd": 1
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "ВЕСЛА",
+        "ВИСЛА"
+      ]
     },
     {
       "id": "kukla",
@@ -3664,7 +3850,10 @@
           "cutStart": 1
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "КРАТ"
+      ]
     },
     {
       "id": "perets",
@@ -3900,7 +4089,11 @@
           ]
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "ГРЕБ",
+        "ГРИПП"
+      ]
     },
     {
       "id": "moryak",
@@ -3987,7 +4180,10 @@
           "text": "Ь"
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "ТВЕРЬ"
+      ]
     },
     {
       "id": "tarelka",
@@ -4560,7 +4756,10 @@
           "text": "И"
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "КАЧЕЛЕЙ"
+      ]
     },
     {
       "id": "kalitka",
@@ -4589,7 +4788,10 @@
           ]
         }
       ],
-      "source": "классика"
+      "source": "классика",
+      "notMisspelled": [
+        "КОЛЯДКА"
+      ]
     },
     {
       "id": "krapiva",

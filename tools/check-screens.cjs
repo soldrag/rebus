@@ -87,6 +87,12 @@ function findOverflow() {
     for (const v of ['ааа', 'ббб']) { await page.fill('input', v); await page.click('.btn-check'); await page.waitForTimeout(300); }
     if (await page.$('.hint-btn')) { await page.click('.hint-btn'); await check('подсказка'); }
     await page.fill('input', 'ввв'); await page.click('.btn-check'); await page.waitForTimeout(900); await check('разбор');
+    // Слово угадано с ошибкой: «Пишется так», потом письмо по образцу.
+    if (list.some((r) => r.id === 'vorona')) {
+      await go('#/r/vorona'); await page.waitForSelector('input');
+      await page.fill('input', 'варона'); await page.click('.btn-check'); await check('пишется так');
+      await page.waitForTimeout(1600); await page.focus('input'); await page.keyboard.type('вар'); await check('по образцу');
+    }
     // Кубок: весь первый этап уровня 1 отгадан.
     await page.evaluate((ids) => localStorage.setItem('rebus-progress-v1', JSON.stringify(Object.fromEntries(ids.map((id) => [id, { tries: 0, status: 'solved' }])))), lvl1.slice(0, 20).map((r) => r.id));
     await go('#/cup/1/1'); await check('кубок');
@@ -98,5 +104,5 @@ function findOverflow() {
     console.log(`\nПроблем: ${problems.length}`);
     process.exit(1);
   }
-  console.log(`Экраны в порядке: ${DEVICES.length} устройств × ${sample.length + 8} экранов`);
+  console.log(`Экраны в порядке: ${DEVICES.length} устройств × ${sample.length + 10} экранов`);
 })();

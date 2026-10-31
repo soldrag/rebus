@@ -9,6 +9,7 @@ npm ci
 npm run dev        # локальный сервер
 npm run validate   # проверка ребусов
 npm run stats      # какие ответы и картинки уже есть
+npm run spelling   # заполнить notMisspelled: похожие на ответ настоящие слова
 npm run build      # проверка + сборка в dist/
 npm run check:screens  # вёрстка на 15 размерах телефонов и планшетов (нужен запущенный `npx vite preview` и Playwright)
 ```
@@ -19,6 +20,7 @@ npm run check:screens  # вёрстка на 15 размерах телефон�
 - `src/rebus-core.js` — правила ребуса: запятые, зачёркнутые буквы, замены, перевёрнутые картинки
 - `src/ui/` — экраны, `src/store.js` — прогресс, `src/install.js` — установка на главный экран
 - `tools/validate.mjs` — проверяет, что каждый ребус складывается в свой ответ
+- `tools/spelling.mjs` — по словарю ищет слова, которые звучат как ответ, но ошибкой в нём не считаются
 - PWA (манифест, service worker) генерирует `vite-plugin-pwa`
 
 ### Формат ребуса

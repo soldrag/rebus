@@ -1,4 +1,4 @@
-// Прогресс: { [id]: { tries: число ошибок, status?: "solved" | "revealed" } }.
+// Прогресс: { [id]: { tries: число ошибок, status?: "solved" | "revealed", typo?: как ребёнок написал с ошибкой } }.
 // localStorage может быть недоступен — тогда всё живёт в памяти.
 const KEY = 'rebus-progress-v1';
 let progress = load();
@@ -20,11 +20,12 @@ function save() {
 
 export function getState(id) {
   const s = progress[id];
-  return { tries: (s && Number(s.tries)) || 0, status: s && s.status };
+  return { tries: (s && Number(s.tries)) || 0, status: s && s.status, typo: s && typeof s.typo === 'string' ? s.typo : undefined };
 }
 
-export function setState(id, { tries, status }) {
+export function setState(id, { tries, status, typo }) {
   progress[id] = status ? { tries, status } : { tries };
+  if (status && typo) progress[id].typo = typo;
   save();
 }
 

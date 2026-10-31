@@ -1,5 +1,5 @@
 // Экран одного ребуса: картинка, ввод ответа, сердечки, итог.
-import { normalize, isCorrect } from '../rebus-core.js';
+import { normalize, isCorrect, spellingFix, spellingMarks } from '../rebus-core.js';
 import { el, add, finePointer } from './dom.js';
 import { getState, setState, MAX_TRIES, hasSeen, markSeen } from '../store.js';
 import { levelInfo, stageNext, stageOf, stageProgress } from '../levels.js';
@@ -13,6 +13,7 @@ const FAR_PHRASES = ['Не то слово, попробуй ещё 🙂', 'По
 // Короткие подсказки прямо в поле: их видно и при открытой клавиатуре.
 const CLOSE_PLACEHOLDER = 'Почти! Ещё разок';
 const FAR_PLACEHOLDER = 'Попробуй ещё';
+const FIX_MS = 1600; // столько видно «Пишется так», потом ребёнок пишет слово сам
 const SETTLE_MS = 600; // столько «Молодец!» видно, прежде чем клавиатура плавно уедет
 
 // Расстояние Левенштейна: насколько ответ похож на правильный.
@@ -73,12 +74,53 @@ function renderHintButton(rebus) {
 
 // Итог показывается на месте поля и кнопки, тех же размеров: картинка и всё
 // остальное на экране остаются на своих местах.
-function resultBox(kind, rebus, fresh) {
+function resultBox(kind, rebus, fresh, typo) {
   const box = el('div', 'result-inline ' + kind);
   box.setAttribute('role', 'status');
-  const title = kind === 'ok' ? (fresh ? 'Молодец! 🎉' : 'Отгадано! ⭐') : 'Вот какое слово было:';
-  add(box, el('span', 'result-title', title), el('span', 'result-word', show(rebus.answer)));
+  const title = kind === 'fix' ? 'Пишется так ✍️'
+    : kind === 'ok' ? (fresh ? 'Молодец! 🎉' : 'Отгадано! ⭐') : 'Вот какое слово было:';
+  add(box, el('span', 'result-title', title), markedWord(rebus.answer, typo, kind === 'fix' ? 'fix-letter' : 'fix-mark'));
   return box;
+}
+
+// Слово ответа; буквы, в которых ребёнок ошибся, — отдельно (подчёркнуты зелёным).
+function markedWord(answer, typo, cls) {
+  const word = show(answer);
+  const w = el('span', 'result-word');
+  if (!typo) { w.textContent = word; return w; }
+  const marks = new Set(spellingMarks(word, typo));
+  [...word].forEach((ch, i) => add(w, marks.has(i) ? el('span', cls, ch) : document.createTextNode(ch)));
+  w.setAttribute('aria-label', word);
+  return w;
+}
+
+// Слово бледными буквами под полем: ребёнок пишет его сам, как по образцу.
+// Свои буквы поля не видны (прозрачные) — их видно в образце: совпавшие тёмные,
+// следующая подчёркнута, не та буква — жёлтая.
+function renderGhost(answer, marks) {
+  const word = show(answer);
+  const ghost = el('div', 'ghost');
+  ghost.setAttribute('aria-hidden', 'true');
+  const update = (value) => {
+    const typed = show(value).replace(/Ё/g, 'Е');
+    const target = word.replace(/Ё/g, 'Е');
+    const n = Math.max(word.length, typed.length);
+    const spans = [];
+    let ok = true;
+    for (let i = 0; i < n; i++) {
+      const t = typed[i];
+      let cls = 'g';
+      if (i < word.length && marks.has(i)) cls += ' fix';
+      if (t === undefined) { if (ok && i === typed.length) cls += ' next'; }
+      else if (ok && t === target[i]) cls += ' hit';
+      else { cls += ' miss'; ok = false; }
+      spans.push(el('span', cls, t !== undefined && !cls.includes('hit') ? t : (word[i] || '')));
+    }
+    ghost.replaceChildren(...spans);
+    return ok && typed.length <= word.length;
+  };
+  update('');
+  return { ghost, update };
 }
 
 function explainBlock(rebus, animate) {
@@ -90,7 +132,7 @@ function explainBlock(rebus, animate) {
 // Готовый ребус при повторном открытии.
 function renderDone(panel, rebus, data, st) {
   const kind = st.status === 'solved' ? 'ok' : 'reveal';
-  const box = resultBox(kind, rebus, false);
+  const box = resultBox(kind, rebus, false, kind === 'ok' ? st.typo : undefined);
   box.classList.add('settled');
   const answer = add(el('div', 'answer answer-done'), add(el('div', 'input-wrap'), box), nextButton(data, rebus));
   panel.replaceChildren(renderHearts(st.tries), answer, el('p', 'msg'), explainBlock(rebus, false));
@@ -165,8 +207,17 @@ export function renderRebus(app, data, id, signal, backTo = '#/') {
   add(panel, hearts, form, msg, hintSlot);
 
   let done = false;
+  let copy = null; // слово угадано с ошибкой: ребёнок пишет его по образцу
   input.addEventListener('input', () => {
     if (done) return;
+    if (copy) {
+      const onTrack = copy.update(input.value);
+      inputWrap.classList.toggle('off-track', !onTrack);
+      msg.textContent = onTrack ? 'Напиши по буквам ✍️' : 'Посмотри на буквы 👀';
+      msg.className = onTrack ? 'msg' : 'msg try';
+      if (isCorrect(rebus, input.value)) finish('ok');
+      return;
+    }
     input.classList.remove('shake');
     if (msg.classList.contains('empty-note')) { msg.textContent = ''; msg.className = 'msg'; }
   });
@@ -177,7 +228,7 @@ export function renderRebus(app, data, id, signal, backTo = '#/') {
   let checking = false;
   input.addEventListener('blur', () => {
     const val = input.value;
-    if (!normalize(val)) return;
+    if (!normalize(val) || copy) return;
     setTimeout(() => {
       if (done || checking || !input.isConnected || document.activeElement === input) return;
       if (input.value !== val || closeLegend) return;
@@ -190,6 +241,7 @@ export function renderRebus(app, data, id, signal, backTo = '#/') {
   // увидеть «Молодец!», и ничего на экране не прыгает — размеры те же.
   const finish = (kind) => {
     done = true;
+    if (copy) { copy.ghost.remove(); inputWrap.classList.remove('copy', 'off-track'); }
     const box = resultBox(kind, rebus, true);
     add(inputWrap, box);
     const next = nextButton(data, rebus);
@@ -210,6 +262,37 @@ export function renderRebus(app, data, id, signal, backTo = '#/') {
     }, hadFocus ? SETTLE_MS : 0);
   };
 
+  // Слово угадано, но написано с ошибкой: сердечко тратится, звезда есть (слово-то верное),
+  // показываем, как оно пишется, и ребёнок пишет его сам по образцу.
+  // Всё происходит на месте поля: экран не прыгает, клавиатура остаётся.
+  const spelled = (val) => {
+    st.tries = Math.min(MAX_TRIES, st.tries + 1);
+    setState(id, { tries: st.tries, status: 'solved', typo: show(val) });
+    updateStars();
+    const lost = hearts.children[MAX_TRIES - st.tries];
+    if (lost) lost.classList.add('off', 'losing');
+    updateHeartsLabel(hearts, st.tries);
+    const marks = new Set(spellingMarks(rebus.answer, val));
+    copy = renderGhost(rebus.answer, marks);
+    const box = resultBox('fix', rebus, true, val);
+    add(inputWrap, box);
+    input.value = '';
+    input.placeholder = '';
+    msg.textContent = 'Слово верное! 🙂';
+    msg.className = 'msg good';
+    hintSlot.replaceChildren();
+    setTimeout(() => {
+      if (done || !input.isConnected) return;
+      inputWrap.classList.add('copy');
+      inputWrap.prepend(copy.ghost);
+      box.classList.add('gone');
+      setTimeout(() => box.remove(), 350);
+      msg.textContent = 'Напиши по буквам ✍️';
+      msg.className = 'msg';
+      copy.update(input.value);
+    }, FIX_MS);
+  };
+
   form.addEventListener('submit', (ev) => {
     ev.preventDefault();
     if (done) return;
@@ -223,11 +306,18 @@ export function renderRebus(app, data, id, signal, backTo = '#/') {
       return;
     }
     if (isCorrect(rebus, val)) {
-      setState(id, { tries: st.tries, status: 'solved' });
+      if (!copy) setState(id, { tries: st.tries, status: 'solved' });
       updateStars();
       finish('ok');
       return;
     }
+    if (copy) {
+      msg.textContent = 'Посмотри на буквы 👀';
+      msg.className = 'msg try';
+      return;
+    }
+    const fix = spellingFix(rebus, val);
+    if (fix) { spelled(val); return; }
     st.tries += 1;
     if (st.tries >= MAX_TRIES) {
       setState(id, { tries: st.tries, status: 'revealed' });

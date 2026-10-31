@@ -10,9 +10,11 @@
     "preview": "vite preview",
     "validate": "node tools/validate.mjs",
     "stats": "node tools/validate.mjs --stats",
-    "check:screens": "node tools/check-screens.cjs"
+    "check:screens": "node tools/check-screens.cjs",
+    "spelling": "node tools/spelling.mjs"
   },
   "devDependencies": {
+    "dictionary-ru": "^3.0.0",
     "vite": "^8.3.5",
     "vite-plugin-pwa": "^2.0.0"
   },
