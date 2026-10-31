@@ -73,6 +73,9 @@ for (const l of [1, 2, 3]) {
     problems += hits.length;
   }
 }
+{ const fresh = words.slice(existing.length), known = new Set(existing.map((r) => normalize(r.answer)));
+  const rep = fresh.filter((w) => known.has(w)).length;
+  if (fresh.length) console.log(`новые слова: ${fresh.length - rep}, повторы слов набора: ${rep} — ориентир на новые слова`); }
 { const sp = spread(words); if (sp.peaks.length) console.log('пики частотности слов:', sp.peaks.map(([w, n]) => `${w} ×${n}`).join(', ')); }
 console.log(`замыслов: ${total}, проблем: ${problems}${pending ? `, ждут обработчика: ${pending}` : ''}`);
 if (process.argv.includes('--stats')) {
