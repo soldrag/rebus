@@ -21,9 +21,9 @@ for (const f of fixtures) {
 }
 const pics = new Map();
 const tech = {};
+const seen = new Map(); // ответ → файл: повторы и между файлами разных авторов
 for (const f of list) {
   const json = JSON.parse(fs.readFileSync(f, 'utf8'));
-  const seen = new Set();
   for (const r of json.proposals || []) {
     total++;
     let p = specProblems(r, { answers, legend: LEGEND_WORDS });
@@ -32,8 +32,9 @@ for (const f of list) {
       console.log(`… ${r.id}: ${p.join('; ')}`);
       pending++; continue;
     }
-    if (seen.has(normalize(r.answer))) p.push('повтор ответа в замыслах');
-    seen.add(normalize(r.answer));
+    const prev = seen.get(normalize(r.answer));
+    if (prev) p.push(`повтор ответа в замыслах (${prev})`);
+    else seen.set(normalize(r.answer), f.split('/').pop());
     p.forEach((x) => console.log(`✗ ${r.id || '?'}: ${x}`));
     problems += p.length;
     if (!p.length) {
