@@ -27,6 +27,37 @@ for (const f of fixtures) {
 }
 const pics = new Map();
 const tech = {};
+let warns = 0;
+
+// Содержательные правила, которые можно проверить механически (выводы редактора, data/proposals/REVIEW.md).
+const allAnswers = () => new Set(words);
+function contentProblems(r, a) {
+  const p = [];
+  const others = [...allAnswers()].filter((w) => w !== a && w.length >= 3);
+  // Ответ встраивает другой ответ набора или замыслов (КОСА ← ОСА).
+  const inside = others.filter((w) => a.includes(w));
+  if (inside.length) p.push(`ответ встраивает другой ответ: ${inside.join(', ')}`);
+  const walkPics = [];
+  const visit = (n) => {
+    if (!n || typeof n !== 'object') return;
+    if (n.pic) walkPics.push(n);
+    (n.initials || []).forEach((it) => walkPics.push({ ...it, inInitials: true }));
+    (n.seq || []).forEach(visit); visit(n.a); visit(n.b);
+  };
+  (r.parts || []).forEach(visit);
+  for (const pic of walkPics) {
+    const w = normalize(pic.pic);
+    const plain = !['cutStart', 'cutEnd', 'remove', 'replace', 'replaceAt', 'pick', 'flip'].some((k) => pic[k] !== undefined);
+    // Ответ вырастает из картинки: целое слово картинки + одна-две буквы (Ч + ЁЛКА, ДОМ → ДОМИК).
+    if (!pic.inInitials && plain && a.includes(w) && a.length - w.length <= 2) p.push(`ответ вырастает из картинки ${w}`);
+    // В описании картинки — только предмет: операции, буквы и цифры рисует приложение (docs/ILLUSTRATIONS.md).
+    if (/зач[её]рк|вверх ногами|перев[её]рн|перевернут|цифр|букв|[=↺]/i.test(pic.look || '')) p.push(`look картинки ${w}: описывайте только предмет — операции, буквы и цифры рисует приложение`);
+    // Зеркальная пара: картинкой стоит ответ набора или замыслов — предупреждение (развести по этапам).
+    if (others.includes(w)) { console.log(`! ${r.id}: картинка ${w} — это ответ другого ребуса (зеркальная пара, развести по этапам)`); warns++; }
+    if (/на фоне|\bфон|на воде|рядом с/i.test(pic.look || '')) { console.log(`! ${r.id}: look картинки ${w} — один предмет без фона и соседей`); warns++; }
+  }
+  return p;
+}
 for (const f of list) {
   const json = JSON.parse(fs.readFileSync(f, 'utf8'));
   for (const r of json.proposals || []) {
@@ -43,6 +74,7 @@ for (const f of list) {
       for (const t of specTricks(r)) if (tricks.has(t)) p.push(`ход ${t} уже есть (${tricks.get(t)}) — придумайте другой`);
     }
     const a = normalize(r.answer);
+    if (!p.length) p.push(...contentProblems(r, a));
     if (wouldPeak(words, a)) p.push(`слово ${a} уже загадано (×${words.filter((w) => w === a).length}) — ещё один ребус на него дал бы пик частотности, придумайте другое слово`);
     if (!p.length) words.push(a);
     p.forEach((x) => console.log(`✗ ${r.id || '?'}: ${x}`));
@@ -77,7 +109,7 @@ for (const l of [1, 2, 3]) {
   const rep = fresh.filter((w) => known.has(w)).length;
   if (fresh.length) console.log(`новые слова: ${fresh.length - rep}, повторы слов набора: ${rep} — ориентир на новые слова`); }
 { const sp = spread(words); if (sp.peaks.length) console.log('пики частотности слов:', sp.peaks.map(([w, n]) => `${w} ×${n}`).join(', ')); }
-console.log(`замыслов: ${total}, проблем: ${problems}${pending ? `, ждут обработчика: ${pending}` : ''}`);
+console.log(`замыслов: ${total}, проблем: ${problems}${warns ? `, предупреждений: ${warns}` : ''}${pending ? `, ждут обработчика: ${pending}` : ''}`);
 if (process.argv.includes('--stats')) {
   console.log('приёмы:', Object.entries(tech).sort().map(([k, n]) => `${k} ×${n}`).join(', '));
   console.log('картинки для дизайнера:', [...pics].map(([w, l]) => `${w} (${l})`).join('; '));
