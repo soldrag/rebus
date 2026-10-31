@@ -1,9 +1,9 @@
 // Проверка замыслов ребусов: npm run proposals [-- файл.json]
 // Без аргумента — все data/proposals/*.json. Схема — docs/REBUS-SPEC.md.
 import fs from 'node:fs';
-import { LEGEND_WORDS, normalize } from '../src/rebus-core.js';
+import { LEGEND_WORDS, normalize, techniques } from '../src/rebus-core.js';
 import { specProblems, specPictures, specTechniques, solveSpec } from './rebus-spec.mjs';
-import { diversity, report } from './diversity.mjs';
+import { paused, report, canon } from './diversity.mjs';
 
 const dir = new URL('../data/proposals/', import.meta.url);
 const files = process.argv.slice(2).filter((a) => a.endsWith('.json'));
@@ -43,13 +43,20 @@ for (const f of list) {
     }
   }
 }
-// Разнообразие замыслов по уровням — ошибка, если приём больше двух честных долей.
+// Разнообразие: набор расширяем, а не переделываем — приёмы, перекошенные в будущем наборе
+// (текущий + замыслы), на паузе; замысел с таким приёмом — ошибка (tools/diversity.mjs).
 const all = list.flatMap((f) => JSON.parse(fs.readFileSync(f, 'utf8')).proposals || [])
-  .filter((r) => solveSpec(r) !== null);
+  .filter((r) => r && solveSpec(r) !== null);
 for (const l of [1, 2, 3]) {
-  const d = diversity(all.filter((r) => r && r.level === l && Array.isArray(r.parts)).map(specTechniques));
-  if (!d.total) continue;
-  if (d.over.length) { console.log('✗ ' + report(`уровень ${l}`, d)); problems += d.over.length; }
+  const pr = all.filter((r) => r.level === l);
+  if (!pr.length) continue;
+  const { d, types } = paused(existing.filter((r) => r.level === l).map(techniques), pr.map(specTechniques));
+  const hits = pr.filter((r) => canon(specTechniques(r)).some((t) => types.has(t)));
+  if (hits.length) {
+    console.log(report(`уровень ${l}: набор + замыслы`, d));
+    hits.forEach((r) => console.log(`✗ ${r.id}: приём ${canon(specTechniques(r)).filter((t) => types.has(t)).join(', ')} на паузе — придумайте другой`));
+    problems += hits.length;
+  }
 }
 console.log(`замыслов: ${total}, проблем: ${problems}${pending ? `, ждут обработчика: ${pending}` : ''}`);
 if (process.argv.includes('--stats')) {
