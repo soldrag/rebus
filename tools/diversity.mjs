@@ -10,7 +10,10 @@ import { techniques } from '../src/rebus-core.js';
 import { specTechniques, solveSpec } from './rebus-spec.mjs';
 
 export const SHARE_FACTOR = 2;
-export const MIN_ITEMS = 10; // на меньших уровнях проценты ничего не значат
+export const MIN_ITEMS = 10;
+// Одно слово можно загадать разными ребусами, но не больше двух раз,
+// и ребусов с повторным словом — не больше 10 % набора.
+export const SAME_ANSWER = { max: 2, share: 0.1 }; // на меньших уровнях проценты ничего не значат
 
 // items — список списков приёмов (по одному на ребус).
 export function diversity(items) {

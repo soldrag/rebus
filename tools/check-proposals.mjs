@@ -3,13 +3,18 @@
 import fs from 'node:fs';
 import { LEGEND_WORDS, normalize, techniques } from '../src/rebus-core.js';
 import { specProblems, specPictures, specTechniques, solveSpec, specTricks, setTricks, specSkeleton } from './rebus-spec.mjs';
-import { paused, report, canon } from './diversity.mjs';
+import { paused, report, canon, SAME_ANSWER } from './diversity.mjs';
 
 const dir = new URL('../data/proposals/', import.meta.url);
 const files = process.argv.slice(2).filter((a) => a.endsWith('.json'));
 const list = files.length ? files : fs.readdirSync(dir).filter((f) => f.endsWith('.json')).map((f) => new URL(f, dir).pathname);
 const existing = JSON.parse(fs.readFileSync(new URL('../public/data/rebuses.json', import.meta.url), 'utf8')).rebuses;
-const answers = new Set(existing.map((r) => normalize(r.answer)));
+// Сколько раз слово уже загадано (набор + замыслы выше по списку): одно слово — разными
+// ребусами можно, но не больше SAME_ANSWER.max раз и не больше SAME_ANSWER.share набора.
+const answerCount = new Map();
+existing.forEach((r) => answerCount.set(normalize(r.answer), (answerCount.get(normalize(r.answer)) || 0) + 1));
+let totalRebuses = existing.length;
+const repeated = () => [...answerCount.values()].filter((n) => n > 1).reduce((a, n) => a + n, 0);
 // Ходы набора и уже записанных замыслов: повтор хода — повтор идеи (ошибка).
 const tricks = new Map();
 existing.forEach((r) => setTricks(r).forEach((t) => tricks.set(t, `набор: ${r.id}`)));
@@ -25,12 +30,11 @@ for (const f of fixtures) {
 }
 const pics = new Map();
 const tech = {};
-const seen = new Map(); // ответ → файл: повторы и между файлами разных авторов
 for (const f of list) {
   const json = JSON.parse(fs.readFileSync(f, 'utf8'));
   for (const r of json.proposals || []) {
     total++;
-    let p = specProblems(r, { answers, legend: LEGEND_WORDS });
+    let p = specProblems(r, { legend: LEGEND_WORDS });
     // Новый вид узла, которого схема ещё не знает, — не ошибка: замысел ждёт обработчика.
     if (p.length && p.every((x) => x.includes('пока не поддержан'))) {
       console.log(`… ${r.id}: ${p.join('; ')}`);
@@ -41,9 +45,11 @@ for (const f of list) {
       if (skeletons.has(sk)) p.push(`тот же ребус, что ${skeletons.get(sk)}`);
       for (const t of specTricks(r)) if (tricks.has(t)) p.push(`ход ${t} уже есть (${tricks.get(t)}) — придумайте другой`);
     }
-    const prev = seen.get(normalize(r.answer));
-    if (prev) p.push(`повтор ответа в замыслах (${prev})`);
-    else seen.set(normalize(r.answer), f.split('/').pop());
+    const a = normalize(r.answer);
+    const had = answerCount.get(a) || 0;
+    if (had >= SAME_ANSWER.max) p.push(`слово ${a} уже загадано ${had} раза — больше не надо`);
+    else if (had === 1 && (repeated() + 2) / (totalRebuses + 1) > SAME_ANSWER.share) p.push(`слово ${a} уже загадано; повторов слов уже ${Math.round(repeated() / totalRebuses * 100)} % — новые повторы на паузе`);
+    if (!p.length) { answerCount.set(a, had + 1); totalRebuses++; }
     p.forEach((x) => console.log(`✗ ${r.id || '?'}: ${x}`));
     problems += p.length;
     if (!p.length) {

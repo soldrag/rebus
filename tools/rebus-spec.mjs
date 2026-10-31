@@ -172,7 +172,7 @@ function nodeProblems(r) {
 }
 
 // Механические проверки замысла. Содержательные правила — docs/REBUSES.md (проверяет редактор).
-export function specProblems(r, { answers = new Set(), legend = [] } = {}) {
+export function specProblems(r, { legend = [] } = {}) {
   if (!r || typeof r !== 'object') return ['не объект'];
   const p = [];
   if (!r.id || typeof r.id !== 'string') p.push('нет id');
@@ -188,7 +188,6 @@ export function specProblems(r, { answers = new Set(), legend = [] } = {}) {
   const got = solveSpec(r);
   if (got !== a) p.push(`ответ ${r.answer}, а по замыслу выходит ${got}`);
   else if (solveSpec(r, keepYo) !== keepYo(r.answer)) p.push(`Ё/Е: ответ ${keepYo(r.answer)}, а выходит ${solveSpec(r, keepYo)}`);
-  if (answers.has(a)) p.push(`ответ ${a} уже есть в наборе`);
   if (legend.includes(a)) p.push(`ответ ${a} есть в примерах легенды`);
   if (String(r.hint).split(/\s+/).map(normalize).some((w) => w.includes(a))) p.push('подсказка содержит ответ');
   const marked = Array.isArray(r.techniques) ? [...r.techniques].sort().join(', ') : '';

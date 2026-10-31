@@ -2,7 +2,7 @@
 // Правила составления — в docs/REBUSES.md. Ошибки валят сборку, предупреждения — нет.
 import fs from 'node:fs';
 import { confusables } from './spelling.mjs';
-import { diversity } from './diversity.mjs';
+import { diversity, SAME_ANSWER } from './diversity.mjs';
 import { chunkStages, formatProblems, LEGEND_PICTURES, LEGEND_WORDS, normalize, pictures, rebusList, techniques } from '../src/rebus-core.js';
 
 
@@ -16,7 +16,7 @@ const problems = [];
 const warnings = [];
 if (!rebuses.length) problems.push('в файле нет ни одного ребуса');
 const ids = new Set();
-const answers = new Set();
+const answers = new Map(); // слово → сколько раз загадано
 const pics = new Map();
 let prevLevel = 0;
 for (const r of rebuses) {
@@ -25,8 +25,9 @@ for (const r of rebuses) {
   if (ids.has(name)) problems.push(`${name}: повтор id`);
   ids.add(name);
   const a = normalize(r && r.answer);
-  if (a && answers.has(a)) problems.push(`${name}: повтор ответа ${r.answer}`);
-  answers.add(a);
+  // Одно слово разными ребусами можно, но не больше SAME_ANSWER.max раз (tools/diversity.mjs).
+  if (a && (answers.get(a) || 0) >= SAME_ANSWER.max) problems.push(`${name}: слово ${r.answer} загадано больше ${SAME_ANSWER.max} раз`);
+  answers.set(a, (answers.get(a) || 0) + 1);
   if (!Array.isArray(r.parts)) continue;
 
   if (r.level < prevLevel) warnings.push(`${name}: стоит после ребусов уровня ${prevLevel} — держите файл от лёгких к трудным`);
@@ -50,6 +51,10 @@ for (const r of rebuses) {
   const miss = confusables(r, rebuses).filter((w) => !(r.notMisspelled || []).map(normalize).includes(w));
   if (miss.length) problems.push(`${name}: в notMisspelled не хватает ${miss.join(', ')} — запустите npm run spelling`);
   if (a && LEGEND_WORDS.includes(a)) problems.push(`${name}: ответ ${r.answer} есть в примерах легенды — легенда его подскажет`);
+}
+{
+  const rep = [...answers.values()].filter((n) => n > 1).reduce((x, n) => x + n, 0);
+  if (rep / rebuses.length > SAME_ANSWER.share) warnings.push(`ребусов с повторным словом ${rep} из ${rebuses.length} — больше ${SAME_ANSWER.share * 100} %`);
 }
 // Реестр картинок (data/pictures.json): какие эмодзи и слова можно, с какого уровня,
 // можно ли переворачивать и брать в «первые буквы». picture: false — только для первых букв.
