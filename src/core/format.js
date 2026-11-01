@@ -2,7 +2,7 @@
 // Это проверка при загрузке в браузере: ребус с такой ошибкой приложение пропускает.
 // Правила автора (подсказка, тема, разметка приёмов, Ё/Е, как читается предлог и т. п.)
 // проверяет только tools/validate.mjs (tools/rules.mjs, rebusProblems) — до сборки.
-import { normalize, PREPOSITIONS, innerPart, solve } from './solve.js';
+import { normalize, POSITIONS, PREPOSITIONS, innerPart, outerPart, solve } from './solve.js';
 
 const PART_TYPES = ['pic', 'letters', 'number', 'initials', 'position'];
 
@@ -20,12 +20,16 @@ function partProblems(part) {
       break;
     case 'position': {
       if (!PREPOSITIONS.includes(normalize(part.prep))) p.push('prep должен быть ' + PREPOSITIONS.join(', '));
-      const inner = innerPart(part);
-      if (inner) {
-        if (!['pic', 'initials'].includes(inner.type)) p.push('inner — буквы, картинка или первые буквы');
-        else partProblems(inner).forEach((x) => p.push('inner: ' + x));
+      const prep = normalize(part.prep);
+      const inner = innerPart(part), outer = outerPart(part);
+      for (const [key, slot] of [['inner', inner], ['outer', outer]]) {
+        if (!slot) continue;
+        if (!['pic', 'number', 'initials'].includes(slot.type)) p.push(key + ' — буквы, картинка, число или первые буквы');
+        else partProblems(slot).forEach((x) => p.push(key + ': ' + x));
       }
-      if (!normalize(part.outer) || (!inner && !normalize(part.inner))) p.push('нет outer или inner');
+      // У «В» и «ИЗ» outer рисуется контуром-вместилищем, а картинку контуром не нарисовать.
+      if (outer && POSITIONS[prep] && POSITIONS[prep].container) p.push(`outer у «${prep.toLowerCase()}» рисуется контуром — только буквы`);
+      if ((!outer && !normalize(part.outer)) || (!inner && !normalize(part.inner))) p.push('нет outer или inner');
       break;
     }
     case 'number':

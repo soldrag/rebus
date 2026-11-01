@@ -8,7 +8,7 @@
 // Ребусы вставляются в свой уровень равномерно, между старыми; потом — npm run spelling,
 // npm run validate и раскладка по предупреждениям.
 import fs from 'node:fs';
-import { normalize, picKey, techniques } from '../src/core/solve.js';
+import { normalize, picKey, techniques, POSITIONS } from '../src/core/solve.js';
 import { OPS as SPEC_OPS, RELATIONS, NOT_DRAWN, solveSpec } from './rebus-spec.mjs';
 import { rebusProblems } from './rules.mjs';
 
@@ -47,12 +47,14 @@ function convert(n) {
     const rel = normalize(n.rel);
     if (NOT_DRAWN[rel]) throw new Error(`«${rel}» не рисуем: ${NOT_DRAWN[rel]}`);
     if (!RELATIONS[rel]) throw new Error('неизвестное отношение ' + n.rel);
-    if (n.b.letters === undefined) throw new Error('в наборе b у отношения — только буквы');
+    // b — буквы или картинка/первые буквы (кроме «В» и «ИЗ»: там b — контур, только буквы).
+    if (n.b.letters === undefined && POSITIONS[rel].container) throw new Error(`b у «${rel.toLowerCase()}» рисуется контуром — только буквы`);
     // Набор знает два порядка: «a предлог b» и «предлог b a» (prepFirst) — как и схема замыслов.
     const read = n.read.join(',');
     if (read !== 'a,rel,b' && read !== 'rel,b,a') throw new Error('read отношения — ["a","rel","b"] или ["rel","b","a"]');
     const inner = n.a.letters !== undefined ? n.a.letters : convert(n.a);
-    const out = { type: 'position', prep: rel, outer: n.b.letters, inner };
+    const outer = n.b.letters !== undefined ? n.b.letters : convert(n.b);
+    const out = { type: 'position', prep: rel, outer, inner };
     if (read === 'rel,b,a') out.prepFirst = true;
     return out;
   }

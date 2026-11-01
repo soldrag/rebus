@@ -17,6 +17,7 @@
     { "answer": "ИЗЮМ", "techniques": ["rel:ИЗ"], "parts": [{ "rel": "ИЗ", "a": { "letters": "М" }, "b": { "letters": "Ю" }, "read": ["rel", "b", "a"] }] },
     { "answer": "ЧАЙКА", "techniques": ["rel:К"], "parts": [{ "rel": "К", "a": { "letters": "ЧАЙ" }, "b": { "letters": "А" }, "read": ["a", "rel", "b"] }] },
     { "answer": "ОТЕЦ", "techniques": ["rel:ОТ"], "parts": [{ "rel": "ОТ", "a": { "letters": "Ц" }, "b": { "letters": "Е" }, "read": ["rel", "b", "a"] }] },
-    { "answer": "ЛАДОШКА", "techniques": ["rel:ДО"], "parts": [{ "rel": "ДО", "a": { "letters": "ЛА" }, "b": { "letters": "ШКА" }, "read": ["a", "rel", "b"] }] }
+    { "answer": "ЛАДОШКА", "techniques": ["rel:ДО"], "parts": [{ "rel": "ДО", "a": { "letters": "ЛА" }, "b": { "letters": "ШКА" }, "read": ["a", "rel", "b"] }] },
+    { "answer": "ПОКОС", "techniques": ["pic-in-rel", "rel:К", "remove"], "parts": [{ "rel": "К", "a": { "letters": "ПО" }, "b": { "pic": "ОСА", "look": "оса", "remove": ["А"] }, "read": ["a", "rel", "b"] }] }
   ]
 }

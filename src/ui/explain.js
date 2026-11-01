@@ -1,5 +1,5 @@
 // Разбор решения: как разгадать ребус, по шагу на каждую часть (после трёх ошибок и на готовом ребусе).
-import { partLetters, normalize, keepYo, POSITIONS, innerPart } from '../core/solve.js';
+import { partLetters, normalize, keepYo, POSITIONS, innerPart, outerPart } from '../core/solve.js';
 import { el, add, plural } from './dom.js';
 import { show } from './board.js';
 function without(n, where) {
@@ -32,13 +32,15 @@ function explainPart(p) {
   } else if (p.type === 'position') {
     const prep = normalize(p.prep);
     const info = POSITIONS[prep] || POSITIONS['В'];
-    const part = innerPart(p);
+    const part = innerPart(p), outer = outerPart(p);
     pic = el('span', 'step-pic step-chip', prep);
-    // Картинка внутри: «СЫ (СЫР без Р) в Е».
+    // Картинка в слоте: «СЫ (СЫР без Р) в Е», «БУ к АШКА (ЧАШКА без Ч)».
     const innerText = part ? partLetters(part, keepYo) : show(p.inner);
+    const outerText = outer ? partLetters(outer, keepYo) : show(p.outer);
     const notes = [p.prepFirst ? 'слово «' + prep + '» ставим в начало' : 'между буквами слово «' + prep + '»'];
+    if (outer) notes.unshift(partNote(outer));
     if (part) notes.unshift(partNote(part));
-    add(what, el('b', 'step-word', innerText + ' ' + info.say + ' ' + show(p.outer)),
+    add(what, el('b', 'step-word', innerText + ' ' + info.say + ' ' + outerText),
       el('span', 'step-notes', notes.join('; ')));
   } else {
     pic = el('span', 'step-pic' + (p.flip ? ' flip' : '') + (p.type === 'number' ? ' step-num' : ''), p.type === 'number' ? String(p.value) : (p.emoji || ''));

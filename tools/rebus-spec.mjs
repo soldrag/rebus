@@ -11,7 +11,7 @@
 //      (когда его нет) ведёт себя как раньше.
 //   3. Каждый новый вид — с образцом в tools/spec-fixtures.json.
 //   4. Неизвестный вид узла не роняет проверку: замысел помечается «нужен обработчик».
-import { normalize, keepYo, partLetters, innerPart, POSITIONS } from '../src/core/solve.js';
+import { normalize, keepYo, partLetters, innerPart, outerPart, POSITIONS } from '../src/core/solve.js';
 import { hintNamesAnswer, isLegendWord } from './rules.mjs';
 
 export const SCHEMA_VERSION = 1;
@@ -105,6 +105,8 @@ export const NODE_KINDS = {
       if (NOT_DRAWN[rel]) p.push(`rel «${rel}» не рисуем: ${NOT_DRAWN[rel]}. Можно: ${Object.keys(RELATIONS).join(', ')}`);
       else if (!RELATIONS[rel]) p.push(`rel — один из ${Object.keys(RELATIONS).join(', ')}`);
       if (!n.a || !n.b) p.push('у rel нужны a и b');
+      // b у «В» и «ИЗ» — контур, который вмещает a; картинку (и первые буквы) контуром не нарисовать.
+      else if (POSITIONS[rel] && POSITIONS[rel].container && kindOf(n.b).kind !== 'letters') p.push(`b у «${rel.toLowerCase()}» рисуется контуром — только буквы`);
       const read = Array.isArray(n.read) ? n.read.join(',') : '';
       if (!Object.values(READS).includes(read)) p.push('read — ["a","rel","b"] (предлог между частями) или ["rel","b","a"] (предлог в начале)');
       else if (RELATION_READ[rel] && read !== READS[RELATION_READ[rel]]) {
@@ -251,7 +253,7 @@ export function setTricks(r) {
       if (sig) out.push(`${p.type}:${normalize(p.word)}[${sig}]`);
     }
     if (p.type === 'initials') out.push('initials:' + (p.items || []).map((it) => normalize(it.word)).join('+'));
-    if (p.type === 'position') out.push(`rel:${normalize(p.prep)}(${innerPart(p) ? partLetters(innerPart(p)) : normalize(p.inner)}|${normalize(p.outer)})`);
+    if (p.type === 'position') out.push(`rel:${normalize(p.prep)}(${innerPart(p) ? partLetters(innerPart(p)) : normalize(p.inner)}|${outerPart(p) ? partLetters(outerPart(p)) : normalize(p.outer)})`);
   }
   return out;
 }

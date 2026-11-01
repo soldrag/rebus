@@ -19,24 +19,31 @@ export function keepYo(s) {
 //   В — внутри, НА — сверху, ПОД — снизу, У — рядом, ЗА — спрятана позади,
 //   ПЕРЕД — загораживает спереди, ИЗ — выходит из контура, К — движется к, ОТ — уходит от, ДО — доходит до.
 //   read — где читается предлог: 'first' — только в начале (prepFirst), 'between' — только между
-//   частями; без read — как задано в ребусе. Не рисуем (и в набор не пускаем) НАД, ПО, С, ПРИ, О/ОБ.
+//   частями; без read — как задано в ребусе. container — b рисуется контуром, который вмещает a
+//   («В», «ИЗ»): картинку контуром не нарисовать, поэтому b там — только буквы. Не рисуем (и в набор не пускаем) НАД, ПО, С, ПРИ, О/ОБ.
 export const POSITIONS = {
-  'В': { tech: 'in', say: 'в', inside: 'внутри' },
+  'В': { tech: 'in', say: 'в', inside: 'внутри', container: true },
   'НА': { tech: 'on', say: 'на', inside: 'над' },
   'ПОД': { tech: 'under', say: 'под', inside: 'под', read: 'first' },
   'У': { tech: 'near', say: 'у', inside: 'рядом с', read: 'between' },
   'ЗА': { tech: 'behind', say: 'за', inside: 'за', read: 'first' },
   'ПЕРЕД': { tech: 'front', say: 'перед', inside: 'перед', read: 'first' },
-  'ИЗ': { tech: 'out', say: 'из', inside: 'выходит из', read: 'first' },
+  'ИЗ': { tech: 'out', say: 'из', inside: 'выходит из', read: 'first', container: true },
   'К': { tech: 'to', say: 'к', inside: 'движется к', read: 'between' },
   'ОТ': { tech: 'from', say: 'от', inside: 'уходит от', read: 'first' },
   'ДО': { tech: 'till', say: 'до', inside: 'доходит до', read: 'between' },
 };
 export const PREPOSITIONS = Object.keys(POSITIONS);
 
-// Внутренняя часть позиции: строка — это буквы, объект — часть ребуса (картинка, первые буквы).
+// Внутренняя часть позиции: строка — это буквы, объект — часть ребуса (картинка, число, первые буквы).
 // «🧀 без Р в Е» = В-Е-СЫ: { type: 'position', prep: 'В', outer: 'Е', inner: { type: 'pic', … }, prepFirst: true }.
 export const innerPart = (part) => (part && part.inner && typeof part.inner === 'object' ? part.inner : null);
+// Внешняя часть (b) — так же: строка — буквы, объект — картинка, число или первые буквы.
+// «БУ к 🍵 без Ч» = БУ-К-АШКА: { type: 'position', prep: 'К', outer: { type: 'pic', … }, inner: 'БУ' }.
+// У отношений с container (В, ИЗ) b — контур, там только буквы (src/core/format.js).
+export const outerPart = (part) => (part && part.outer && typeof part.outer === 'object' ? part.outer : null);
+// Буквы слота: часть ребуса или строка букв.
+const slotLetters = (obj, str, norm) => (obj ? partLetters(obj, norm) : norm(str));
 
 // Картинка: эмодзи или своя иллюстрация (image — путь в public/, одобряет дизайнер).
 export const picKey = (p) => `${p.emoji || p.image} ${normalize(p.word)}`;
@@ -48,7 +55,7 @@ export function pictures(rebus) {
     if (!p) return;
     if (p.type === 'pic') out.push(p);
     if (p.type === 'initials') (p.items || []).forEach((it) => out.push({ ...it, inInitials: true }));
-    if (p.type === 'position') visit(innerPart(p));
+    if (p.type === 'position') { visit(innerPart(p)); visit(outerPart(p)); }
   };
   (rebus.parts || []).forEach(visit);
   return out;
@@ -65,8 +72,9 @@ export function partLetters(part, norm = normalize) {
       return (part.items || []).map((it) => norm(it.word).charAt(0)).join('');
     case 'position': { // «ДА в О» = В-О-ДА, «СО в А» = СО-В-А, «ПА на МА» = ПА-НА-МА, «К у Б» = К-У-Б, «ОВА под К» = ПОД-К-ОВА,
       // «Й перед А» = ПЕРЕД-А-Й, «М из Ю» = ИЗ-Ю-М, «ЧАЙ к А» = ЧАЙ-К-А, «Ц от Е» = ОТ-Е-Ц, «ЛА до ШКА» = ЛА-ДО-ШКА
-      const prep = norm(part.prep), outer = norm(part.outer);
-      const inner = innerPart(part) ? partLetters(innerPart(part), norm) : norm(part.inner);
+      const prep = norm(part.prep);
+      const outer = slotLetters(outerPart(part), part.outer, norm);
+      const inner = slotLetters(innerPart(part), part.inner, norm);
       return part.prepFirst ? prep + outer + inner : inner + prep + outer;
     }
     default:
@@ -102,7 +110,10 @@ export function solve(rebus, norm = normalize) {
 export function techniques(rebus) {
   const t = new Set();
   const parts = [];
-  (rebus.parts || []).forEach((p) => { parts.push(p); if (p.type === 'position' && innerPart(p)) parts.push(innerPart(p)); });
+  (rebus.parts || []).forEach((p) => {
+    parts.push(p);
+    if (p.type === 'position') [innerPart(p), outerPart(p)].filter(Boolean).forEach((x) => parts.push(x));
+  });
   for (const p of parts) {
     if (p.type === 'initials') t.add('initials');
     else if (p.type === 'position') t.add((POSITIONS[normalize(p.prep)] || POSITIONS['В']).tech);

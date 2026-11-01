@@ -677,6 +677,8 @@ h1[tabindex="-1"]:focus { outline: none; }
 }
 .rel.pic { --R: var(--e); }
 .rel-row { display: flex; align-items: center; justify-content: center; min-height: calc(var(--R) * 1.12); }
+/* На доске отношение из одних букв стоит на одной средней линии с картинками, даже когда буквы ужаты (--el < --e): строка — как у букв и картинок. */
+.board-row > .rel > .rel-row { min-height: calc(var(--e) * 1.12); }
 .rel-box { position: relative; display: inline-flex; align-items: center; justify-content: center; }
 .slot {
   --k: 1;

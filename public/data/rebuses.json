@@ -1641,6 +1641,29 @@
       ]
     },
     {
+      "id": "udochka",
+      "answer": "УДОЧКА",
+      "accept": [],
+      "level": 2,
+      "theme": "вода",
+      "techniques": [
+        "till"
+      ],
+      "hint": "Длинная гибкая палка с леской, поплавком и крючком",
+      "parts": [
+        {
+          "type": "position",
+          "prep": "ДО",
+          "outer": "ЧКА",
+          "inner": "У"
+        }
+      ],
+      "source": "замысел author-librarian",
+      "exceptions": {
+        "embedded": "ДОЧКА не складывается отдельной частью: ДО — предлог, его ребёнок говорит сам, а на доске только У и ЧКА. Так же принято у БУСЫ / УСЫ. При раскладке не ставить в один этап с ДОЧКОЙ."
+      }
+    },
+    {
       "id": "schit",
       "answer": "ЩИТ",
       "accept": [],
@@ -2472,6 +2495,27 @@
       "source": "замысел author-teacher"
     },
     {
+      "id": "perednik",
+      "answer": "ПЕРЕДНИК",
+      "accept": [],
+      "level": 2,
+      "theme": "одежда",
+      "techniques": [
+        "front"
+      ],
+      "hint": "Его завязывают поверх платья, чтобы не испачкаться у плиты",
+      "parts": [
+        {
+          "type": "position",
+          "prep": "ПЕРЕД",
+          "outer": "Н",
+          "inner": "ИК",
+          "prepFirst": true
+        }
+      ],
+      "source": "замысел author-boardgames"
+    },
+    {
       "id": "pen",
       "answer": "ПЕНЬ",
       "accept": [],
@@ -2821,6 +2865,35 @@
         }
       ],
       "source": "классика"
+    },
+    {
+      "id": "rodinka",
+      "answer": "РОДИНКА",
+      "accept": [],
+      "level": 2,
+      "theme": "люди",
+      "techniques": [
+        "number",
+        "to"
+      ],
+      "hint": "Маленькое тёмное пятнышко на коже, бывает на щеке",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "Р"
+        },
+        {
+          "type": "position",
+          "prep": "К",
+          "outer": "А",
+          "inner": {
+            "type": "number",
+            "value": "1",
+            "word": "ОДИН"
+          }
+        }
+      ],
+      "source": "замысел author-boardgames"
     },
     {
       "id": "sushka",
@@ -3945,6 +4018,35 @@
       "source": "классика"
     },
     {
+      "id": "izbushka",
+      "answer": "ИЗБУШКА",
+      "accept": [],
+      "level": 3,
+      "theme": "сказки",
+      "techniques": [
+        "out",
+        "remove"
+      ],
+      "hint": "Домик Бабы-яги на курьих ножках",
+      "parts": [
+        {
+          "type": "position",
+          "prep": "ИЗ",
+          "outer": "Б",
+          "inner": {
+            "type": "pic",
+            "image": "pictures/pushka.svg",
+            "word": "ПУШКА",
+            "remove": [
+              "П"
+            ]
+          },
+          "prepFirst": true
+        }
+      ],
+      "source": "замысел author-boardgames"
+    },
+    {
       "id": "uley",
       "answer": "УЛЕЙ",
       "accept": [],
@@ -4207,6 +4309,34 @@
         "ЛАОС",
         "ЛОС"
       ]
+    },
+    {
+      "id": "bukashka",
+      "answer": "БУКАШКА",
+      "accept": [],
+      "level": 3,
+      "theme": "насекомые",
+      "techniques": [
+        "remove",
+        "to"
+      ],
+      "hint": "Так зовут любое крошечное насекомое, которое ползает в траве",
+      "parts": [
+        {
+          "type": "position",
+          "prep": "К",
+          "outer": {
+            "type": "pic",
+            "image": "pictures/chashka.svg",
+            "word": "ЧАШКА",
+            "remove": [
+              "Ч"
+            ]
+          },
+          "inner": "БУ"
+        }
+      ],
+      "source": "замысел author-boardgames"
     },
     {
       "id": "kniga",
@@ -4482,6 +4612,34 @@
       ]
     },
     {
+      "id": "vodovorot",
+      "answer": "ВОДОВОРОТ",
+      "accept": [],
+      "level": 3,
+      "theme": "вода",
+      "techniques": [
+        "remove",
+        "till"
+      ],
+      "hint": "В реке всё кружится воронкой и тянет на дно",
+      "parts": [
+        {
+          "type": "position",
+          "prep": "ДО",
+          "outer": {
+            "type": "pic",
+            "image": "pictures/vorota.svg",
+            "word": "ВОРОТА",
+            "remove": [
+              "А"
+            ]
+          },
+          "inner": "ВО"
+        }
+      ],
+      "source": "замысел author-boardgames"
+    },
+    {
       "id": "povar",
       "answer": "ПОВАР",
       "accept": [],
@@ -4744,6 +4902,42 @@
       "source": "классика"
     },
     {
+      "id": "sharlotka",
+      "answer": "ШАРЛОТКА",
+      "accept": [],
+      "level": 3,
+      "theme": "еда",
+      "techniques": [
+        "from",
+        "replaceAt"
+      ],
+      "hint": "Пышный пирог с яблоками, его быстро печёт бабушка",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "🧣",
+          "word": "ШАРФ",
+          "replaceAt": [
+            [
+              4,
+              "Л"
+            ]
+          ]
+        },
+        {
+          "type": "position",
+          "prep": "ОТ",
+          "outer": "К",
+          "inner": "А",
+          "prepFirst": true
+        }
+      ],
+      "source": "замысел author-librarian",
+      "exceptions": {
+        "embedded": "Слово ШАР в ребусе не складывается отдельной частью: на картинке ШАРФ, и он сразу превращается в ШАРЛ, а Л — уже начало «лотки». Ребёнок не видит ШАР ни картинкой, ни буквами. При раскладке не ставить в один этап с ШАРОМ (там тот же ШАРФ)."
+      }
+    },
+    {
       "id": "pirat",
       "answer": "ПИРАТ",
       "accept": [],
@@ -4987,6 +5181,45 @@
         }
       ],
       "source": "классика"
+    },
+    {
+      "id": "potolok",
+      "answer": "ПОТОЛОК",
+      "accept": [],
+      "level": 3,
+      "theme": "дом",
+      "techniques": [
+        "from",
+        "replaceAt"
+      ],
+      "hint": "Он над головой в каждой комнате, с него свисает люстра",
+      "parts": [
+        {
+          "type": "letters",
+          "text": "П"
+        },
+        {
+          "type": "position",
+          "prep": "ОТ",
+          "outer": "О",
+          "inner": {
+            "type": "pic",
+            "emoji": "🧅",
+            "word": "ЛУК",
+            "replaceAt": [
+              [
+                2,
+                "О"
+              ]
+            ]
+          },
+          "prepFirst": true
+        }
+      ],
+      "source": "замысел author-librarian",
+      "notMisspelled": [
+        "ПАТОЛОГ"
+      ]
     },
     {
       "id": "dver",
@@ -5249,6 +5482,39 @@
       "source": "классика"
     },
     {
+      "id": "gorizont",
+      "answer": "ГОРИЗОНТ",
+      "accept": [],
+      "level": 3,
+      "theme": "природа",
+      "techniques": [
+        "out",
+        "remove"
+      ],
+      "hint": "Далёкая линия, где небо будто касается земли или моря",
+      "parts": [
+        {
+          "type": "pic",
+          "emoji": "⛰️",
+          "word": "ГОРА",
+          "remove": [
+            "А"
+          ]
+        },
+        {
+          "type": "position",
+          "prep": "ИЗ",
+          "outer": "О",
+          "inner": "НТ",
+          "prepFirst": true
+        }
+      ],
+      "source": "замысел author-librarian",
+      "exceptions": {
+        "embedded": "ЗОНТ в ребусе не виден: З — конец предлога «из», О — контур, НТ — выходящие буквы. Ни картинки зонта, ни букв ЗОНТ подряд ребёнок не видит. При раскладке не ставить в один этап с ЗОНТОМ."
+      }
+    },
+    {
       "id": "komar",
       "answer": "КОМАР",
       "accept": [],
@@ -5495,6 +5761,37 @@
         }
       ],
       "source": "классика"
+    },
+    {
+      "id": "sadovnik",
+      "answer": "САДОВНИК",
+      "accept": [],
+      "level": 3,
+      "theme": "люди",
+      "techniques": [
+        "remove",
+        "till"
+      ],
+      "hint": "Ухаживает за яблонями и клумбами: поливает цветы, подстригает кусты",
+      "parts": [
+        {
+          "type": "position",
+          "prep": "ДО",
+          "outer": {
+            "type": "pic",
+            "image": "pictures/venik.svg",
+            "word": "ВЕНИК",
+            "remove": [
+              "Е"
+            ]
+          },
+          "inner": "СА"
+        }
+      ],
+      "source": "замысел author-librarian",
+      "exceptions": {
+        "embedded": "САД не складывается отдельной частью: написано только СА, Д — начало предлога «до», который ребёнок говорит сам. При раскладке не ставить в один этап с САДОМ."
+      }
     },
     {
       "id": "trava",
