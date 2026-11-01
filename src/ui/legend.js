@@ -23,7 +23,7 @@ export function openLegend(kinds, { fresh = false, onClose } = {}) {
   const list = el('div', 'legend-cards' + (kinds.length === 1 ? ' single' : ''));
   // Общее правило чтения предлогов — один раз, если в легенде есть хоть одно отношение.
   const rule = kinds.some((k) => RELATION_KINDS.includes(k))
-    ? el('p', 'legend-rule', 'Назови, что видишь, со словом-предлогом. Читай как книгу: сверху вниз, слева направо. Контур — то, что вмещает или стоит сзади.')
+    ? el('p', 'legend-rule', 'Читай сверху вниз и слева направо.')
     : null;
   for (const k of kinds) {
     const c = CARDS[k];
