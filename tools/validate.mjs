@@ -3,13 +3,12 @@
 import fs from 'node:fs';
 import { confusables } from './spelling.mjs';
 import { diversity, spread } from './diversity.mjs';
-import { picKey } from '../src/rebus-core.js';
-import { chunkStages, formatProblems, LEGEND_PICTURES, LEGEND_WORDS, normalize, pictures, rebusList, techniques } from '../src/rebus-core.js';
-
+import { chunkStages, formatProblems, LEGEND_PICTURES, LEGEND_WORDS, normalize, picKey, pictures, rebusList, techniques } from '../src/rebus-core.js';
 
 const file = new URL('../public/data/rebuses.json', import.meta.url);
 const registryFile = new URL('../data/pictures.json', import.meta.url);
 const rebuses = rebusList(JSON.parse(fs.readFileSync(file, 'utf8')));
+const registryPictures = JSON.parse(fs.readFileSync(registryFile, 'utf8')).pictures;
 // Одна и та же картинка — не чаще чем в ~2,5% ребусов (но до 4 раз можно всегда).
 const MAX_PIC_USES = Math.max(4, Math.ceil(rebuses.length / 40));
 
@@ -67,40 +66,36 @@ spread(rebuses.map((r) => normalize(r.answer))).peaks.forEach(([w, n]) => warnin
 // можно ли переворачивать и брать в «первые буквы». picture: false — только для первых букв.
 // Иллюстрации: в реестре — эмодзи или своя картинка (image). Своя картинка попадает в набор
 // только после одобрения дизайнера (designApproved) и в стиле приложения (docs/ILLUSTRATIONS.md).
-for (const p of JSON.parse(fs.readFileSync(registryFile, 'utf8')).pictures) {
+for (const p of registryPictures) {
   if (!p.emoji && !p.image) problems.push(`реестр: у ${p.word} нет ни emoji, ни image`);
   if (p.image) {
     if (p.designApproved !== true) problems.push(`реестр: картинка ${p.image} (${p.word}) не одобрена дизайнером — нужен designApproved: true`);
     if (!fs.existsSync(new URL('../public/' + p.image, import.meta.url))) problems.push(`реестр: нет файла public/${p.image}`);
   }
 }
-const registry = new Map(
-  JSON.parse(fs.readFileSync(registryFile, 'utf8')).pictures.map((p) => [picKey(p), p]),
-);
+const registry = new Map(registryPictures.map((p) => [picKey(p), p]));
 for (const r of rebuses) {
-  {
-    const uses = pictures(r).map((u) => ({ ...u, asInitial: !!u.inInitials }));
-    for (const u of uses) {
-      const key = picKey(u);
-      const reg = registry.get(key);
-      if (!reg) { problems.push(`${r.id}: картинки ${key} нет в реестре data/pictures.json`); continue; }
-      if (reg.banned) { problems.push(`${r.id}: картинка ${key} запрещена — ${reg.note || 'см. реестр'}`); continue; }
-      if (r.level < (reg.minLevel || 1)) should(r, 'pictureLevel', `картинка ${key} — обычно с уровня ${reg.minLevel}`);
-      if (u.asInitial && reg.initials === false) problems.push(`${r.id}: картинку ${key} нельзя в первые буквы — ${reg.note || ''}`);
-      if (!u.asInitial && reg.picture === false) problems.push(`${r.id}: картинку ${key} можно только в первые буквы — ${reg.note || ''}`);
-      if (!u.asInitial && u.flip && !reg.flip) problems.push(`${r.id}: картинку ${key} нельзя переворачивать — ${reg.note || ''}`);
-      // Цифры над картинкой в обратном порядке (4 3 2 1) — это тот же переворот.
-      const pk = u.pick || [];
-      if (!u.asInitial && pk.length > 1 && pk.every((n, i) => i === 0 || n < pk[i - 1]) && !reg.flip) {
-        problems.push(`${r.id}: цифры над ${key} в обратном порядке — это переворот, а её переворачивать нельзя`);
-      }
+  for (const u of pictures(r)) {
+    const key = picKey(u);
+    const asInitial = !!u.inInitials;
+    const reg = registry.get(key);
+    if (!reg) { problems.push(`${r.id}: картинки ${key} нет в реестре data/pictures.json`); continue; }
+    if (reg.banned) { problems.push(`${r.id}: картинка ${key} запрещена — ${reg.note || 'см. реестр'}`); continue; }
+    if (r.level < (reg.minLevel || 1)) should(r, 'pictureLevel', `картинка ${key} — обычно с уровня ${reg.minLevel}`);
+    if (asInitial && reg.initials === false) problems.push(`${r.id}: картинку ${key} нельзя в первые буквы — ${reg.note || ''}`);
+    if (!asInitial && reg.picture === false) problems.push(`${r.id}: картинку ${key} можно только в первые буквы — ${reg.note || ''}`);
+    if (!asInitial && u.flip && !reg.flip) problems.push(`${r.id}: картинку ${key} нельзя переворачивать — ${reg.note || ''}`);
+    // Цифры над картинкой в обратном порядке (4 3 2 1) — это тот же переворот.
+    const pk = u.pick || [];
+    if (!asInitial && pk.length > 1 && pk.every((n, i) => i === 0 || n < pk[i - 1]) && !reg.flip) {
+      problems.push(`${r.id}: цифры над ${key} в обратном порядке — это переворот, а её переворачивать нельзя`);
     }
   }
 }
 
 // Картинки легенды подчиняются тому же реестру.
 for (const p of LEGEND_PICTURES) {
-  const key = `${p.emoji} ${normalize(p.word)}`;
+  const key = picKey(p);
   const reg = registry.get(key);
   if (!reg || reg.banned) problems.push(`легенда: картинки ${key} нет в реестре или она запрещена`);
   else if (p.flip && !reg.flip) problems.push(`легенда: картинку ${key} нельзя переворачивать`);

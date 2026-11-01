@@ -1,9 +1,9 @@
 // Экран одного ребуса: картинка, ввод ответа, сердечки, итог.
-import { normalize, isCorrect, spellingFix, spellingMarks } from '../rebus-core.js';
+import { normalize, isCorrect, isClose, spellingFix, spellingMarks, techniques } from '../rebus-core.js';
 import { el, add } from './dom.js';
 import { getState, setState, MAX_TRIES, hasSeen, markSeen } from '../store.js';
 import { levelInfo, stageNext, stageOf, stageProgress } from '../levels.js';
-import { renderBoard, renderExplain, techniques, show } from './board.js';
+import { renderBoard, renderExplain, show } from './board.js';
 import { openLegend, ALL_KINDS } from './legend.js';
 import { celebrate } from './confetti.js';
 import { createKeyboard, letterOf } from './keyboard.js';
@@ -15,26 +15,6 @@ const PLACEHOLDER = 'Что тут спрятано?';
 const MAX_LEN = 20;
 const FIX_MS = 1600; // столько видно «Пишется так», потом ребёнок пишет слово сам
 const KBD_OUT_MS = 350; // столько видно «Молодец!» над клавиатурой, прежде чем её сменит «Дальше»
-
-// Расстояние Левенштейна: насколько ответ похож на правильный.
-function distance(a, b) {
-  const prev = Array.from({ length: b.length + 1 }, (_, i) => i);
-  for (let i = 1; i <= a.length; i++) {
-    let diag = prev[0];
-    prev[0] = i;
-    for (let j = 1; j <= b.length; j++) {
-      const tmp = prev[j];
-      prev[j] = Math.min(prev[j] + 1, prev[j - 1] + 1, diag + (a[i - 1] === b[j - 1] ? 0 : 1));
-      diag = tmp;
-    }
-  }
-  return prev[b.length];
-}
-
-function isClose(rebus, input) {
-  const n = normalize(input);
-  return [rebus.answer].concat(rebus.accept || []).some((a) => distance(normalize(a), n) <= 2);
-}
 
 // «Дальше» — следующий ребус этапа; когда этап пройден — за кубком.
 function nextButton(data, rebus) {
@@ -130,12 +110,6 @@ function renderGhost(answer, marks) {
   return { ghost, update, pin };
 }
 
-function explainBlock(rebus, animate) {
-  const ex = renderExplain(rebus);
-  if (animate) ex.classList.add('appear');
-  return ex;
-}
-
 // Место клавиатуры внизу. Когда ответ готов, клавиатура плавно уходит, а на её месте —
 // «Дальше» (и разбор, если слово показали). Клавиатура остаётся в разметке невидимой:
 // по ней высота места та же, и экран не прыгает.
@@ -160,7 +134,7 @@ function renderDone(panel, rebus, data, st) {
   const kb = createKeyboard({ onLetter() {}, onErase() {}, onCheck() {} });
   kb.close();
   const dock = renderDock(kb);
-  dockDone(dock, nextButton(data, rebus), explainBlock(rebus, false)).classList.add('shown');
+  dockDone(dock, nextButton(data, rebus), renderExplain(rebus)).classList.add('shown');
   panel.replaceChildren(add(el('div', 'status-row'), renderHearts(st.tries)), answer, el('p', 'msg'));
   panel.after(dock);
 }
@@ -240,6 +214,12 @@ export function renderRebus(app, data, id, signal, backTo = '#/') {
   };
 
   const hearts = renderHearts(st.tries);
+  // Сердечко гаснет (st.tries уже увеличено): самое правое из горящих.
+  const loseHeart = () => {
+    const lost = hearts.children[MAX_TRIES - st.tries];
+    if (lost) lost.classList.add('off', 'losing');
+    updateHeartsLabel(hearts, st.tries);
+  };
   const msg = el('p', 'msg');
   msg.setAttribute('role', 'status');
   const hintSlot = el('div', 'hint-slot');
@@ -298,7 +278,7 @@ export function renderRebus(app, data, id, signal, backTo = '#/') {
     if (hintSlot.querySelector('.hint-btn')) hintSlot.replaceChildren();
     if (kind === 'ok') celebrate();
     next = nextButton(data, rebus);
-    const layer = dockDone(dock, next, kind === 'reveal' ? explainBlock(rebus, false) : null);
+    const layer = dockDone(dock, next, kind === 'reveal' ? renderExplain(rebus) : null);
     setTimeout(() => {
       if (!field.isConnected) return;
       kb.close();
@@ -320,9 +300,7 @@ export function renderRebus(app, data, id, signal, backTo = '#/') {
     st.tries = Math.min(MAX_TRIES, st.tries + 1);
     setState(id, { tries: st.tries, status: 'solved', typo: show(val) });
     updateStars();
-    const lost = hearts.children[MAX_TRIES - st.tries];
-    if (lost) lost.classList.add('off', 'losing');
-    updateHeartsLabel(hearts, st.tries);
+    loseHeart();
     const marks = new Set(spellingMarks(rebus.answer, val));
     copy = renderGhost(rebus.answer, marks);
     const box = resultBox('fix', rebus, true, val);
@@ -370,16 +348,12 @@ export function renderRebus(app, data, id, signal, backTo = '#/') {
     st.tries += 1;
     if (st.tries >= MAX_TRIES) {
       setState(id, { tries: st.tries, status: 'revealed' });
-      const lastHeart = hearts.children[0];
-      if (lastHeart) lastHeart.classList.add('off', 'losing');
-      updateHeartsLabel(hearts, st.tries);
+      loseHeart();
       finish('reveal');
       return;
     }
     setState(id, { tries: st.tries });
-    const lost = hearts.children[MAX_TRIES - st.tries];
-    if (lost) lost.classList.add('off', 'losing');
-    updateHeartsLabel(hearts, st.tries);
+    loseHeart();
     field.classList.remove('shake');
     void field.offsetWidth; // перезапуск анимации
     field.classList.add('shake');

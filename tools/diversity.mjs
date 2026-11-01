@@ -6,11 +6,11 @@
 //   node tools/diversity.mjs --strict [--only=set|proposals]   — код выхода 1 при превышении (для хука)
 import fs from 'node:fs';
 import { execFileSync } from 'node:child_process';
-import { techniques } from '../src/rebus-core.js';
+import { POSITIONS, techniques } from '../src/rebus-core.js';
 import { specTechniques, solveSpec } from './rebus-spec.mjs';
 
 export const SHARE_FACTOR = 2;
-export const MIN_ITEMS = 10;
+export const MIN_ITEMS = 10; // на меньших уровнях проценты ничего не значат
 // Частотность: сколько раз встречается каждое значение (слово-ответ и т.п.).
 // Пик — больше двух средних (SHARE_FACTOR × среднее), провал — меньше половины среднего.
 // Жёстких лимитов нет: всё считается от текущей статистики.
@@ -26,7 +26,7 @@ export function spread(values) {
 export function wouldPeak(values, v) {
   const after = spread(values.concat(v));
   return after.peaks.some(([x]) => x === v);
-} // на меньших уровнях проценты ничего не значат
+}
 
 // items — список списков приёмов (по одному на ребус).
 export function diversity(items) {
@@ -46,13 +46,11 @@ export function report(title, d) {
   return lines.join('\n');
 }
 
-const byLevel = (list, tech) => [1, 2, 3].map((l) => [l, list.filter((r) => r && r.level === l).map(tech)]);
-
 // Набор сейчас не трогаем, а расширяем. Поэтому правило применяется к будущему набору
 // (текущий + замыслы): приём, который в нём выше предела, «на паузе» — новые ребусы
 // с ним не добавляем, пока перекос не выровняется. Пауза снимается сама.
 // Коды замыслов (rel:В) и набора (in) — один и тот же приём: считаем вместе.
-const SAME = { 'rel:В': 'in', 'rel:НА': 'on', 'rel:У': 'near', 'rel:ПОД': 'under', 'rel:ЗА': 'behind' };
+const SAME = Object.fromEntries(Object.entries(POSITIONS).map(([prep, p]) => ['rel:' + prep, p.tech]));
 export const canon = (list) => list.map((t) => SAME[t] || t);
 
 export function paused(setItems, proposalItems) {
@@ -83,6 +81,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const only = (process.argv.find((a) => a.startsWith('--only=')) || '').slice(7);
   const set = readSet();
   const proposals = readProposals(new Set(set.map((r) => r.id)));
+  const before = only !== 'proposals' ? readSet('HEAD') : null; // набор в последнем коммите
   const out = [];
   let bad = 0;
   for (const l of [1, 2, 3]) {
@@ -99,16 +98,13 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       }
     }
     // Набор: правка не должна увеличивать долю приёмов на паузе (сравнение с последним коммитом).
-    if (only !== 'proposals') {
-      const before = readSet('HEAD');
-      if (before) {
-        const b = diversity(before.filter((r) => r.level === l).map(techniques));
-        const now = diversity(s);
-        for (const t of types) {
-          const was = (b.rows.find((r) => r.type === t) || { share: 0 }).share;
-          const is = (now.rows.find((r) => r.type === t) || { share: 0 }).share;
-          if (is > was + 1e-9) { bad++; out.push(`  ✗ набор: доля «${t}» выросла ${Math.round(was * 100)} % → ${Math.round(is * 100)} %, а приём на паузе`); }
-        }
+    if (before) {
+      const b = diversity(before.filter((r) => r.level === l).map(techniques));
+      const now = diversity(s);
+      for (const t of types) {
+        const was = (b.rows.find((r) => r.type === t) || { share: 0 }).share;
+        const is = (now.rows.find((r) => r.type === t) || { share: 0 }).share;
+        if (is > was + 1e-9) { bad++; out.push(`  ✗ набор: доля «${t}» выросла ${Math.round(was * 100)} % → ${Math.round(is * 100)} %, а приём на паузе`); }
       }
     }
   }

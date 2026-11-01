@@ -132,7 +132,7 @@ export function solveSpec(r, norm = normalize) {
 // Приёмы: коды из реестров плюс pic-in-rel, если картинка стоит в отношении.
 export function specTechniques(r) {
   const t = new Set();
-  (r.parts || []).forEach((n) => walk(n, (node, kind, path, inRel) => {
+  (r.parts || []).forEach((n) => walk(n, (node, kind, _path, inRel) => {
     const def = kind && NODE_KINDS[kind];
     if (def && def.techniques) def.techniques(node).forEach((x) => t.add(x));
     if (inRel && kind === 'pic') t.add('pic-in-rel');

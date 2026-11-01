@@ -8,8 +8,8 @@
 // Ребусы вставляются в свой уровень равномерно, между старыми; потом — npm run spelling,
 // npm run validate и раскладка по предупреждениям.
 import fs from 'node:fs';
-import { normalize, techniques, formatProblems } from '../src/rebus-core.js';
-import { solveSpec } from './rebus-spec.mjs';
+import { normalize, picKey, techniques, formatProblems } from '../src/rebus-core.js';
+import { OPS as SPEC_OPS, solveSpec } from './rebus-spec.mjs';
 
 const dir = new URL('../data/proposals/', import.meta.url);
 const setFile = new URL('../public/data/rebuses.json', import.meta.url);
@@ -17,17 +17,18 @@ const regFile = new URL('../data/pictures.json', import.meta.url);
 const plan = new Map(JSON.parse(fs.readFileSync(new URL('../data/pictures-plan.json', import.meta.url), 'utf8')).map((x) => [normalize(x.word), x]));
 const only = process.argv.slice(2);
 
+const reg = JSON.parse(fs.readFileSync(regFile, 'utf8'));
+
 // Картинка: сначала план дизайнера, иначе уже одобренная запись реестра с тем же словом.
-const regPictures = JSON.parse(fs.readFileSync(new URL('../data/pictures.json', import.meta.url), 'utf8')).pictures;
 function picture(node, asInitial = false) {
   const x = plan.get(normalize(node.pic));
   if (x) return x.image ? { image: x.image } : { emoji: x.emoji };
-  const r = regPictures.find((e) => normalize(e.word) === normalize(node.pic) && !e.banned
+  const r = reg.pictures.find((e) => normalize(e.word) === normalize(node.pic) && !e.banned
     && (asInitial ? e.initials !== false : e.picture !== false) && (!e.image || e.designApproved));
   if (!r) throw new Error(`нет картинки ${node.pic}: ни в data/pictures-plan.json, ни в реестре`);
   return r.image ? { image: r.image } : { emoji: r.emoji };
 }
-const OPS = ['flip', 'replace', 'replaceAt', 'remove', 'pick', 'cutStart', 'cutEnd'];
+const OPS = SPEC_OPS.map((op) => op.key);
 function convert(n) {
   if (n.letters !== undefined) return { type: 'letters', text: n.letters };
   if (n.pic !== undefined) {
@@ -52,7 +53,6 @@ function convert(n) {
 }
 
 const set = JSON.parse(fs.readFileSync(setFile, 'utf8'));
-const reg = JSON.parse(fs.readFileSync(regFile, 'utf8'));
 const have = new Set(set.rebuses.map((r) => r.id));
 const files = fs.readdirSync(dir).filter((f) => f.endsWith('.json'));
 const moved = [];
@@ -70,9 +70,9 @@ for (const f of files) {
   }
 }
 // Реестр: новые картинки.
-const regKeys = new Set(reg.pictures.map((x) => `${x.emoji || x.image} ${normalize(x.word)}`));
+const regKeys = new Set(reg.pictures.map(picKey));
 for (const x of plan.values()) {
-  const key = `${x.emoji || x.image} ${normalize(x.word)}`;
+  const key = picKey(x);
   if (regKeys.has(key)) continue;
   const e = { word: x.word, minLevel: 1, flip: false, initials: true, note: x.note || '' };
   if (x.image) Object.assign(e, { image: x.image, designApproved: false }); else e.emoji = x.emoji;
@@ -86,7 +86,7 @@ for (const level of [1, 2, 3]) {
   const idx = set.rebuses.map((r, i) => [r, i]).filter(([r]) => r.level === level).map(([, i]) => i);
   const start = idx[0], len = idx.length;
   // позиции внутри уровня, с конца — чтобы индексы не съезжали
-  const at = add.map((r, k) => start + Math.round(((k + 1) * len) / (add.length + 1)));
+  const at = add.map((_, k) => start + Math.round(((k + 1) * len) / (add.length + 1)));
   for (let k = add.length - 1; k >= 0; k--) set.rebuses.splice(at[k], 0, add[k]);
   console.log(`уровень ${level}: +${add.length} (${add.map((r) => r.answer).join(', ')})`);
 }

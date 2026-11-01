@@ -35,7 +35,7 @@ function findOverflow() {
     const r = e.getBoundingClientRect();
     if (!r.width || !r.height) continue;
     const cs = getComputedStyle(e);
-    if (cs.visibility === 'hidden' || cs.position === 'fixed' && e.id === 'confetti') continue;
+    if (cs.visibility === 'hidden') continue;
     if (r.right > W + 1 || r.left < -1) out.push(`${name(e)} за краем: ${Math.round(r.left)}…${Math.round(r.right)} при ширине ${W}`);
   }
   for (const box of document.querySelectorAll('dialog[open], .legend, .board, .card, .panel')) {
@@ -119,9 +119,10 @@ function findOverflow() {
       await answer('варона'); await check('пишется так');
       await page.waitForTimeout(1600); await type('вар'); await check('по образцу');
     }
-    // Кубок: весь первый этап уровня 1 отгадан.
+    // Кубок: весь первый этап уровня 1 отгадан. Прогресс приложение читает при запуске, а смена
+    // одного hash страницу не перезагружает — поэтому сначала перезагрузка, иначе кубок не откроется.
     await page.evaluate((ids) => localStorage.setItem('rebus-progress-v1', JSON.stringify(Object.fromEntries(ids.map((id) => [id, { tries: 0, status: 'solved' }])))), lvl1.slice(0, 20).map((r) => r.id));
-    await go('#/cup/1/1'); await check('кубок');
+    await page.reload(); await go('#/cup/1/1'); await page.waitForSelector('.cup-card'); await check('кубок');
     await ctx.close();
   }
   await browser.close();

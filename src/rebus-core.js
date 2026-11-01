@@ -138,6 +138,26 @@ export function isCorrect(rebus, input) {
   });
 }
 
+// Расстояние Левенштейна: насколько ответ похож на правильный.
+function distance(a, b) {
+  const prev = Array.from({ length: b.length + 1 }, (_, i) => i);
+  for (let i = 1; i <= a.length; i++) {
+    let diag = prev[0];
+    prev[0] = i;
+    for (let j = 1; j <= b.length; j++) {
+      const tmp = prev[j];
+      prev[j] = Math.min(prev[j] + 1, prev[j - 1] + 1, diag + (a[i - 1] === b[j - 1] ? 0 : 1));
+      diag = tmp;
+    }
+  }
+  return prev[b.length];
+}
+
+// Неверный ответ, но близко к правильному (не больше двух букв не так) — «Почти!».
+export function isClose(rebus, input) {
+  const n = normalize(input);
+  return [rebus.answer].concat(rebus.accept || []).some((a) => distance(normalize(a), n) <= 2);
+}
 
 // --- Орфография: слово угадано, но написано с детской ошибкой («ВАРОНА» вместо «ВОРОНА»).
 // Такая попытка засчитывается как ошибка, но ребёнку показываем, как слово пишется.

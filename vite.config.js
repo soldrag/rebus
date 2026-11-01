@@ -1,10 +1,26 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
+
+// В сборке ребусы — без отступов (в офлайн-кеше 70 КБ вместо 125). Раньше, чем vite-plugin-pwa
+// считает офлайн-кеш (closeBundle), поэтому ревизия в sw.js — от того, что реально лежит в dist.
+const compactData = {
+  name: 'compact-data',
+  apply: 'build',
+  writeBundle({ dir }) {
+    const file = path.join(dir, 'data/rebuses.json');
+    fs.writeFileSync(file, JSON.stringify(JSON.parse(fs.readFileSync(file, 'utf8'))));
+  },
+};
 
 export default defineConfig({
   // Относительные пути: работает и на <user>.github.io/<repo>/, и на своём домене.
   base: './',
+  // Один модуль без <link rel="modulepreload">: полифил предзагрузки модулей не нужен.
+  build: { modulePreload: { polyfill: false } },
   plugins: [
+    compactData,
     VitePWA({
       // Новую версию ставим сами, когда это не мешает ребёнку (см. src/main.js).
       registerType: 'prompt',

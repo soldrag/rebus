@@ -1,14 +1,11 @@
 // Картинка ребуса, раскладка под размер экрана, разбор решения.
 import { partLetters, normalize, keepYo, POSITIONS, POSITIONS_NEXT, innerPart } from '../rebus-core.js';
-export { techniques } from '../rebus-core.js';
 import { el, add, plural } from './dom.js';
 
 const LETTER_COLORS = 5;
 
 // Для показа: заглавные буквы, Ё остаётся Ё (normalize — только для сравнения).
-export function show(text) {
-  return String(text || '').toUpperCase().replace(/[^А-ЯЁA-Z0-9]/g, '');
-}
+export const show = keepYo;
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const E_MAX = 240;   // самый крупный размер эмодзи, px
 const E_MIN = 32;
@@ -18,7 +15,7 @@ const PAD = 0.3;     // запас по краям, в долях эмодзи
 const ONE_ROW_BIAS = 0.68; // одна строка, если картинки в ней не меньше ~2/3 от двухстрочных
 
 // Запятая — нарисованная (круглая головка и хвостик), чтобы не путалась с апострофом.
-export function commaSvg() {
+function commaSvg() {
   const svg = document.createElementNS(SVG_NS, 'svg');
   svg.setAttribute('viewBox', '0 0 20 40');
   svg.setAttribute('class', 'comma');
@@ -38,7 +35,7 @@ function commas(n, side) {
 }
 
 // Картинка: эмодзи или своя иллюстрация (src — путь в public/, docs/ILLUSTRATIONS.md).
-export function picEmoji(emoji, flip, image) {
+function picEmoji(emoji, flip, image) {
   const wrap = el('span', 'emoji-wrap');
   let em;
   if (image) {
@@ -61,14 +58,14 @@ export function picEmoji(emoji, flip, image) {
   return wrap;
 }
 
-export function struckLetter(ch) {
+function struckLetter(ch) {
   const x = el('span', 'struck', show(ch));
   x.setAttribute('aria-label', 'без буквы ' + show(ch));
   return x;
 }
 
 // Цифры над картинкой: какие буквы слова взять и в каком порядке.
-export function pickNumbers(pick) {
+function pickNumbers(pick) {
   const box = el('span', 'pick');
   box.setAttribute('aria-label', 'буквы номер ' + pick.join(', '));
   for (const n of pick) add(box, el('span', 'pick-n', String(n)));
@@ -76,7 +73,7 @@ export function pickNumbers(pick) {
 }
 
 // Замена по номеру: номер — в кружке, как в цифрах над картинкой, чтобы «3» не читалась как «З».
-export function numberSwap(n, to) {
+function numberSwap(n, to) {
   const box = el('span', 'swap swap-n');
   box.setAttribute('aria-label', 'букву номер ' + n + ' меняем на ' + show(to));
   return add(box, el('span', 'pick-n', String(n)), document.createTextNode(' = ' + show(to)));
@@ -107,7 +104,6 @@ function renderPic(p) {
   if (p.cutEnd) add(row, commas(p.cutEnd, 'r'));
   const bottom = el('div', 'part-bottom');
   for (const ch of p.remove || []) add(bottom, struckLetter(ch));
-  if (top.childElementCount) box.classList.add('has-top');
   if (bottom.childElementCount) box.classList.add('has-bottom');
   return add(box, top, row, bottom);
 }
@@ -130,7 +126,7 @@ function renderLetters(p, seed, ctx = {}) {
 
 // Первые буквы: несколько картинок в рамке, над ней — значок «А…».
 function renderInitials(p) {
-  const box = el('div', 'part pic initials has-top');
+  const box = el('div', 'part pic initials');
   const top = el('div', 'part-top');
   const mark = el('span', 'initials-mark', 'А…');
   mark.setAttribute('aria-label', 'по первым буквам');
@@ -149,7 +145,7 @@ function renderInitials(p) {
 //   order — порядок слотов на экране (= порядок чтения: сверху вниз, слева направо; цвета идут так же);
 //   outline — какой слот рисуется контуром; front — сплошной слот поверх контура (с кромкой);
 //   fit — a ужимается, чтобы поместиться в b; fill — b заполнен узором из a («ИЗ», «ПО»).
-export const RELATIONS = {
+const RELATIONS = {
   in: { order: ['b', 'a'], outline: 'b', front: 'a', fit: true },
   on: { order: ['a', 'b'] },
   over: { order: ['a', 'b'] },
@@ -168,7 +164,7 @@ const LETTER_HEX = ['#E8604C', '#2C88C9', '#27996C', '#B87400', '#8A5FD1'];
 
 // Слоты отношения из данных: в наборе — outer/inner (буквы-строка или узел), в схеме замыслов — b/a.
 const asNode = (v) => (v && typeof v === 'object' ? v : { type: 'letters', text: v });
-export const relSlots = (p) => ({ a: asNode(p.a ?? p.inner), b: asNode(p.b ?? p.outer) });
+const relSlots = (p) => ({ a: asNode(p.a ?? p.inner), b: asNode(p.b ?? p.outer) });
 const relInfo = (p) => {
   const k = normalize(p.prep || p.rel);
   return POSITIONS[k] || POSITIONS_NEXT[k] || POSITIONS['В'];
@@ -295,7 +291,6 @@ function layout(board, inner, parts, rows, m) {
   const e = Math.max(E_MIN, Math.floor(use.e));
   inner.style.setProperty('--e', e + 'px');
   inner.style.setProperty('--el', Math.floor(e * use.s) + 'px');
-  inner.classList.toggle('two-rows', split > 0);
   // Строки — отдельные блоки: порядок чтения слева направо, сверху вниз.
   rows[0].append(...parts.slice(0, split || parts.length));
   if (split) { rows[1].append(...parts.slice(split)); inner.append(rows[1]); }
@@ -328,14 +323,9 @@ export function renderBoard(rebus, signal) {
     if (!m) m = measure(inner, parts, rows);
     layout(board, inner, parts, rows, m);
   };
-  if (typeof ResizeObserver === 'function') {
-    const ro = new ResizeObserver(relayout);
-    ro.observe(board);
-    if (signal) signal.addEventListener('abort', () => ro.disconnect(), { once: true });
-  } else {
-    requestAnimationFrame(relayout);
-    window.addEventListener('resize', relayout, signal ? { signal } : undefined);
-  }
+  const ro = new ResizeObserver(relayout);
+  ro.observe(board);
+  signal.addEventListener('abort', () => ro.disconnect(), { once: true });
   // После загрузки шрифта ширина букв меняется — перемеряем.
   if (document.fonts && document.fonts.status !== 'loaded') {
     document.fonts.ready.then(() => { m = null; relayout(); });

@@ -11,8 +11,7 @@ function header() {
   return add(head, mascot, el('h1', 'title', 'Ребусы'));
 }
 
-function levelCard(list, L) {
-  const p = levelProgress(list, L.level);
+function levelCard(L, p) {
   const a = el('a', 'level-card ' + L.cls + (p.done ? ' done' : ''));
   a.href = '#/level/' + L.level;
   a.dataset.level = String(L.level);
@@ -48,7 +47,8 @@ export function renderHome(app, data, signal) {
   const levels = el('nav', 'levels');
   levels.setAttribute('aria-label', 'Уровни');
   for (const L of LEVELS) {
-    if (levelProgress(list, L.level).total) add(levels, levelCard(list, L));
+    const p = levelProgress(list, L.level);
+    if (p.total) add(levels, levelCard(L, p));
   }
   add(app, levels);
 

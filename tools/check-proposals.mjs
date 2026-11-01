@@ -2,7 +2,7 @@
 // Без аргумента — все data/proposals/*.json. Схема — docs/REBUS-SPEC.md.
 import fs from 'node:fs';
 import { LEGEND_WORDS, normalize, techniques } from '../src/rebus-core.js';
-import { specProblems, specPictures, specTechniques, solveSpec, specTricks, setTricks, specSkeleton } from './rebus-spec.mjs';
+import { OPS, specProblems, specPictures, specTechniques, solveSpec, specTricks, setTricks, specSkeleton } from './rebus-spec.mjs';
 import { paused, report, canon, spread, wouldPeak } from './diversity.mjs';
 
 const dir = new URL('../data/proposals/', import.meta.url);
@@ -57,7 +57,7 @@ function contentProblems(r, a) {
   (r.parts || []).forEach(visit);
   for (const pic of walkPics) {
     const w = normalize(pic.pic);
-    const plain = !['cutStart', 'cutEnd', 'remove', 'replace', 'replaceAt', 'pick', 'flip'].some((k) => pic[k] !== undefined);
+    const plain = !OPS.some((op) => pic[op.key] !== undefined);
     // Ответ вырастает из картинки: слово картинки + окончание/суффикс (ДОМ → ДОМИК, СЛОН → СЛОНЁНОК) —
     // скорее всего однокоренное. Буква спереди (Ч + ЁЛКА, Г + РОЗА) даёт другое слово — это можно.
     if (!pic.inInitials && plain && a.startsWith(w) && a.length > w.length) { console.log(`! ${r.id}: ответ начинается со слова картинки ${w} — не однокоренное ли? (решает редактор)`); warns++; }

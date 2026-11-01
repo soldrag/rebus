@@ -21,7 +21,7 @@ import { clearConfetti } from './ui/confetti.js';
 
 const app = document.getElementById('app');
 let data = null;
-let current = null; // { id, controller } — открытый экран
+let controller = null; // открытый экран: его слушатели снимаются через abort()
 let lastLevel = null;
 let lastId = null;
 let backTo = '#/'; // куда ведёт «назад» с ребуса: на главную или к списку по номерам
@@ -36,7 +36,7 @@ function currentId() {
 function route({ keepScroll = false } = {}) {
   if (!data) return;
   clearConfetti();
-  if (current) current.controller.abort();
+  if (controller) controller.abort();
   const lv = /^#\/level\/(\d)$/.exec(location.hash);
   if (lv) {
     const r = levelStart(data.list, Number(lv[1]));
@@ -44,8 +44,8 @@ function route({ keepScroll = false } = {}) {
     return;
   }
   const id = currentId();
-  current = { id, controller: new AbortController() };
-  const { signal } = current.controller;
+  controller = new AbortController();
+  const { signal } = controller;
   if (id) {
     renderRebus(app, data, id, signal, backTo);
     if (data.byId[id]) { lastLevel = data.byId[id].rebus.level; lastId = id; }

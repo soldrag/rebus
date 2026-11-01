@@ -28,13 +28,16 @@ const REPEAT_EVERY = 90;
 
 // Нажатие — сразу по pointerdown (без задержки и без ожидания отпускания пальца).
 // Клавиатура (Tab + Enter) и экранный диктор нажимают кнопку «кликом» без pointerdown —
-// его тоже принимаем, но не второй раз после касания.
+// его тоже принимаем, но не второй раз после касания. Время — от последнего касания
+// или отпускания: после долгого нажатия click приходит сразу за отпусканием.
 function bindKey(btn, act, { repeat = false, onRelease = false } = {}) {
-  let lastDown = 0;
+  let lastPointer = 0;
+  let pressed = false;
   let holdT = null;
   let holdI = null;
   let upT = null;
   const stop = () => {
+    if (pressed) { pressed = false; lastPointer = Date.now(); }
     clearTimeout(holdT);
     clearInterval(holdI);
     holdT = holdI = null;
@@ -44,7 +47,8 @@ function bindKey(btn, act, { repeat = false, onRelease = false } = {}) {
   btn.addEventListener('pointerdown', (e) => {
     if (e.button > 0) return;
     e.preventDefault(); // не выделять текст и не открывать меню долгого нажатия
-    lastDown = Date.now();
+    lastPointer = Date.now();
+    pressed = true;
     clearTimeout(upT);
     btn.classList.add('down');
     if (onRelease) return;
@@ -53,7 +57,7 @@ function bindKey(btn, act, { repeat = false, onRelease = false } = {}) {
   });
   for (const ev of ['pointerup', 'pointercancel', 'pointerleave']) btn.addEventListener(ev, stop);
   btn.addEventListener('click', () => {
-    if (onRelease || Date.now() - lastDown > 700) act();
+    if (onRelease || Date.now() - lastPointer > 700) act();
   });
 }
 

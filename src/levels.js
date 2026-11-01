@@ -37,8 +37,7 @@ export function levelProgress(list, level) {
   const all = stages(list, level);
   const p = stageProgress(all.flat());
   const cups = all.filter((s) => stageProgress(s).done).length;
-  const current = all.findIndex((s) => !stageProgress(s).done) + 1 || all.length;
-  return { ...p, cups, stages: all.length, current };
+  return { ...p, cups, stages: all.length };
 }
 
 // С какого ребуса начать уровень: первый нерешённый в первом незаконченном этапе,

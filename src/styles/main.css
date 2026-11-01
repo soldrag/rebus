@@ -263,8 +263,8 @@ h1[tabindex="-1"]:focus { outline: none; }
   line-height: 1;
   filter: drop-shadow(0 2px 2px rgba(0,0,0,.12));
 }
-.tile.solved { background: var(--mint); border-color: #8FD9B7 !important; color: #17553C; }
-.tile.revealed { background: var(--reveal); border-color: #C3D3DF !important; color: var(--reveal-ink); }
+.tile.solved { background: var(--mint); border-color: #8FD9B7; color: #17553C; }
+.tile.revealed { background: var(--reveal); border-color: #C3D3DF; color: var(--reveal-ink); }
 .tile.started { background: #FFF4D6; }
 .tile-hearts {
   top: auto;
@@ -616,7 +616,6 @@ h1[tabindex="-1"]:focus { outline: none; }
 .swap-n { display: inline-flex; align-items: center; gap: calc(var(--o, var(--e)) * .06); background: var(--sun); color: var(--ink); }
 .swap-n .pick-n { background: #FFF; width: calc(var(--o, var(--e)) * .32); height: calc(var(--o, var(--e)) * .32); font-size: calc(var(--o, var(--e)) * .22); }
 
-/* Число */
 /* Число — в рамке, как на кубике: так цифру не спутать с буквой. */
 .num-digits {
   display: inline-flex;
@@ -765,8 +764,8 @@ h1[tabindex="-1"]:focus { outline: none; }
 .emoji-img { width: var(--e); height: calc(var(--e) * 1.12); object-fit: contain; font-size: inherit; }
 .step-img { width: 44px; height: 44px; object-fit: contain; vertical-align: middle; }
 
-.step-num { font-size: 24px; font-weight: 900; color: var(--sky-ink); font-family: var(--font); }
-.step-multi { font-size: 20px; word-break: break-all; }
+.step-num { font-weight: 900; color: var(--sky-ink); }
+.step-multi { word-break: break-all; }
 .step-word.step-wrap { white-space: normal; }
 
 /* Ответ */
@@ -774,9 +773,7 @@ h1[tabindex="-1"]:focus { outline: none; }
 
 .hearts {
   display: flex;
-  justify-content: center;
   gap: 10px;
-  margin-bottom: 10px;
 }
 .heart {
   font-size: 32px;
@@ -862,6 +859,8 @@ h1[tabindex="-1"]:focus { outline: none; }
 }
 .btn-check:active { box-shadow: 0 2px 0 #E3A520; }
 .btn-next {
+  position: relative;
+  z-index: 60; /* поверх конфетти */
   background: #23845B;
   color: #fff;
   box-shadow: 0 5px 0 #165C3F;
@@ -870,9 +869,9 @@ h1[tabindex="-1"]:focus { outline: none; }
 
 .msg {
   min-height: 1.4em;
-  margin: 12px 0 0;
+  margin: 8px 0 0;
   text-align: center;
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 800;
   color: var(--ink-soft);
 }
@@ -914,7 +913,6 @@ h1[tabindex="-1"]:focus { outline: none; }
   max-width: 100%;
   overflow: hidden;
 }
-.btn-next { position: relative; z-index: 60; }
 
 /* Слово угадано, но написано с ошибкой: «Пишется так» и письмо по образцу */
 .msg.good { color: var(--mint-ink); }
@@ -969,9 +967,6 @@ h1[tabindex="-1"]:focus { outline: none; }
 .input-wrap.copy .answer-input > * { visibility: hidden; }
 .input-wrap.copy.off-track .answer-input { border-color: var(--sun-deep); }
 
-.explain.appear { animation: appear .4s ease both; }
-@keyframes appear { from { opacity: 0; transform: translateY(10px); } }
-
 .explain {
   margin-top: 16px;
   background: #FFFAF2;
@@ -1011,26 +1006,22 @@ h1[tabindex="-1"]:focus { outline: none; }
 
 /* Подсказка */
 .hint {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  margin: 12px 0 0;
-  padding: 12px 16px;
+  margin: 0;
+  padding: 6px 12px;
   background: #FFF4CC;
   border: 2px dashed var(--sun-deep);
   border-radius: 20px;
   text-align: center;
   animation: pop .45s cubic-bezier(.2, 1.4, .4, 1);
 }
-.hint-label { font-size: 16px; font-weight: 900; color: #8A6200; }
+.hint-label { margin-right: 6px; font-size: 16px; font-weight: 900; color: #8A6200; }
 .hint-btn {
   display: block;
-  margin: 12px auto 0;
-  min-height: 52px;
-  padding: 0 22px;
+  margin: 0;
+  min-height: 44px;
+  padding: 0 16px;
   font: inherit;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 900;
   color: #6B4C00;
   background: #FFF4CC;
@@ -1040,7 +1031,7 @@ h1[tabindex="-1"]:focus { outline: none; }
   animation: pop .45s cubic-bezier(.2, 1.4, .4, 1);
 }
 .hint-btn:active { transform: translateY(2px); }
-.hint-text { font-size: 22px; font-weight: 800; color: var(--ink); }
+.hint-text { font-size: 19px; font-weight: 800; color: var(--ink); }
 
 /* Загрузка и ошибка */
 .status {
@@ -1057,7 +1048,7 @@ h1[tabindex="-1"]:focus { outline: none; }
 .status p { margin: 12px 0 0; }
 .status .status-sub { font-size: 18px; color: var(--ink-soft); font-weight: 700; margin-bottom: 18px; }
 .status-icon { font-size: 64px; line-height: 1; }
-.status .btn { width: 100%; font-size: 22px; }
+.status .btn { font-size: 22px; }
 .loader {
   width: 56px;
   height: 56px;
@@ -1235,13 +1226,7 @@ html.lay-portrait:not(.lay-portrait-wide) .dock-done .step-arrow, html.lay-land-
   min-height: 44px;
   margin-bottom: 8px;
 }
-.status-row .hearts { margin: 0; justify-content: flex-start; }
-.status-row .hint-btn { margin: 0; min-height: 44px; padding: 0 16px; font-size: 17px; }
 .status-row .hint-slot.open { flex: 1 0 100%; }
-.status-row .hint { margin: 0; padding: 6px 12px; display: block; }
-.status-row .hint-label { margin-right: 6px; }
-.status-row .hint-text { font-size: 19px; }
-.msg { margin-top: 8px; font-size: 20px; }
 
 /* Телефон в портрете: клавиатура во всю ширину экрана, прижата к низу (как системная). */
 html.lay-portrait:not(.lay-portrait-wide) .play { padding-bottom: 0; }
@@ -1338,13 +1323,6 @@ html.lay-land-phone .step-res { font-size: 20px; }
   .step-what { grid-area: what; }
   .step-res { grid-area: res; justify-self: start; }
   .step-arrow { display: none; }
-}
-
-@media (max-width: 400px) {
-  .topbar { gap: 8px; }
-  .back, .help-btn { width: 52px; height: 52px; font-size: 28px; }
-  .rebus-num { font-size: 24px; }
-  .mini-stars { font-size: 17px; padding: 6px 10px; }
 }
 
 @media (max-width: 359px) {
@@ -1517,7 +1495,6 @@ html.lay-land-phone .step-res { font-size: 20px; }
   border-radius: 10px;
   background: var(--sun);
   color: var(--ink);
-  font-family: var(--font);
 }
 
 /* Короткое сообщение внизу экрана */

@@ -3,6 +3,7 @@
 // слова и картинки перечислены в LEGEND_WORDS и LEGEND_PICTURES (rebus-core.js), валидатор это проверяет.
 import { el, add } from './dom.js';
 import { renderPart, fitRelations } from './board.js';
+import { POSITIONS } from '../rebus-core.js';
 
 // Карточка легенды собирается из тех же заготовок, что и доска ребуса (board.js → renderPart):
 // пример — это узлы ребуса, поэтому значок в легенде выглядит ровно как в ребусе.
@@ -90,7 +91,7 @@ const sample = (parts) => {
   return add(el('div', 'legend-sample'), ...parts.map((p) => renderPart(p, seed)));
 };
 // Отношения (предлоги) — для общего правила чтения над карточками.
-const RELATION_KINDS = ['in', 'on', 'under', 'near', 'behind'];
+const RELATION_KINDS = Object.values(POSITIONS).map((p) => p.tech);
 // Приёмы с карточками; «plain» — только для ребусов без особых значков, сам не показывается.
 export const ALL_KINDS = Object.keys(CARDS).filter((k) => k !== 'plain');
 
