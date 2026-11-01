@@ -1,6 +1,6 @@
 // Общие правила набора и замыслов: их проверяют и tools/validate.mjs, и tools/check-proposals.mjs.
 // Сами правила — docs/REBUSES.md.
-import { normalize, keepYo, innerPart, pictures, solve, techniques } from '../src/core/solve.js';
+import { normalize, keepYo, innerPart, pictures, solve, techniques, POSITIONS } from '../src/core/solve.js';
 import { shapeProblems, solveProblems } from '../src/core/format.js';
 import { CARDS } from '../src/legend-data.js';
 
@@ -64,6 +64,8 @@ export function readsAsLetters(value) {
   return digits.length > 0 && digits.every((d) => d in DIGIT_LOOKALIKES);
 }
 
+const readOf = (prep) => (POSITIONS[prep] || {}).read;
+
 function authorPartProblems(part) {
   if (!part || typeof part !== 'object') return [];
   const p = [];
@@ -71,8 +73,9 @@ function authorPartProblems(part) {
   switch (part.type) {
     case 'position':
       if (innerPart(part)) authorPartProblems(innerPart(part)).forEach((x) => p.push('inner: ' + x));
-      if (['ПОД', 'ЗА'].includes(prep) && !part.prepFirst) p.push('«' + prep + '» читается в начале слова: нужен prepFirst');
-      if (prep === 'У' && part.prepFirst) p.push('«У» читается между буквами: prepFirst не нужен');
+      // Где читается предлог — POSITIONS[…].read (docs/REBUSES.md, «Буквы в позиции»).
+      if (readOf(prep) === 'first' && !part.prepFirst) p.push('«' + prep + '» читается в начале слова: нужен prepFirst');
+      if (readOf(prep) === 'between' && part.prepFirst) p.push('«' + prep + '» читается между частями: prepFirst не нужен');
       break;
     case 'number':
       if (readsAsLetters(part.value)) {

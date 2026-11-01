@@ -1,5 +1,5 @@
 // Картинка ребуса и раскладка под размер экрана (разбор решения — explain.js).
-import { normalize, keepYo, POSITIONS, POSITIONS_NEXT } from '../core/solve.js';
+import { normalize, keepYo, POSITIONS } from '../core/solve.js';
 import { el, add } from './dom.js';
 
 const LETTER_COLORS = 5;
@@ -142,44 +142,53 @@ function renderInitials(p) {
 // СПЛОШНОЕ — содержимое или переднее; у сплошного поверх контура — кремовая кромка.
 // Правило композиции одно на отношение и не зависит от содержимого слотов: роли слотов — здесь,
 // размеры и расположение — в CSS-классе rb-<код> (доли --ka/--kb, касание/зазор/перекрытие).
-//   order — порядок слотов на экране (= порядок чтения: сверху вниз, слева направо; цвета идут так же);
+//   order — порядок на экране (= порядок чтения: сверху вниз, слева направо; цвета идут так же);
+//     кроме слотов в нём бывают значки движения из MARKS: 'arrow' — стрелка, 'stop' — черта «до»;
 //   outline — какой слот рисуется контуром; front — сплошной слот поверх контура (с кромкой);
-//   fit — a ужимается, чтобы поместиться в b; fill — b заполнен узором из a («ИЗ», «ПО»).
+//   fit — a ужимается, чтобы поместиться в b; half — a наполовину выходит за правый край b («ИЗ»).
 const RELATIONS = {
   in: { order: ['b', 'a'], outline: 'b', front: 'a', fit: true },
   on: { order: ['a', 'b'] },
-  over: { order: ['a', 'b'] },
   under: { order: ['b', 'a'] },
   near: { order: ['a', 'b'] },
   behind: { order: ['b', 'a'], outline: 'a', front: 'b' },
-  before: { order: ['b', 'a'], outline: 'b', front: 'a' },
-  from: { order: ['b'], fill: true },
-  along: { order: ['b'], fill: true },
+  front: { order: ['b', 'a'], outline: 'b', front: 'a' },
+  out: { order: ['b', 'a', 'arrow'], outline: 'b', front: 'a', half: true },
+  to: { order: ['a', 'arrow', 'b'] },
+  from: { order: ['b', 'a', 'arrow'] },
+  till: { order: ['a', 'stop', 'b'] },
 };
 // Доля внутреннего слота «В» от ширины и высоты контура.
 const FIT_W = 0.62;
 const FIT_H = 0.62;
 
-const LETTER_HEX = ['#E8604C', '#2C88C9', '#27996C', '#B87400', '#8A5FD1'];
+// Значки движения (К, ОТ, ДО, ИЗ) — один стиль: скруглённая линия цвета приглушённого текста.
+// Координаты — в сотых --R (у значка font-size = --R, svg — в em), толщина — как контур (0.06 --R).
+// Стрелка: линия 0.3 --R и шеврон; черта «до»: линия без острия и поперечная черта, в неё упирается b.
+const MARKS = {
+  arrow: { w: 36, h: 28, d: 'M3 14H33M22 3L33 14L22 25' },
+  stop: { w: 34, h: 34, d: 'M3 17H31M31 3V31' },
+};
+function renderMark(kind) {
+  const m = MARKS[kind];
+  const box = el('span', 'rel-mark rel-mark-' + kind);
+  box.setAttribute('aria-hidden', 'true');
+  const svg = document.createElementNS(SVG_NS, 'svg');
+  svg.setAttribute('viewBox', `0 0 ${m.w} ${m.h}`);
+  svg.style.width = m.w / 100 + 'em';
+  svg.style.height = m.h / 100 + 'em';
+  const path = document.createElementNS(SVG_NS, 'path');
+  path.setAttribute('d', m.d);
+  add(svg, path);
+  return add(box, svg);
+}
 
 // Слоты отношения из данных: в наборе — outer/inner (буквы-строка или узел), в схеме замыслов — b/a.
 const asNode = (v) => (v && typeof v === 'object' ? v : { type: 'letters', text: v });
 const relSlots = (p) => ({ a: asNode(p.a ?? p.inner), b: asNode(p.b ?? p.outer) });
-const relInfo = (p) => {
-  const k = normalize(p.prep || p.rel);
-  return POSITIONS[k] || POSITIONS_NEXT[k] || POSITIONS['В'];
-};
+const relInfo = (p) => POSITIONS[normalize(p.prep || p.rel)] || POSITIONS['В'];
 const hasPic = (n) => n.type === 'position' ? hasPic(relSlots(n).a) || hasPic(relSlots(n).b) : n.type !== 'letters';
 const label = (n) => n.type === 'letters' ? show(n.text) : n.type === 'position' ? 'отношение' : 'картинка';
-
-// Узор для «ИЗ» и «ПО»: плитка с маленьким a (буквы или картинка без операций).
-function fillTile(a, color) {
-  if (a.type === 'pic' && a.image) return `url("${new URL(a.image, document.baseURI).href}")`;
-  const text = a.type === 'letters' ? show(a.text) : a.type === 'pic' ? a.emoji : '?';
-  const size = text.length > 1 && a.type === 'letters' ? 100 / (text.length * 0.8) : 72;
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text x="50" y="52" font-family="Nunito, Arial Black, sans-serif" font-weight="900" font-size="${size.toFixed(0)}" text-anchor="middle" dominant-baseline="central" fill="${color}">${text}</text></svg>`;
-  return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
-}
 
 function renderRelation(p, seed) {
   const info = relInfo(p);
@@ -189,24 +198,34 @@ function renderRelation(p, seed) {
   const box = el('div', 'part rel rel-' + info.tech + (hasPic(p) ? ' pic' : ' text'));
   const stack = el('span', 'rel-box rb-' + info.tech);
   // Слоты рисуются в порядке чтения — поэтому и цвета идут по порядку: верх/лево — первый цвет.
-  const slots = {};
-  for (const k of rel.order) {
+  const items = rel.order.map((k) => {
+    if (MARKS[k]) return renderMark(k);
     const s = el('span', 'slot slot-' + k + (rel.outline === k ? ' is-outline' : '') + (rel.front === k ? ' is-front' : ''));
-    slots[k] = add(s, renderPart(nodes[k], seed, { slot: k }));
-  }
-  if (rel.fill) slots.b.style.setProperty('--fill', fillTile(nodes.a, LETTER_HEX[nextColor(seed)]));
+    return add(s, renderPart(nodes[k], seed, { slot: k }));
+  });
   if (rel.fit) stack.dataset.fit = '';
+  if (rel.half) stack.dataset.half = '';
   stack.setAttribute('aria-label', label(nodes.a) + ' ' + info.inside + ' ' + label(nodes.b));
-  add(stack, ...rel.order.map((k) => slots[k]));
+  add(stack, ...items);
   return add(box, el('div', 'part-top'), add(el('div', 'rel-row'), stack), el('div', 'part-bottom'));
 }
 
-// «В»: внутренний слот ужимается так, чтобы целиком лечь в контур. Меряется один раз
-// (доли не зависят от размера), сначала самые вложенные.
+// Размеры, которые зависят от содержимого слотов. Меряются один раз (доли не зависят от размера),
+// сначала самые вложенные.
+//   «В»: внутренний слот ужимается так, чтобы целиком лечь в контур.
+//   «ИЗ»: a выходит за правый край b ровно на половину своей ширины; ширина — в долях --R
+//   (у значка движения font-size = --R).
 export function fitRelations(root) {
-  for (const box of [...root.querySelectorAll('.rel-box[data-fit]')].reverse()) {
+  for (const box of [...root.querySelectorAll('.rel-box[data-fit], .rel-box[data-half]')].reverse()) {
+    const slotA = box.querySelector(':scope > .slot-a');
+    if (box.dataset.half !== undefined) {
+      const w = slotA.getBoundingClientRect().width;
+      const R = parseFloat(getComputedStyle(box.querySelector(':scope > .rel-mark')).fontSize);
+      if (w && R) box.style.setProperty('--half', (w / 2 / R).toFixed(3));
+      continue;
+    }
     box.style.setProperty('--fit', '1');
-    const a = box.querySelector(':scope > .slot-a').getBoundingClientRect();
+    const a = slotA.getBoundingClientRect();
     const b = box.querySelector(':scope > .slot-b').getBoundingClientRect();
     if (!a.width || !b.width) continue;
     const f = Math.min(1, (FIT_W * b.width) / a.width, (FIT_H * b.height) / a.height);

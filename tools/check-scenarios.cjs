@@ -16,7 +16,7 @@ const BASE = (process.argv.find((a) => a.startsWith('http')) || 'http://localhos
 const shotsAt = process.argv.indexOf('--shots');
 const SHOTS = shotsAt > 0 ? process.argv[shotsAt + 1] : null;
 const BOARDS = !process.argv.includes('--no-boards');
-const SEEN = ['initials', 'number', 'pick', 'replaceAt', 'in', 'on', 'flip', 'replace', 'remove', 'near', 'under', 'behind'];
+const SEEN = ['initials', 'number', 'pick', 'replaceAt', 'in', 'on', 'flip', 'replace', 'remove', 'near', 'under', 'behind', 'front', 'out', 'to', 'from', 'till'];
 
 let chromium;
 try { ({ chromium } = require('playwright')); } catch {

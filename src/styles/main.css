@@ -553,11 +553,11 @@ h1[tabindex="-1"]:focus { outline: none; }
   padding: 0 calc(var(--el) * .01);
   text-shadow: 0 calc(var(--el) * .04) 0 rgba(0,0,0,.08);
 }
-.c0 { --ink-c: #E8604C; --pale-c: #FADAD3; color: var(--ink-c); }
-.c1 { --ink-c: #2C88C9; --pale-c: #D3E8F7; color: var(--ink-c); }
-.c2 { --ink-c: #27996C; --pale-c: #D0ECDF; color: var(--ink-c); }
-.c3 { --ink-c: #B87400; --pale-c: #F3E3C4; color: var(--ink-c); }
-.c4 { --ink-c: #8A5FD1; --pale-c: #E5DAF6; color: var(--ink-c); }
+.c0 { --ink-c: #E8604C; color: var(--ink-c); }
+.c1 { --ink-c: #2C88C9; color: var(--ink-c); }
+.c2 { --ink-c: #27996C; color: var(--ink-c); }
+.c3 { --ink-c: #B87400; color: var(--ink-c); }
+.c4 { --ink-c: #8A5FD1; color: var(--ink-c); }
 
 .swap {
   font-size: calc(var(--o, var(--e)) * .34);
@@ -655,7 +655,7 @@ h1[tabindex="-1"]:focus { outline: none; }
   border-radius: 999px;
 }
 
-/* ---------- Отношения: в, на, над, под, у, за, перед, из, по ----------
+/* ---------- Отношения: в, на, под, у, за, перед, из, к, от, до ----------
    Визуальный язык — docs/VISUAL-LANGUAGE.md. Отношение — композиция двух слотов:
    a — что ставим, b — относительно чего. В слот кладётся любая заготовка (буквы, картинка
    с операциями, первые буквы, другое отношение). Рисунок показывает только, ГДЕ части стоят:
@@ -667,7 +667,9 @@ h1[tabindex="-1"]:focus { outline: none; }
      --ka, --kb — доли слотов от --R: в слоте --e = --el = --R × доля (вложенность уменьшает сама);
      --o  — единица значков операций (зачёркнутая, «А…», «2 = О»): не мельче 0.75 единицы ребуса --E;
      --stroke — толщина контура, 0.06 --R; --rim — кромка, 0.1 --R (видна половина, снаружи);
-     касание — зазор 0 по «чернилам» (у букв срезаны поля шрифта), зазор «НАД» — 0.24 --R. */
+     касание — зазор 0 по «чернилам» (у букв срезаны поля шрифта);
+     значок движения (.rel-mark: стрелка К, ОТ, ИЗ; черта ДО) — font-size = --R, рисунок в em,
+     линия толщиной 0.06 --R (как контур), цвет приглушённого текста. */
 .rel {
   --R: var(--el);
   --stroke: max(1.5px, calc(var(--R) * .06));
@@ -725,40 +727,56 @@ h1[tabindex="-1"]:focus { outline: none; }
 .rb-in { --kb: 1.5; --ka: calc(.42 * var(--fit, 1)); }
 .rb-in > .slot-a { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 1; }
 
-/* НА, НАД, ПОД — столбик: верхнее над нижним, маленькое 0.46 против 0.78. НА и ПОД — вплотную, НАД — зазор. */
-.rb-on, .rb-over, .rb-under { flex-direction: column; --ka: .46; --kb: .78; gap: calc(var(--R) * .02); }
-.rb-over { gap: calc(var(--R) * .24); }
+/* НА, ПОД — столбик: верхнее над нижним вплотную, маленькое 0.46 против 0.78. */
+.rb-on, .rb-under { flex-direction: column; --ka: .46; --kb: .78; gap: calc(var(--R) * .02); }
 /* В столбике значки снизу у картинки — справа от неё: не встают между верхним и нижним. */
-:is(.rb-on, .rb-over, .rb-under) > .slot > .part.has-bottom { grid-template-rows: auto; grid-auto-flow: column; column-gap: calc(var(--o) * .04); }
+:is(.rb-on, .rb-under) > .slot > .part.has-bottom { grid-template-rows: auto; grid-auto-flow: column; column-gap: calc(var(--o) * .04); }
 
 /* У — маленькое (0.5) вплотную слева от большого, на одной линии низа (по базовой линии). */
 .rb-near { align-items: baseline; --ka: .5; --kb: 1; gap: calc(var(--R) * .04); }
 
 /* ЗА — заднее (a, 0.75) контуром, выше на 0.32 и правее, видно целиком; переднее (b, 0.95) сплошное
    с кромкой и закрывает только угол заднего (перекрытие 0.18 --R). Картинку сзади контуром не рисуем:
-   она просто позади, переднее с кромкой закрывает её край. ПЕРЕД — зеркально: впереди a, сзади b. */
-.rb-behind, .rb-before { align-items: flex-end; } /* по нижнему краю: у рамки первых букв базовая линия глубоко внутри */
+   она просто позади, переднее с кромкой закрывает её край.
+   ПЕРЕД — зеркально: заднее (b, 0.75) контуром слева и выше, переднее (a, 0.95) справа закрывает
+   его правый нижний угол. В обоих предлог читается первым, потом левая часть. */
+.rb-behind, .rb-front { align-items: flex-end; } /* по нижнему краю: у рамки первых букв базовая линия глубоко внутри */
 .rb-behind { --kb: .95; --ka: .75; }
-.rb-before { --kb: .75; --ka: .95; }
-.rb-behind > .slot-a, .rb-before > .slot-a { margin-left: calc(var(--R) * -.18); }
-.rb-behind > .is-outline, .rb-before > .is-outline { z-index: 1; margin-bottom: calc(var(--R) * .32); } /* подъём — полем, а не сдвигом: раскладка доски его учитывает */
-.rb-behind > .is-front, .rb-before > .is-front { z-index: 2; }
+.rb-front { --kb: .75; --ka: .95; }
+.rb-behind > .slot-a, .rb-front > .slot-a { margin-left: calc(var(--R) * -.18); }
+.rb-behind > .is-outline, .rb-front > .is-outline { z-index: 1; margin-bottom: calc(var(--R) * .32); } /* подъём — полем, а не сдвигом: раскладка доски его учитывает */
+.rb-behind > .is-front, .rb-front > .is-front { z-index: 2; }
 
-/* ИЗ — b сложено из маленьких a (только узор). ПО — a мелко написано по всей b (узор поверх буквы). */
-.rb-from, .rb-along { --kb: 1.8; }
-:is(.rb-from, .rb-along) > .slot-b .big-letter {
-  color: transparent;
-  text-shadow: none;
-  background: var(--fill) 0 0 / .13em .13em;
-  -webkit-background-clip: text;
-  background-clip: text;
-}
-.rb-along > .slot-b .big-letter {
-  background: var(--fill) 0 0 / .12em .12em, var(--pale-c);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-stroke: var(--stroke) var(--ink-c);
-}
+/* Отношения со значком движения (ИЗ, К, ОТ, ДО) — в ряд, по сетке из трёх строк: значки операций
+   сверху, сами части, значки снизу (подсетка у слота и его заготовки). Части и значок движения
+   центрируются по средней строке — зачёркнутая буква под картинкой не опускает стрелку. */
+.rb-out, .rb-to, .rb-from, .rb-till { display: inline-grid; grid-auto-flow: column; grid-template-rows: auto auto auto; align-items: center; }
+:is(.rb-out, .rb-to, .rb-from, .rb-till) > .slot { grid-row: 1 / span 3; display: grid; grid-template-rows: subgrid; }
+:is(.rb-out, .rb-to, .rb-from, .rb-till) > .slot > .part { grid-row: 1 / span 3; grid-template-rows: subgrid; }
+:is(.rb-out, .rb-to, .rb-from, .rb-till) > .slot > .part > .part-top { grid-row: 1; }
+:is(.rb-out, .rb-to, .rb-from, .rb-till) > .slot > .part > :is(.letters-row, .pic-row, .rel-row) { grid-row: 2; }
+:is(.rb-out, .rb-to, .rb-from, .rb-till) > .slot > .part > .part-bottom { grid-row: 3; }
+:is(.rb-out, .rb-to, .rb-from, .rb-till) > .rel-mark { grid-row: 2; }
+
+/* Значок движения: начинается у того, что движется (a), и смотрит, куда оно движется. */
+.rel-mark { display: flex; font-size: var(--R); line-height: 1; color: var(--ink-soft); }
+.rel-mark svg { display: block; overflow: visible; fill: none; stroke: currentColor; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ИЗ — b крупный контур (1.5, как у «В»); a (0.4) сплошное с кромкой на середине высоты и выходит
+   за правый край b ровно наполовину (--half — половина ширины a в --R, меряет fitRelations);
+   за ним стрелка вправо. */
+.rb-out { --kb: 1.5; --ka: .4; }
+.rb-out > .slot-a { z-index: 1; margin-left: calc(var(--R) * var(--half, .15) * -1); }
+.rb-out > .rel-mark { margin-left: calc(var(--R) * .05); }
+
+/* К — в ряд, оба сплошные (0.55): a, стрелка, небольшой зазор, b. */
+/* ОТ — b, зазор 0.25 --R, a, за ним стрелка — от b. */
+/* ДО — a, линия без острия с чертой на конце, b вплотную к черте. */
+.rb-to, .rb-from, .rb-till { --ka: .55; --kb: .55; }
+.rb-to > .rel-mark { margin: 0 calc(var(--R) * .08) 0 calc(var(--R) * .04); }
+.rb-from > .slot-a { margin-left: calc(var(--R) * .25); }
+.rb-from > .rel-mark { margin-left: calc(var(--R) * .05); }
+.rb-till > .rel-mark { margin: 0 calc(var(--R) * .01) 0 calc(var(--R) * .04); }
 
 /* Своя иллюстрация вместо эмодзи: тот же размер и та же тень (docs/ILLUSTRATIONS.md). */
 .emoji-img { width: var(--e); height: calc(var(--e) * 1.12); object-fit: contain; font-size: inherit; }

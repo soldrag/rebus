@@ -15,26 +15,24 @@ export function keepYo(s) {
 }
 
 // Предлоги «букв в позиции»: как расположены буквы → приём (код в techniques()) и как читать.
-//   В — внутри, НА — сверху, ПОД — снизу, У — рядом, ЗА — спрятана позади.
-//   «ПОД» и «ЗА» ставим только в начало слова (prepFirst), «У» — только между буквами.
+// Рисует их src/ui/board.js (RELATIONS по коду tech), правила — docs/VISUAL-LANGUAGE.md.
+//   В — внутри, НА — сверху, ПОД — снизу, У — рядом, ЗА — спрятана позади,
+//   ПЕРЕД — загораживает спереди, ИЗ — выходит из контура, К — движется к, ОТ — уходит от, ДО — доходит до.
+//   read — где читается предлог: 'first' — только в начале (prepFirst), 'between' — только между
+//   частями; без read — как задано в ребусе. Не рисуем (и в набор не пускаем) НАД, ПО, С, ПРИ, О/ОБ.
 export const POSITIONS = {
   'В': { tech: 'in', say: 'в', inside: 'внутри' },
   'НА': { tech: 'on', say: 'на', inside: 'над' },
-  'ПОД': { tech: 'under', say: 'под', inside: 'под' },
-  'У': { tech: 'near', say: 'у', inside: 'рядом с' },
-  'ЗА': { tech: 'behind', say: 'за', inside: 'за' },
+  'ПОД': { tech: 'under', say: 'под', inside: 'под', read: 'first' },
+  'У': { tech: 'near', say: 'у', inside: 'рядом с', read: 'between' },
+  'ЗА': { tech: 'behind', say: 'за', inside: 'за', read: 'first' },
+  'ПЕРЕД': { tech: 'front', say: 'перед', inside: 'перед', read: 'first' },
+  'ИЗ': { tech: 'out', say: 'из', inside: 'выходит из', read: 'first' },
+  'К': { tech: 'to', say: 'к', inside: 'движется к', read: 'between' },
+  'ОТ': { tech: 'from', say: 'от', inside: 'уходит от', read: 'first' },
+  'ДО': { tech: 'till', say: 'до', inside: 'доходит до', read: 'between' },
 };
 export const PREPOSITIONS = Object.keys(POSITIONS);
-// Отношения, которые приложение уже умеет рисовать (docs/VISUAL-LANGUAGE.md), но в набор
-// пока не пускает: нет карточки в легенде у ребёнка и не решено, где читается предлог.
-// Перенести строку в POSITIONS — и отношение станет доступно ребусам.
-//   НАД — сверху с зазором, ПЕРЕД — загораживает, ИЗ — b сложено из маленьких a, ПО — a написано по всей b.
-export const POSITIONS_NEXT = {
-  'НАД': { tech: 'over', say: 'над', inside: 'над' },
-  'ПЕРЕД': { tech: 'before', say: 'перед', inside: 'перед' },
-  'ИЗ': { tech: 'from', say: 'из', inside: 'из' },
-  'ПО': { tech: 'along', say: 'по', inside: 'по' },
-};
 
 // Внутренняя часть позиции: строка — это буквы, объект — часть ребуса (картинка, первые буквы).
 // «🧀 без Р в Е» = В-Е-СЫ: { type: 'position', prep: 'В', outer: 'Е', inner: { type: 'pic', … }, prepFirst: true }.
@@ -65,7 +63,8 @@ export function partLetters(part, norm = normalize) {
       return norm(part.text);
     case 'initials': // первые буквы картинок
       return (part.items || []).map((it) => norm(it.word).charAt(0)).join('');
-    case 'position': { // «ДА в О» = В-О-ДА, «СО в А» = СО-В-А, «ПА на МА» = ПА-НА-МА, «К у Б» = К-У-Б, «ОВА под К» = ПОД-К-ОВА
+    case 'position': { // «ДА в О» = В-О-ДА, «СО в А» = СО-В-А, «ПА на МА» = ПА-НА-МА, «К у Б» = К-У-Б, «ОВА под К» = ПОД-К-ОВА,
+      // «Й перед А» = ПЕРЕД-А-Й, «М из Ю» = ИЗ-Ю-М, «ЧАЙ к А» = ЧАЙ-К-А, «Ц от Е» = ОТ-Е-Ц, «ЛА до ШКА» = ЛА-ДО-ШКА
       const prep = norm(part.prep), outer = norm(part.outer);
       const inner = innerPart(part) ? partLetters(innerPart(part), norm) : norm(part.inner);
       return part.prepFirst ? prep + outer + inner : inner + prep + outer;

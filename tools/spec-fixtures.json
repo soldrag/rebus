@@ -12,6 +12,11 @@
     { "answer": "КУБ", "techniques": ["initials"], "parts": [{ "initials": [{ "pic": "КЕНГУРУ", "look": "к" }, { "pic": "УТКА", "look": "у" }, { "pic": "БЕГЕМОТ", "look": "б" }] }] },
     { "answer": "ВОРОТА", "techniques": ["pic-in-rel", "rel:В"], "parts": [{ "rel": "В", "a": { "pic": "РОТ", "look": "рот" }, "b": { "letters": "О" }, "read": ["rel", "b", "a"] }, { "letters": "А" }] },
     { "answer": "ЗУБ", "techniques": ["rel:У"], "parts": [{ "rel": "У", "a": { "letters": "З" }, "b": { "letters": "Б" }, "read": ["a", "rel", "b"] }] },
-    { "answer": "ВОДАКИТ", "techniques": ["rel:В"], "parts": [{ "seq": [{ "rel": "В", "a": { "letters": "ДА" }, "b": { "letters": "О" }, "read": ["rel", "b", "a"] }, { "letters": "КИТ" }] }] }
+    { "answer": "ВОДАКИТ", "techniques": ["rel:В"], "parts": [{ "seq": [{ "rel": "В", "a": { "letters": "ДА" }, "b": { "letters": "О" }, "read": ["rel", "b", "a"] }, { "letters": "КИТ" }] }] },
+    { "answer": "ПЕРЕДАЙ", "techniques": ["rel:ПЕРЕД"], "parts": [{ "rel": "ПЕРЕД", "a": { "letters": "Й" }, "b": { "letters": "А" }, "read": ["rel", "b", "a"] }] },
+    { "answer": "ИЗЮМ", "techniques": ["rel:ИЗ"], "parts": [{ "rel": "ИЗ", "a": { "letters": "М" }, "b": { "letters": "Ю" }, "read": ["rel", "b", "a"] }] },
+    { "answer": "ЧАЙКА", "techniques": ["rel:К"], "parts": [{ "rel": "К", "a": { "letters": "ЧАЙ" }, "b": { "letters": "А" }, "read": ["a", "rel", "b"] }] },
+    { "answer": "ОТЕЦ", "techniques": ["rel:ОТ"], "parts": [{ "rel": "ОТ", "a": { "letters": "Ц" }, "b": { "letters": "Е" }, "read": ["rel", "b", "a"] }] },
+    { "answer": "ЛАДОШКА", "techniques": ["rel:ДО"], "parts": [{ "rel": "ДО", "a": { "letters": "ЛА" }, "b": { "letters": "ШКА" }, "read": ["a", "rel", "b"] }] }
   ]
 }
