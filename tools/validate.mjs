@@ -3,7 +3,10 @@
 import fs from 'node:fs';
 import { confusables } from './spelling.mjs';
 import { diversity, spread } from './diversity.mjs';
-import { chunkStages, formatProblems, LEGEND_PICTURES, LEGEND_WORDS, normalize, picKey, pictures, rebusList, techniques } from '../src/rebus-core.js';
+import { exceptionRules, hintNamesAnswer, isLegendWord, isMirror, LEGEND_PICTURES, rebusProblems } from './rules.mjs';
+import { chunkStages } from '../src/core/stages.js';
+import { rebusList } from '../src/core/format.js';
+import { normalize, picKey, pictures, techniques } from '../src/core/solve.js';
 
 const file = new URL('../public/data/rebuses.json', import.meta.url);
 const registryFile = new URL('../data/pictures.json', import.meta.url);
@@ -17,12 +20,8 @@ const warnings = [];
 // Правила трёх видов (docs/REBUSES.md, «Как устроены правила»):
 //   «нельзя» — problems; «обычно» — should(): нарушение — ошибка, если в ребусе нет
 //   exceptions: { <правило>: "почему здесь можно" }; статистика — warnings.
-const accepted = [];
-function should(r, rule, msg) {
-  const why = r && r.exceptions && typeof r.exceptions[rule] === 'string' && r.exceptions[rule].trim();
-  if (why) accepted.push(`${r.id}: ${rule} — ${why}`);
-  else problems.push(`${(r && r.id) || '?'}: ${msg} [правило ${rule}; можно отступить через exceptions.${rule} с причиной]`);
-}
+const rules = exceptionRules();
+const should = (r, rule, msg) => rules.should(r, problems, rule, `${(r && r.id) || '?'}: ${msg}`);
 if (!rebuses.length) problems.push('в файле нет ни одного ребуса');
 const ids = new Set();
 const answers = new Map(); // слово → сколько раз загадано
@@ -30,7 +29,7 @@ const pics = new Map();
 let prevLevel = 0;
 for (const r of rebuses) {
   const name = (r && r.id) || '?';
-  formatProblems(r).forEach((p) => problems.push(`${name}: ${p}`));
+  rebusProblems(r).forEach((p) => problems.push(`${name}: ${p}`));
   if (ids.has(name)) problems.push(`${name}: повтор id`);
   ids.add(name);
   const a = normalize(r && r.answer);
@@ -41,8 +40,7 @@ for (const r of rebuses) {
   prevLevel = Math.max(prevLevel, r.level);
 
   // Подсказка не должна называть ответ.
-  const hintWords = String(r.hint || '').split(/\s+/).map(normalize);
-  if (a && hintWords.some((w) => w.includes(a))) problems.push(`${name}: подсказка содержит ответ`);
+  if (hintNamesAnswer(r.hint, a)) problems.push(`${name}: подсказка содержит ответ`);
 
   // Написанных букв — не больше половины ответа (цель — не больше трети).
   const written = r.parts.filter((p) => p && p.type === 'letters').reduce((n, p) => n + normalize(p.text).length, 0);
@@ -58,7 +56,7 @@ for (const r of rebuses) {
   // Другие слова, похожие на ответ на слух, не должны считаться ошибкой в ответе (tools/spelling.mjs).
   const miss = confusables(r, rebuses).filter((w) => !(r.notMisspelled || []).map(normalize).includes(w));
   if (miss.length) problems.push(`${name}: в notMisspelled не хватает ${miss.join(', ')} — запустите npm run spelling`);
-  if (a && LEGEND_WORDS.includes(a)) problems.push(`${name}: ответ ${r.answer} есть в примерах легенды — легенда его подскажет`);
+  if (a && isLegendWord(a)) problems.push(`${name}: ответ ${r.answer} есть в примерах легенды — легенда его подскажет`);
 }
 // Одно слово можно загадать разными ребусами — лишь бы частотность была ровной, без пиков.
 spread(rebuses.map((r) => normalize(r.answer))).peaks.forEach(([w, n]) => warnings.push(`слово ${w} загадано ${n} раз — пик частотности`));
@@ -99,8 +97,8 @@ for (const p of LEGEND_PICTURES) {
   const reg = registry.get(key);
   if (!reg || reg.banned) problems.push(`легенда: картинки ${key} нет в реестре или она запрещена`);
   else if (p.flip && !reg.flip) problems.push(`легенда: картинку ${key} нельзя переворачивать`);
-  else if (p.initials && reg.initials === false) problems.push(`легенда: картинку ${key} нельзя в первые буквы`);
-  else if (!p.initials && reg.picture === false) problems.push(`легенда: картинку ${key} можно только в первые буквы`);
+  else if (p.inInitials && reg.initials === false) problems.push(`легенда: картинку ${key} нельзя в первые буквы`);
+  else if (!p.inInitials && reg.picture === false) problems.push(`легенда: картинку ${key} можно только в первые буквы`);
 }
 
 // Уровень 1: число только целиком — без запятых (иначе это две операции для пятилетки).
@@ -176,7 +174,7 @@ for (const level of [1, 2, 3]) {
 for (const r of rebuses) {
   const a = normalize(r && r.answer);
   if (!a) continue;
-  const others = rebuses.filter((o) => o !== r && pictures(o).some((p) => normalize(p.word) === a));
+  const others = rebuses.filter((o) => o !== r && pictures(o).some((p) => isMirror(p, [a])));
   if (others.length >= 2) warnings.push(`${r.id}: ответ ${r.answer} стоит картинкой в ${others.length} ребусах (${others.map((o) => o.id).join(', ')}) — «узел»`);
   else if (others.length === 1 && stageOfId.get(others[0].id) === stageOfId.get(r.id)) warnings.push(`${r.id}: зеркальная пара с ${others[0].id} в одном этапе`);
 }
@@ -185,7 +183,7 @@ for (const [key, n] of pics) {
   if (n > MAX_PIC_USES) problems.push(`картинка ${key} используется ${n} раз (максимум ${MAX_PIC_USES})`);
 }
 
-accepted.forEach((x) => console.log('~ исключение:', x));
+rules.printAccepted();
 warnings.forEach((w) => console.log('!', w));
 problems.forEach((p) => console.log('✗', p));
 console.log(`${rebuses.length} ребусов, проблем: ${problems.length}, предупреждений: ${warnings.length}`);

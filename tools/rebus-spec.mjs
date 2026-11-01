@@ -11,7 +11,8 @@
 //      (когда его нет) ведёт себя как раньше.
 //   3. Каждый новый вид — с образцом в tools/spec-fixtures.json.
 //   4. Неизвестный вид узла не роняет проверку: замысел помечается «нужен обработчик».
-import { normalize, keepYo, partLetters, innerPart } from '../src/rebus-core.js';
+import { normalize, keepYo, partLetters, innerPart } from '../src/core/solve.js';
+import { hintNamesAnswer, isLegendWord } from './rules.mjs';
 
 export const SCHEMA_VERSION = 1;
 
@@ -141,6 +142,16 @@ export function specTechniques(r) {
   return [...t].sort();
 }
 
+// Узлы-картинки замысла (с операциями и look); картинка «первых букв» — с inInitials.
+export function specPictureNodes(r) {
+  const out = [];
+  (r.parts || []).forEach((n) => walk(n, (node, kind) => {
+    if (kind === 'pic') out.push(node);
+    if (kind === 'initials') node.initials.forEach((it) => out.push({ ...it, inInitials: true }));
+  }));
+  return out;
+}
+
 export function specPictures(r) {
   const out = [];
   (r.parts || []).forEach((n) => walk(n, (node, kind) => {
@@ -172,7 +183,7 @@ function nodeProblems(r) {
 }
 
 // Механические проверки замысла. Содержательные правила — docs/REBUSES.md (проверяет редактор).
-export function specProblems(r, { legend = [] } = {}) {
+export function specProblems(r) {
   if (!r || typeof r !== 'object') return ['не объект'];
   const p = [];
   if (!r.id || typeof r.id !== 'string') p.push('нет id');
@@ -188,11 +199,11 @@ export function specProblems(r, { legend = [] } = {}) {
   const got = solveSpec(r);
   if (got !== a) p.push(`ответ ${r.answer}, а по замыслу выходит ${got}`);
   else if (solveSpec(r, keepYo) !== keepYo(r.answer)) p.push(`Ё/Е: ответ ${keepYo(r.answer)}, а выходит ${solveSpec(r, keepYo)}`);
-  if (legend.includes(a)) p.push(`ответ ${a} есть в примерах легенды`);
+  if (isLegendWord(a)) p.push(`ответ ${a} есть в примерах легенды`);
   // Ребус — это превращение: ответ не может быть просто названием одной картинки.
   const pics = specPictures(r).map((x) => normalize(x.word));
   if (pics.includes(a)) p.push(`ответ ${a} — это просто картинка: тут нечего разгадывать`);
-  if (String(r.hint).split(/\s+/).map(normalize).some((w) => w.includes(a))) p.push('подсказка содержит ответ');
+  if (hintNamesAnswer(r.hint, a)) p.push('подсказка содержит ответ');
   const marked = Array.isArray(r.techniques) ? [...r.techniques].sort().join(', ') : '';
   if (marked !== specTechniques(r).join(', ')) p.push(`techniques: в разметке [${marked}], а по частям [${specTechniques(r).join(', ')}]`);
   return p;

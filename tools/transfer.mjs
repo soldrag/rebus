@@ -8,8 +8,9 @@
 // Ребусы вставляются в свой уровень равномерно, между старыми; потом — npm run spelling,
 // npm run validate и раскладка по предупреждениям.
 import fs from 'node:fs';
-import { normalize, picKey, techniques, formatProblems } from '../src/rebus-core.js';
+import { normalize, picKey, techniques } from '../src/core/solve.js';
 import { OPS as SPEC_OPS, solveSpec } from './rebus-spec.mjs';
+import { rebusProblems } from './rules.mjs';
 
 const dir = new URL('../data/proposals/', import.meta.url);
 const setFile = new URL('../public/data/rebuses.json', import.meta.url);
@@ -64,7 +65,7 @@ for (const f of files) {
     const r = { id: p.id, answer: p.answer, accept: [], level: p.level, theme: p.theme, techniques: [], hint: p.hint, parts: p.parts.map(convert), source: `замысел ${f.replace('.json', '')}` };
     if (p.exceptions) r.exceptions = p.exceptions;
     r.techniques = techniques(r).sort();
-    const bad = formatProblems(r);
+    const bad = rebusProblems(r);
     if (bad.length) { console.log(`✗ ${p.id}: ${bad.join('; ')}`); continue; }
     moved.push(r);
   }

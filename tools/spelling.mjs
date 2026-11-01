@@ -1,7 +1,7 @@
 // Орфография: какие настоящие слова звучат как ответ, но ошибкой не считаются.
 //
 // Приложение показывает «Пишется так: ВОРОНА», если ребёнок написал ответ с детской
-// ошибкой (src/rebus-core.js, spellingFix). Но «ПЛОТ» — не ошибка в слове ПЛОД, а другое
+// ошибкой (src/core/answer.js, spellingFix). Но «ПЛОТ» — не ошибка в слове ПЛОД, а другое
 // слово: ребёнок не угадал, и показывать ему ответ нельзя. Такие слова ищем в словаре
 // (dictionary-ru, Hunspell, только при сборке — в приложение не попадает) и пишем
 // в поле notMisspelled ребуса.
@@ -10,7 +10,9 @@
 //   npm run validate          — проверяет, что ничего не пропущено
 import fs from 'node:fs';
 import ru from 'dictionary-ru';
-import { normalize, soundKey, rebusList } from '../src/rebus-core.js';
+import { normalize } from '../src/core/solve.js';
+import { soundKey } from '../src/core/answer.js';
+import { rebusList } from '../src/core/format.js';
 
 let index = null;
 function dictionary() {

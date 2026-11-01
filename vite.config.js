@@ -3,14 +3,20 @@ import path from 'node:path';
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
-// В сборке ребусы — без отступов (в офлайн-кеше 70 КБ вместо 125). Раньше, чем vite-plugin-pwa
-// считает офлайн-кеш (closeBundle), поэтому ревизия в sw.js — от того, что реально лежит в dist.
+// В сборке ребусы — без отступов и без полей, которые нужны только автору и проверкам
+// (tools/validate.mjs): приложение их не читает. Раньше, чем vite-plugin-pwa считает офлайн-кеш
+// (closeBundle), поэтому ревизия в sw.js — от того, что реально лежит в dist.
+//   Приложение читает: id, answer, accept, level, hint, parts, notMisspelled (src/).
+const AUTHOR_ONLY = ['theme', 'techniques', 'source', 'exceptions'];
+const appRebus = (r) => Object.fromEntries(Object.entries(r).filter(([k, v]) =>
+  !AUTHOR_ONLY.includes(k) && !(Array.isArray(v) && !v.length))); // пустые accept, notMisspelled
 const compactData = {
   name: 'compact-data',
   apply: 'build',
   writeBundle({ dir }) {
     const file = path.join(dir, 'data/rebuses.json');
-    fs.writeFileSync(file, JSON.stringify(JSON.parse(fs.readFileSync(file, 'utf8'))));
+    const { rebuses } = JSON.parse(fs.readFileSync(file, 'utf8'));
+    fs.writeFileSync(file, JSON.stringify({ rebuses: rebuses.map(appRebus) }));
   },
 };
 

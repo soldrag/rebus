@@ -1,9 +1,11 @@
 // Экран одного ребуса: картинка, ввод ответа, сердечки, итог.
-import { normalize, isCorrect, isClose, spellingFix, spellingMarks, techniques } from '../rebus-core.js';
+import { normalize, techniques } from '../core/solve.js';
+import { isCorrect, isClose, spellingFix, spellingMarks } from '../core/answer.js';
 import { el, add } from './dom.js';
 import { getState, setState, MAX_TRIES, hasSeen, markSeen } from '../store.js';
 import { levelInfo, stageNext, stageOf, stageProgress } from '../levels.js';
-import { renderBoard, renderExplain, show } from './board.js';
+import { renderBoard, show } from './board.js';
+import { renderExplain } from './explain.js';
 import { openLegend, ALL_KINDS } from './legend.js';
 import { celebrate } from './confetti.js';
 import { createKeyboard, letterOf } from './keyboard.js';
@@ -134,9 +136,30 @@ function renderDone(panel, rebus, data, st) {
   const kb = createKeyboard({ onLetter() {}, onErase() {}, onCheck() {} });
   kb.close();
   const dock = renderDock(kb);
-  dockDone(dock, nextButton(data, rebus), renderExplain(rebus)).classList.add('shown');
+  const next = nextButton(data, rebus);
+  dockDone(dock, next, renderExplain(rebus)).classList.add('shown');
   panel.replaceChildren(add(el('div', 'status-row'), renderHearts(st.tries)), answer, el('p', 'msg'));
   panel.after(dock);
+  return next;
+}
+
+// Физическая клавиатура (ПК, планшет с клавиатурой). Пока открыта легенда (или другой диалог) —
+// клавиши не принимаем. handle(e, onButton): onButton — фокус на кнопке или ссылке.
+function listenKeys(signal, blocked, handle) {
+  document.addEventListener('keydown', (e) => {
+    if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey || e.isComposing) return;
+    if (blocked() || document.querySelector('dialog[open]')) return;
+    const a = document.activeElement;
+    handle(e, a && a !== document.body && /^(BUTTON|A|INPUT|TEXTAREA|SELECT)$/.test(a.tagName) ? a : null);
+  }, { signal });
+}
+// Enter на отгаданном ребусе нажимает «Дальше» — сразу после ответа и при повторном открытии.
+// Enter на кнопке нажимает эту кнопку. Зажатый Enter (автоповтор) «Дальше» не нажимает:
+// иначе он пролистал бы подряд все отгаданные ребусы этапа.
+function enterPressesNext(e, onButton, next) {
+  if (e.key !== 'Enter' || onButton) return;
+  e.preventDefault();
+  if (next && !e.repeat) next.click();
 }
 
 export function renderRebus(app, data, id, signal, backTo = '#/') {
@@ -184,7 +207,11 @@ export function renderRebus(app, data, id, signal, backTo = '#/') {
     showLegend(kinds, false, () => help.focus());
   });
 
-  if (st.status) { renderDone(panel, rebus, data, st); return; }
+  if (st.status) {
+    const next = renderDone(panel, rebus, data, st);
+    listenKeys(signal, () => closeLegend, (e, onButton) => enterPressesNext(e, onButton, next));
+    return;
+  }
 
   // Поле ответа — не <input>: его нельзя сфокусировать, поэтому системная клавиатура
   // (и полоска ↑↓✓ над ней на iPhone) не появляется никогда. Буквы — со своей клавиатуры
@@ -365,18 +392,13 @@ export function renderRebus(app, data, id, signal, backTo = '#/') {
     paint();
   };
 
-  // Физическая клавиатура (ПК, планшет с клавиатурой): буквы, Ё, Backspace, Enter.
-  // Пока открыта легенда (или другой диалог) — не печатаем.
-  document.addEventListener('keydown', (e) => {
-    if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey || e.isComposing) return;
-    if (closeLegend || document.querySelector('dialog[open]')) return;
+  // Физическая клавиатура: буквы, Ё, Backspace, Enter.
+  listenKeys(signal, () => closeLegend, (e, onButton) => {
     viaPointer = false;
-    const a = document.activeElement;
-    const onButton = a && a !== document.body && /^(BUTTON|A|INPUT|TEXTAREA|SELECT)$/.test(a.tagName);
     if (e.key === 'Enter') {
+      if (done) { enterPressesNext(e, onButton, next); return; }
       if (onButton) return; // Enter на кнопке нажимает эту кнопку
       e.preventDefault();
-      if (done) { if (next) next.click(); return; }
       if (!e.repeat) { kb.flash('↵'); check(); }
       return;
     }
@@ -385,7 +407,7 @@ export function renderRebus(app, data, id, signal, backTo = '#/') {
     if (!ch && e.key !== 'Backspace') return;
     // Ребёнок печатает ответ — значит, следующий Enter проверяет, а не нажимает
     // кнопку, на которой остался фокус (например, «?» после закрытия легенды).
-    if (onButton) a.blur();
+    if (onButton) onButton.blur();
     if (e.key === 'Backspace') {
       e.preventDefault();
       kb.flash('⌫');
@@ -395,7 +417,7 @@ export function renderRebus(app, data, id, signal, backTo = '#/') {
     e.preventDefault();
     kb.flash(ch);
     typeLetter(ch);
-  }, { signal });
+  });
 
   // Новый для ребёнка приём записи — один раз показываем легенду.
   // Запятые ребёнок знает — для них легенду сам не показываем.

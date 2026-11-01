@@ -1,90 +1,9 @@
 // Мини-легенда ребусной записи: по карточке на каждый приём.
-// Примеры не должны совпадать с ответами набора, а картинки должны быть разрешены реестром:
-// слова и картинки перечислены в LEGEND_WORDS и LEGEND_PICTURES (rebus-core.js), валидатор это проверяет.
+// Примеры карточек — в src/legend-data.js (там же — правила для слов и картинок примеров).
 import { el, add } from './dom.js';
 import { renderPart, fitRelations } from './board.js';
-import { POSITIONS } from '../rebus-core.js';
-
-// Карточка легенды собирается из тех же заготовок, что и доска ребуса (board.js → renderPart):
-// пример — это узлы ребуса, поэтому значок в легенде выглядит ровно как в ребусе.
-const pic = (emoji, word, ops = {}) => ({ type: 'pic', emoji, word, ...ops });
-const letters = (text) => ({ type: 'letters', text });
-const rel = (prep, inner, outer) => ({ type: 'position', prep, inner, outer });
-
-const CARDS = {
-  plain: {
-    title: 'Назови картинки и прочитай всё подряд, слева направо',
-    words: 'КИТ + Ы → КИТЫ',
-    parts: [pic('🐳', 'КИТ'), letters('Ы')],
-  },
-  comma: {
-    title: 'Запятая — убери букву с этого края',
-    words: 'КЛЮЧ → КЛЮ',
-    parts: [pic('🔑', 'КЛЮЧ', { cutEnd: 1 })],
-  },
-  remove: {
-    title: 'Зачёркнутая буква — убери её',
-    words: 'ТОРТ → ТОТ',
-    parts: [pic('🎂', 'ТОРТ', { remove: ['Р'] })],
-  },
-  replace: {
-    title: 'Р = Н — замени букву',
-    words: 'СЫР → СЫН',
-    parts: [pic('🧀', 'СЫР', { replace: [['Р', 'Н']] })],
-  },
-  flip: {
-    title: 'Вверх ногами — читай задом наперёд',
-    words: 'ТОРТ → ТРОТ',
-    parts: [pic('🎂', 'ТОРТ', { flip: true })],
-  },
-  initials: {
-    title: 'А… — возьми первые буквы картинок',
-    words: 'КЕНГУРУ, УТКА, БЕГЕМОТ → КУБ',
-    parts: [{ type: 'initials', items: [pic('🦘', 'КЕНГУРУ'), pic('🦆', 'УТКА'), pic('🦛', 'БЕГЕМОТ')] }],
-  },
-  number: {
-    title: 'Цифру читай словом',
-    words: '100 + ЛБ → СТОЛБ',
-    parts: [{ type: 'number', value: 100, word: 'СТО' }, letters('ЛБ')],
-  },
-  pick: {
-    title: 'Цифры сверху — возьми буквы с этими номерами, по порядку цифр',
-    words: 'ЛИСА, 1 2 3 → ЛИС',
-    parts: [pic('🦊', 'ЛИСА', { pick: [1, 2, 3] })],
-  },
-  replaceAt: {
-    title: '2 = О — поменяй вторую букву',
-    words: 'СЫР → СОР',
-    parts: [pic('🧀', 'СЫР', { replaceAt: [[2, 'О']] })],
-  },
-  // Отношения: рисунок показывает только, ГДЕ части стоят (docs/VISUAL-LANGUAGE.md);
-  // подпись — фраза с предлогом, как ребёнок называет увиденное, и ответ.
-  in: {
-    title: 'Внутри: маленькое лежит в большой букве-контуре',
-    words: 'СО в А → СОВА',
-    parts: [rel('В', 'СО', 'А')],
-  },
-  on: {
-    title: 'Сверху: стоит на другом вплотную',
-    words: 'КА на ВА → КАНАВА',
-    parts: [rel('НА', 'КА', 'ВА')],
-  },
-  under: {
-    title: 'Снизу: стоит под другим вплотную',
-    words: 'под К — ОВА → ПОДКОВА',
-    parts: [rel('ПОД', 'ОВА', 'К')],
-  },
-  near: {
-    title: 'Рядом: маленькое вплотную слева от большого',
-    words: 'К у Б → КУБ',
-    parts: [rel('У', 'К', 'Б')],
-  },
-  behind: {
-    title: 'Сзади: заднее — контуром, переднее закрывает его угол',
-    words: 'за К — АТ → ЗАКАТ',
-    parts: [rel('ЗА', 'АТ', 'К')],
-  },
-};
+import { POSITIONS } from '../core/solve.js';
+import { CARDS } from '../legend-data.js';
 
 const sample = (parts) => {
   const seed = { n: 0 };

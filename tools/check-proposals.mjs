@@ -1,8 +1,9 @@
 // Проверка замыслов ребусов: npm run proposals [-- файл.json]
 // Без аргумента — все data/proposals/*.json. Схема — docs/REBUS-SPEC.md.
 import fs from 'node:fs';
-import { LEGEND_WORDS, normalize, techniques } from '../src/rebus-core.js';
-import { OPS, specProblems, specPictures, specTechniques, solveSpec, specTricks, setTricks, specSkeleton } from './rebus-spec.mjs';
+import { normalize, techniques } from '../src/core/solve.js';
+import { exceptionRules, isMirror, pictureWord } from './rules.mjs';
+import { OPS, specProblems, specPictureNodes, specPictures, specTechniques, solveSpec, specTricks, setTricks, specSkeleton } from './rebus-spec.mjs';
 import { paused, report, canon, spread, wouldPeak } from './diversity.mjs';
 
 const dir = new URL('../data/proposals/', import.meta.url);
@@ -30,14 +31,8 @@ const pics = new Map();
 const tech = {};
 let warns = 0;
 
-// «Обычно»-правила: нарушение — ошибка, если в замысле нет exceptions.<правило> с причиной
-// (docs/REBUSES.md, «Как устроены правила»).
-const accepted = [];
-function should(r, p, rule, msg) {
-  const why = r.exceptions && typeof r.exceptions[rule] === 'string' && r.exceptions[rule].trim();
-  if (why) accepted.push(`${r.id}: ${rule} — ${why}`);
-  else p.push(`${msg} [правило ${rule}; можно отступить через exceptions.${rule} с причиной]`);
-}
+// «Обычно»-правила: нарушение — ошибка, если в замысле нет exceptions.<правило> с причиной.
+const { should, printAccepted } = exceptionRules();
 
 // Содержательные правила, которые можно проверить механически (выводы редактора, data/proposals/REVIEW.md).
 const allAnswers = () => new Set(words);
@@ -47,16 +42,8 @@ function contentProblems(r, a) {
   // Ответ встраивает другой ответ набора или замыслов (КОСА ← ОСА).
   const inside = others.filter((w) => a.includes(w));
   if (inside.length) should(r, p, 'embedded', `ответ встраивает другой ответ: ${inside.join(', ')}`);
-  const walkPics = [];
-  const visit = (n) => {
-    if (!n || typeof n !== 'object') return;
-    if (n.pic) walkPics.push(n);
-    (n.initials || []).forEach((it) => walkPics.push({ ...it, inInitials: true }));
-    (n.seq || []).forEach(visit); visit(n.a); visit(n.b);
-  };
-  (r.parts || []).forEach(visit);
-  for (const pic of walkPics) {
-    const w = normalize(pic.pic);
+  for (const pic of specPictureNodes(r)) {
+    const w = pictureWord(pic);
     const plain = !OPS.some((op) => pic[op.key] !== undefined);
     // Ответ вырастает из картинки: слово картинки + окончание/суффикс (ДОМ → ДОМИК, СЛОН → СЛОНЁНОК) —
     // скорее всего однокоренное. Буква спереди (Ч + ЁЛКА, Г + РОЗА) даёт другое слово — это можно.
@@ -64,7 +51,7 @@ function contentProblems(r, a) {
     // В описании картинки — только предмет: операции, буквы и цифры рисует приложение (docs/ILLUSTRATIONS.md).
     if (/зач[её]рк|вверх ногами|перев[её]рн|перевернут|цифр|букв|[=↺]/i.test(pic.look || '')) { console.log(`! ${r.id}: look картинки ${w} — описывайте только предмет: операции, буквы и цифры рисует приложение`); warns++; }
     // Зеркальная пара: картинкой стоит ответ набора или замыслов — предупреждение (развести по этапам).
-    if (others.includes(w)) { console.log(`! ${r.id}: картинка ${w} — это ответ другого ребуса (зеркальная пара, развести по этапам)`); warns++; }
+    if (isMirror(pic, others)) { console.log(`! ${r.id}: картинка ${w} — это ответ другого ребуса (зеркальная пара, развести по этапам)`); warns++; }
     if (/на фоне|\bфон|на воде|рядом с/i.test(pic.look || '')) { console.log(`! ${r.id}: look картинки ${w} — один предмет без фона и соседей`); warns++; }
   }
   return p;
@@ -75,7 +62,7 @@ for (const f of list) {
     // Уже перенесён в набор (tools/transfer.mjs) — это не замысел, а ребус набора.
     if (r && existingIds.has(r.id)) { transferred++; continue; }
     total++;
-    let p = specProblems(r, { legend: LEGEND_WORDS });
+    let p = specProblems(r);
     // Новый вид узла, которого схема ещё не знает, — не ошибка: замысел ждёт обработчика.
     if (p.length && p.every((x) => x.includes('пока не поддержан'))) {
       console.log(`… ${r.id}: ${p.join('; ')}`);
@@ -122,7 +109,7 @@ for (const l of [1, 2, 3]) {
   const rep = fresh.filter((w) => known.has(w)).length;
   if (fresh.length) console.log(`новые слова: ${fresh.length - rep}, повторы слов набора: ${rep} — ориентир на новые слова`); }
 { const sp = spread(words); if (sp.peaks.length) console.log('пики частотности слов:', sp.peaks.map(([w, n]) => `${w} ×${n}`).join(', ')); }
-accepted.forEach((x) => console.log('~ исключение:', x));
+printAccepted();
 console.log(`замыслов: ${total}${transferred ? ` (ещё ${transferred} уже в наборе)` : ''}, проблем: ${problems}${warns ? `, предупреждений: ${warns}` : ''}${pending ? `, ждут обработчика: ${pending}` : ''}`);
 if (process.argv.includes('--stats')) {
   console.log('приёмы:', Object.entries(tech).sort().map(([k, n]) => `${k} ×${n}`).join(', '));

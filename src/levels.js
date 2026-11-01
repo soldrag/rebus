@@ -1,7 +1,7 @@
 // Уровни сложности, этапы внутри уровня (по ~20 ребусов, за каждый — кубок)
 // и порядок ребусов.
 import { getState } from './store.js';
-import { chunkStages } from './rebus-core.js';
+import { chunkStages } from './core/stages.js';
 
 export const LEVELS = [
   { level: 1, title: 'Лёгкие', emoji: '🐣', cls: 'lvl-1' },

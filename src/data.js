@@ -1,5 +1,5 @@
 // Загрузка ребусов из public/data/rebuses.json.
-import { formatProblems, rebusList } from './rebus-core.js';
+import { formatProblems, rebusList } from './core/format.js';
 
 const URL_ = `${import.meta.env.BASE_URL}data/rebuses.json`;
 

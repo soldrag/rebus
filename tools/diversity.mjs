@@ -6,7 +6,7 @@
 //   node tools/diversity.mjs --strict [--only=set|proposals]   — код выхода 1 при превышении (для хука)
 import fs from 'node:fs';
 import { execFileSync } from 'node:child_process';
-import { POSITIONS, techniques } from '../src/rebus-core.js';
+import { POSITIONS, techniques } from '../src/core/solve.js';
 import { specTechniques, solveSpec } from './rebus-spec.mjs';
 
 export const SHARE_FACTOR = 2;
