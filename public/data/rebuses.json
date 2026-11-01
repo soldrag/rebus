@@ -3691,39 +3691,6 @@
       "source": "классика"
     },
     {
-      "id": "luna",
-      "answer": "ЛУНА",
-      "accept": [],
-      "level": 2,
-      "theme": "природа",
-      "techniques": [
-        "initials",
-        "near"
-      ],
-      "hint": "Светит на небе ночью",
-      "parts": [
-        {
-          "type": "position",
-          "prep": "У",
-          "inner": "Л",
-          "outer": {
-            "type": "initials",
-            "items": [
-              {
-                "emoji": "🦵",
-                "word": "НОГА"
-              },
-              {
-                "emoji": "🍉",
-                "word": "АРБУЗ"
-              }
-            ]
-          }
-        }
-      ],
-      "source": "классика"
-    },
-    {
       "id": "sovok",
       "answer": "СОВОК",
       "accept": [],

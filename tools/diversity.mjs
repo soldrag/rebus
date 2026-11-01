@@ -102,9 +102,13 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       const b = diversity(before.filter((r) => r.level === l).map(techniques));
       const now = diversity(s);
       for (const t of types) {
-        const was = (b.rows.find((r) => r.type === t) || { share: 0 }).share;
-        const is = (now.rows.find((r) => r.type === t) || { share: 0 }).share;
-        if (is > was + 1e-9) { bad++; out.push(`  ✗ набор: доля «${t}» выросла ${Math.round(was * 100)} % → ${Math.round(is * 100)} %, а приём на паузе`); }
+        const row = (d) => d.rows.find((r) => r.type === t) || { share: 0, count: 0 };
+        const was = row(b).share, is = row(now).share;
+        // Удаление ребуса уменьшает знаменатель и само по себе поднимает доли — это не нарушение.
+        // Нарушение — когда ребусов с приёмом на паузе стало больше или правка подняла долю без удалений.
+        const removed = before.filter((r) => r.level === l).length > s.length;
+        const grewCount = row(now).count > row(b).count;
+        if (is > was + 1e-9 && (grewCount || !removed)) { bad++; out.push(`  ✗ набор: доля «${t}» выросла ${Math.round(was * 100)} % → ${Math.round(is * 100)} %, а приём на паузе`); }
       }
     }
   }

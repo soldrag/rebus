@@ -25,13 +25,13 @@ export const POSITIONS = {
   'В': { tech: 'in', say: 'в', inside: 'внутри', container: true },
   'НА': { tech: 'on', say: 'на', inside: 'над' },
   'ПОД': { tech: 'under', say: 'под', inside: 'под', read: 'first' },
-  'У': { tech: 'near', say: 'у', inside: 'рядом с', read: 'between' },
+  'У': { tech: 'near', say: 'у', inside: 'рядом с', read: 'between', row: true },
   'ЗА': { tech: 'behind', say: 'за', inside: 'за', read: 'first' },
   'ПЕРЕД': { tech: 'front', say: 'перед', inside: 'перед', read: 'first' },
   'ИЗ': { tech: 'out', say: 'из', inside: 'выходит из', read: 'first', container: true },
-  'К': { tech: 'to', say: 'к', inside: 'движется к', read: 'between' },
-  'ОТ': { tech: 'from', say: 'от', inside: 'уходит от', read: 'first' },
-  'ДО': { tech: 'till', say: 'до', inside: 'доходит до', read: 'between' },
+  'К': { tech: 'to', say: 'к', inside: 'движется к', read: 'between', row: true },
+  'ОТ': { tech: 'from', say: 'от', inside: 'уходит от', read: 'first', row: true },
+  'ДО': { tech: 'till', say: 'до', inside: 'доходит до', read: 'between', row: true },
 };
 export const PREPOSITIONS = Object.keys(POSITIONS);
 

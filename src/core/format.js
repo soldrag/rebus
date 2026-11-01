@@ -29,6 +29,8 @@ function partProblems(part) {
       }
       // У «В» и «ИЗ» outer рисуется контуром-вместилищем, а картинку контуром не нарисовать.
       if (outer && POSITIONS[prep] && POSITIONS[prep].container) p.push(`outer у «${prep.toLowerCase()}» рисуется контуром — только буквы`);
+      // Рамка первых букв в отношении читается отдельным словом: «Л у 🦵🍉» прочитали как ЛНА.
+      if (POSITIONS[prep] && POSITIONS[prep].row && [outer, inner].some((x) => x && x.type === 'initials')) p.push(`первые буквы в «${prep.toLowerCase()}» не рисуем — рамка читается отдельным словом`);
       if ((!outer && !normalize(part.outer)) || (!inner && !normalize(part.inner))) p.push('нет outer или inner');
       break;
     }

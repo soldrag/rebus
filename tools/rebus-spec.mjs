@@ -107,6 +107,7 @@ export const NODE_KINDS = {
       if (!n.a || !n.b) p.push('у rel нужны a и b');
       // b у «В» и «ИЗ» — контур, который вмещает a; картинку (и первые буквы) контуром не нарисовать.
       else if (POSITIONS[rel] && POSITIONS[rel].container && kindOf(n.b).kind !== 'letters') p.push(`b у «${rel.toLowerCase()}» рисуется контуром — только буквы`);
+      if (POSITIONS[rel] && POSITIONS[rel].row && [n.a, n.b].some((x) => x && kindOf(x).kind === 'initials')) p.push(`первые буквы в «${rel.toLowerCase()}» не рисуем — рамка читается отдельным словом`);
       const read = Array.isArray(n.read) ? n.read.join(',') : '';
       if (!Object.values(READS).includes(read)) p.push('read — ["a","rel","b"] (предлог между частями) или ["rel","b","a"] (предлог в начале)');
       else if (RELATION_READ[rel] && read !== READS[RELATION_READ[rel]]) {
