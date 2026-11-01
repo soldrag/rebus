@@ -214,12 +214,15 @@ function renderRelation(p, seed) {
 // сначала самые вложенные.
 //   «В»: внутренний слот ужимается так, чтобы целиком лечь в контур.
 //   «ИЗ»: a выходит за правый край b ровно на половину своей ширины; ширина — в долях --R
-//   (у значка движения font-size = --R).
+//   (у значка движения font-size = --R); значки a — справа от неё, снаружи b.
 export function fitRelations(root) {
   for (const box of [...root.querySelectorAll('.rel-box[data-fit], .rel-box[data-half]')].reverse()) {
     const slotA = box.querySelector(':scope > .slot-a');
     if (box.dataset.half !== undefined) {
-      const w = slotA.getBoundingClientRect().width;
+      // Наполовину выходит сама a (картинка или буквы); её значки (зачёркнутая буква) стоят справа
+      // от неё — целиком снаружи b, на чистом месте.
+      const rowA = slotA.querySelector(':scope > .part > :is(.pic-row, .letters-row, .rel-row)') || slotA;
+      const w = rowA.getBoundingClientRect().width;
       const R = parseFloat(getComputedStyle(box.querySelector(':scope > .rel-mark')).fontSize);
       if (w && R) box.style.setProperty('--half', (w / 2 / R).toFixed(3));
       continue;

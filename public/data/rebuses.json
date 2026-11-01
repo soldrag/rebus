@@ -2691,6 +2691,26 @@
       "source": "классика"
     },
     {
+      "id": "panama",
+      "answer": "ПАНАМА",
+      "accept": [],
+      "level": 2,
+      "theme": "одежда",
+      "techniques": [
+        "on"
+      ],
+      "hint": "Лёгкая шляпка от солнца",
+      "parts": [
+        {
+          "type": "position",
+          "prep": "НА",
+          "outer": "МА",
+          "inner": "ПА"
+        }
+      ],
+      "source": "классика"
+    },
+    {
       "id": "lozhka",
       "answer": "ЛОЖКА",
       "accept": [],
@@ -3287,26 +3307,6 @@
       ]
     },
     {
-      "id": "panama",
-      "answer": "ПАНАМА",
-      "accept": [],
-      "level": 2,
-      "theme": "одежда",
-      "techniques": [
-        "on"
-      ],
-      "hint": "Лёгкая шляпка от солнца",
-      "parts": [
-        {
-          "type": "position",
-          "prep": "НА",
-          "outer": "МА",
-          "inner": "ПА"
-        }
-      ],
-      "source": "классика"
-    },
-    {
       "id": "shkola",
       "answer": "ШКОЛА",
       "accept": [],
@@ -3697,21 +3697,28 @@
       "level": 2,
       "theme": "природа",
       "techniques": [
-        "comma"
+        "initials",
+        "near"
       ],
       "hint": "Светит на небе ночью",
       "parts": [
         {
-          "type": "pic",
-          "emoji": "🧅",
-          "word": "ЛУК",
-          "cutEnd": 1
-        },
-        {
-          "type": "pic",
-          "emoji": "🛁",
-          "word": "ВАННА",
-          "cutStart": 3
+          "type": "position",
+          "prep": "У",
+          "inner": "Л",
+          "outer": {
+            "type": "initials",
+            "items": [
+              {
+                "emoji": "🦵",
+                "word": "НОГА"
+              },
+              {
+                "emoji": "🍉",
+                "word": "АРБУЗ"
+              }
+            ]
+          }
         }
       ],
       "source": "классика"

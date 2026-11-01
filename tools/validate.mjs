@@ -3,8 +3,8 @@
 import fs from 'node:fs';
 import { confusables } from './spelling.mjs';
 import { diversity, spread } from './diversity.mjs';
-import { exceptionRules, hintNamesAnswer, isLegendWord, isMirror, LEGEND_PICTURES, rebusProblems } from './rules.mjs';
-import { chunkStages } from '../src/core/stages.js';
+import { exceptionRules, hintNamesAnswer, isLegendWord, LEGEND_PICTURES, rebusProblems } from './rules.mjs';
+import { isPosition, kindOf, knotWarnings, mirrors, placementWarnings } from './placement.mjs';
 import { rebusList } from '../src/core/format.js';
 import { normalize, picKey, pictures, techniques } from '../src/core/solve.js';
 
@@ -26,7 +26,6 @@ if (!rebuses.length) problems.push('в файле нет ни одного ре�
 const ids = new Set();
 const answers = new Map(); // слово → сколько раз загадано
 const pics = new Map();
-let prevLevel = 0;
 for (const r of rebuses) {
   const name = (r && r.id) || '?';
   rebusProblems(r).forEach((p) => problems.push(`${name}: ${p}`));
@@ -35,9 +34,6 @@ for (const r of rebuses) {
   const a = normalize(r && r.answer);
   answers.set(a, (answers.get(a) || 0) + 1);
   if (!Array.isArray(r.parts)) continue;
-
-  if (r.level < prevLevel) warnings.push(`${name}: стоит после ребусов уровня ${prevLevel} — держите файл от лёгких к трудным`);
-  prevLevel = Math.max(prevLevel, r.level);
 
   // Подсказка не должна называть ответ.
   if (hintNamesAnswer(r.hint, a)) problems.push(`${name}: подсказка содержит ответ`);
@@ -121,65 +117,25 @@ for (const r of rebuses) {
   }
 }
 
-// Чередование: не больше двух ребусов подряд с одним набором приёмов,
-// и ни один приём не больше двух честных долей уровня.
-const MAX_IN_ROW = 2;
-const kindOf = (r) => techniques(r).sort().join('+');
+// Доли приёмов: ни один приём не больше двух честных долей уровня (tools/diversity.mjs).
+// Пока набор не перебалансирован — предупреждение; станет ошибкой после переноса замыслов.
 const shares = {};
-// Темы: не больше трёх ребусов одной темы подряд внутри уровня.
-for (const level of [1, 2, 3]) {
-  let run = 0;
-  rebuses.filter((r) => r && r.level === level).forEach((r, i, items) => {
-    run = i && items[i - 1].theme === r.theme ? run + 1 : 1;
-    if (run === 4) warnings.push(`${r.id}: уже 4 ребуса подряд на тему «${r.theme}» на уровне ${level}`);
-  });
-}
 for (const level of [1, 2, 3]) {
   const items = rebuses.filter((r) => r && r.level === level && Array.isArray(r.parts));
-  let run = 0;
-  items.forEach((r, i) => {
-    run = i && kindOf(items[i - 1]) === kindOf(r) ? run + 1 : 1;
-    if (run === MAX_IN_ROW + 1) warnings.push(`${r.id}: уже ${run} ребуса подряд «${kindOf(r)}» на уровне ${level}`);
-  });
   const count = {};
   items.forEach((r) => { count[kindOf(r)] = (count[kindOf(r)] || 0) + 1; });
   shares[level] = count;
-  // Ни один приём не больше двух честных долей уровня (tools/diversity.mjs).
-  // Пока набор не перебалансирован — предупреждение; станет ошибкой после переноса замыслов.
   const d = diversity(items.map(techniques));
   d.over.forEach((o) => warnings.push(`уровень ${level}: «${o.type}» — ${o.count} из ${d.total} (${Math.round(o.share * 100)} %), предел ${Math.round(d.limit * 100)} % при ${d.n} приёмах`));
+  // На уровне 3 буквы в позиции — только вместе с картинкой (от раскладки не зависит).
+  if (level === 3) items.forEach((r) => { if (isPosition(r) && !r.parts.some((p) => p.type === 'pic')) warnings.push(`${r.id}: на уровне 3 буквы в позиции — только вместе с картинкой`); });
 }
 
-// Буквы в позиции (в, на, у, под, за) — ребусы из одних букв: их не должно быть слишком много.
-// Не больше трёх на этап (15 % длинного этапа), не больше двух подряд, на уровне 3 — только вместе с картинкой.
-// Ребус «из одних букв в позиции»: картинка внутри позиции (🧀 в Е) делает его обычным ребусом с картинкой.
-const isPosition = (r) => (r.parts || []).some((p) => p && p.type === 'position') && pictures(r).length === 0;
-for (const level of [1, 2, 3]) {
-  const items = rebuses.filter((r) => r && r.level === level && Array.isArray(r.parts));
-  chunkStages(items).forEach((stage, i) => {
-    const n = stage.filter(isPosition).length;
-    const max = Math.max(3, Math.ceil(stage.length * 0.15));
-    if (n > max) warnings.push(`уровень ${level}, этап ${i + 1}: ${n} ребусов с буквами в позиции из ${stage.length} — не больше ${max}`);
-  });
-  items.forEach((r, i) => {
-    if (isPosition(r) && i && isPosition(items[i - 1])) warnings.push(`${r.id}: два ребуса с буквами в позиции подряд`);
-    if (level === 3 && isPosition(r) && !r.parts.some((p) => p.type === 'pic')) warnings.push(`${r.id}: на уровне 3 буквы в позиции — только вместе с картинкой`);
-  });
-}
-
-// Зеркальные пары: ответ одного ребуса — картинка другого. «Узел» (картинкой в 2+ ребусах)
-// и пара внутри одного этапа мешают ребёнку.
-const stageOfId = new Map();
-for (const level of [1, 2, 3]) {
-  chunkStages(rebuses.filter((r) => r && r.level === level)).forEach((items, i) => items.forEach((r) => stageOfId.set(r.id, `${level}-${i + 1}`)));
-}
-for (const r of rebuses) {
-  const a = normalize(r && r.answer);
-  if (!a) continue;
-  const others = rebuses.filter((o) => o !== r && pictures(o).some((p) => isMirror(p, [a])));
-  if (others.length >= 2) warnings.push(`${r.id}: ответ ${r.answer} стоит картинкой в ${others.length} ребусах (${others.map((o) => o.id).join(', ')}) — «узел»`);
-  else if (others.length === 1 && stageOfId.get(others[0].id) === stageOfId.get(r.id)) warnings.push(`${r.id}: зеркальная пара с ${others[0].id} в одном этапе`);
-}
+// Раскладка (tools/placement.mjs — те же правила раскладывает tools/transfer.mjs): порядок уровней,
+// темы и приёмы подряд, буквы в позиции по этапам и подряд, зеркальные пары в одном этапе.
+// «Узел» (ответ картинкой в 2+ ребусах) от раскладки не зависит — пересобрать один из ребусов.
+const mir = mirrors(rebuses.filter((r) => r && Array.isArray(r.parts)));
+warnings.push(...placementWarnings(rebuses, mir), ...knotWarnings(rebuses, mir));
 
 for (const [key, n] of pics) {
   if (n > MAX_PIC_USES) problems.push(`картинка ${key} используется ${n} раз (максимум ${MAX_PIC_USES})`);

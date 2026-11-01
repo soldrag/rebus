@@ -5,6 +5,7 @@ import { normalize, techniques } from '../src/core/solve.js';
 import { exceptionRules, isMirror, pictureWord } from './rules.mjs';
 import { OPS, specProblems, specPictureNodes, specPictures, specTechniques, solveSpec, specTricks, setTricks, specSkeleton } from './rebus-spec.mjs';
 import { paused, report, canon, spread, wouldPeak } from './diversity.mjs';
+import { drawProblems, loadPictureSources } from './convert.mjs';
 
 const dir = new URL('../data/proposals/', import.meta.url);
 const files = process.argv.slice(2).filter((a) => a.endsWith('.json'));
@@ -19,7 +20,8 @@ const tricks = new Map();
 existing.forEach((r) => setTricks(r).forEach((t) => tricks.set(t, `набор: ${r.id}`)));
 const skeletons = new Map();
 
-let problems = 0, total = 0, pending = 0, transferred = 0;
+let problems = 0, total = 0, pending = 0, transferred = 0, awaiting = 0;
+const pictureSources = loadPictureSources();
 // Образцы схемы: расширение схемы не должно ломать то, что уже решалось.
 const fixtures = JSON.parse(fs.readFileSync(new URL('./spec-fixtures.json', import.meta.url), 'utf8')).fixtures;
 for (const f of fixtures) {
@@ -78,6 +80,17 @@ for (const f of list) {
     }
     const a = normalize(r.answer);
     if (!p.length) p.push(...contentProblems(r, a));
+    // «Приложение это нарисует?» — та же конвертация, что при переносе (tools/convert.mjs), и проверка
+    // формата приложения (src/core/format.js). Не рисует — ошибка автора: поменять замысел. Если владелец
+    // попросил разработчика доучить приложение, в замысле стоит awaitsDeveloper — тогда «ждёт разработчика»:
+    // не ошибка автора, но перенос его не возьмёт, пока приложение не научится.
+    if (!p.length) {
+      const draw = drawProblems(r, pictureSources);
+      const why = typeof r.awaitsDeveloper === 'string' && r.awaitsDeveloper.trim();
+      if (draw.length && why) { console.log(`⏳ ${r.id}: ждёт разработчика: ${draw.join('; ')} (${why})`); awaiting++; continue; }
+      if (draw.length) p.push(`приложение пока не рисует: ${draw.join('; ')} — поменяйте замысел или попросите владельца отдать его разработчику (awaitsDeveloper)`);
+      else if (why) console.log(`! ${r.id}: awaitsDeveloper лишнее — приложение это уже рисует`), warns++;
+    }
     if (wouldPeak(words, a)) p.push(`слово ${a} уже загадано (×${words.filter((w) => w === a).length}) — ещё один ребус на него дал бы пик частотности, придумайте другое слово`);
     if (!p.length) words.push(a);
     p.forEach((x) => console.log(`✗ ${r.id || '?'}: ${x}`));
@@ -113,7 +126,7 @@ for (const l of [1, 2, 3]) {
   if (fresh.length) console.log(`новые слова: ${fresh.length - rep}, повторы слов набора: ${rep} — ориентир на новые слова`); }
 { const sp = spread(words); if (sp.peaks.length) console.log('пики частотности слов:', sp.peaks.map(([w, n]) => `${w} ×${n}`).join(', ')); }
 printAccepted();
-console.log(`замыслов: ${total}${transferred ? ` (ещё ${transferred} уже в наборе)` : ''}, проблем: ${problems}${warns ? `, предупреждений: ${warns}` : ''}${pending ? `, ждут обработчика: ${pending}` : ''}`);
+console.log(`замыслов: ${total}${transferred ? ` (ещё ${transferred} уже в наборе)` : ''}, проблем: ${problems}${warns ? `, предупреждений: ${warns}` : ''}${pending ? `, ждут обработчика: ${pending}` : ''}${awaiting ? `, ждут разработчика: ${awaiting}` : ''}`);
 if (process.argv.includes('--stats')) {
   console.log('приёмы:', Object.entries(tech).sort().map(([k, n]) => `${k} ×${n}`).join(', '));
   console.log('картинки для дизайнера:', [...pics].map(([w, l]) => `${w} (${l})`).join('; '));

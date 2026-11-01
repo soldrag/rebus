@@ -736,6 +736,8 @@ h1[tabindex="-1"]:focus { outline: none; }
 
 /* У — маленькое (0.5) вплотную слева от большого, на одной линии низа (по базовой линии). */
 .rb-near { align-items: baseline; --ka: .5; --kb: 1; gap: calc(var(--R) * .04); }
+/* b — картинка или первые буквы: у них базовая линия — значки сверху («А…»), поэтому по нижнему краю. */
+.rb-near:has(> .slot-b .pic-row) { align-items: flex-end; }
 
 /* ЗА — заднее (a, 0.75) контуром, выше на 0.32 и правее, видно целиком; переднее (b, 0.95) сплошное
    с кромкой и закрывает только угол заднего (перекрытие 0.18 --R). Картинку сзади контуром не рисуем:
@@ -764,11 +766,17 @@ h1[tabindex="-1"]:focus { outline: none; }
 .rel-mark { display: flex; font-size: var(--R); line-height: 1; color: var(--ink-soft); }
 .rel-mark svg { display: block; overflow: visible; fill: none; stroke: currentColor; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
 
-/* ИЗ — b крупный контур (1.5, как у «В»); a (0.4) сплошное с кромкой на середине высоты и выходит
-   за правый край b ровно наполовину (--half — половина ширины a в --R, меряет fitRelations);
-   за ним стрелка вправо. */
-.rb-out { --kb: 1.5; --ka: .4; }
-.rb-out > .slot-a { z-index: 1; margin-left: calc(var(--R) * var(--half, .15) * -1); }
+/* ИЗ — b крупный контур (1.8: крупнее, чем у «В», — a закрывает его правый край, а О не должна
+   стать С); a (0.6 — буквы a не мельче 60 % обычных букв доски, картинка — крупно) сплошное с кромкой
+   на середине высоты и выходит за правый край b ровно наполовину (--half — половина ширины самой a
+   в --R, меряет fitRelations); за ним стрелка вправо. Значки a снизу (зачёркнутая буква) — справа
+   от картинки по её нижнему краю, целиком снаружи b: не пересекают контур и не липнут к b. */
+.rb-out { --kb: 1.8; --ka: .6; }
+.rb-out > .slot-a { z-index: 1; margin-left: calc(var(--R) * var(--half, .15) * -1); grid-row: 2; grid-template-rows: none; }
+.rb-out > .slot-a > .part { grid-row: auto; grid-template-rows: auto auto; grid-template-columns: auto auto; align-items: end; column-gap: calc(var(--o) * .04); }
+.rb-out > .slot-a > .part > .part-top { grid-row: 1; grid-column: 1; }
+.rb-out > .slot-a > .part > :is(.letters-row, .pic-row, .rel-row) { grid-row: 2; grid-column: 1; }
+.rb-out > .slot-a > .part > .part-bottom { grid-row: 2; grid-column: 2; align-self: end; }
 .rb-out > .rel-mark { margin-left: calc(var(--R) * .05); }
 
 /* К — в ряд, оба сплошные (0.55): a, стрелка, небольшой зазор, b. */
