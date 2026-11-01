@@ -42,6 +42,9 @@ function contentProblems(r, a) {
   // Ответ встраивает другой ответ набора или замыслов (КОСА ← ОСА).
   const inside = others.filter((w) => a.includes(w));
   if (inside.length) should(r, p, 'embedded', `ответ встраивает другой ответ: ${inside.join(', ')}`);
+  // ИЗ: выходящая часть стоит у края большой и наполовину ложится на неё — длинная не читается.
+  const rels = (n) => !n || typeof n !== 'object' ? [] : [...(n.rel ? [n] : []), ...Object.values(n).flatMap((v) => Array.isArray(v) ? v.flatMap(rels) : rels(v))];
+  if (rels(r.parts).some((n) => n.rel === 'ИЗ' && typeof n.a?.letters === 'string' && normalize(n.a.letters).length > 2)) should(r, p, 'outPart', 'у «из» выходящая часть обычно не длиннее двух букв — длинная ложится на большую');
   for (const pic of specPictureNodes(r)) {
     const w = pictureWord(pic);
     const plain = !OPS.some((op) => pic[op.key] !== undefined);

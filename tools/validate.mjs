@@ -49,6 +49,8 @@ for (const r of rebuses) {
   if (a && a.length <= 5 && written > (r.level === 1 ? 2 : 1)) should(r, 'shortLetters', `в слове из ${a.length} букв написано ${written} — для уровня ${r.level} много`);
 
   if (r.parts.some((p) => p && p.type === 'position' && typeof p.inner === 'string' && normalize(p.inner).length > 3)) should(r, 'positionInner', 'внутренних букв в позиции обычно не больше трёх — мелкие не читаются');
+  // ИЗ: выходящая часть стоит у края большой и наполовину ложится на неё — длинная не читается.
+  if (r.parts.some((p) => p && p.type === 'position' && p.prep === 'ИЗ' && typeof p.inner === 'string' && normalize(p.inner).length > 2)) should(r, 'outPart', 'у «из» выходящая часть обычно не длиннее двух букв — длинная ложится на большую');
   for (const p of pictures(r)) {
     const key = picKey(p);
     pics.set(key, (pics.get(key) || 0) + 1);
